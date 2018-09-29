@@ -2,6 +2,8 @@
 
 Streaming-data:
 `{"date":"Mar 26, 2018 6:01:56 PM","devId":10,"varId":5508,"value":0,"quality":false}`
+Static-data:
+`{"bb_s_n":"IOTSPI216110315", "MACHINE":"A561322", "CDI":"182CBAFBRY53", "ITEMID":"20A09132_WIP", "STARTDATETIME":"2018-03-26 00:32:56.000", "ENDDATETIME:"2018-03-26 02:31:13.000" }
 
 To build ksql's project: `mvn clean package -DskipTests`
 

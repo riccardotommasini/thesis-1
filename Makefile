@@ -2,7 +2,8 @@
 
 datagen-stream:
 	sudo docker-compose up -d
-	sudo docker run --network thesis_default --rm \
+	sudo docker run --network thesis_default --rm -d \
+		--name datagen-stream \
 		-v `pwd`/streaming-data.avro:/streaming-data.avro \
 		confluentinc/ksql-examples:5.0.0 \
 		ksql-datagen \
@@ -10,20 +11,21 @@ datagen-stream:
 			schema=/streaming-data.avro \
 			format=json \
 			key=devId \
-			topic=data2 \
+			topic=streaming-data \
 			maxInterval=500 \
 			schemaRegistryUrl=schema-registry:8081
 
 datagen-static:
 	sudo docker-compose up -d
-	sudo docker run --network thesis_default --rm \
-		-v `pwd`/static-data.avro:/streaming-data.avro \
+	sudo docker run --network thesis_default --rm -d \
+		--name datagen-static \
+		-v `pwd`/static-data.avro:/static-data.avro \
 		confluentinc/ksql-examples:5.0.0 \
 		ksql-datagen \
 			bootstrap-server=broker:9092 \
-			schema=/streaming-data.avro \
+			schema=/static-data.avro \
 			format=json \
-			key=date \
-			topic=data \
+			key=bb_s_n \
+			topic=static-data \
 			maxInterval=500 \
 			schemaRegistryUrl=schema-registry:8081
