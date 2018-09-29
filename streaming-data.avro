@@ -1,0 +1,42 @@
+{
+    "type": "record",
+    "name":"SensorData",
+    "fields": [
+    { "name":"date",
+			"type": {
+				"type":"long",
+				"format_as_time" : "unix_long",
+				"arg.properties": {
+					"iteration": { "start": 1, "step": 10}
+				}
+			}
+    },
+    { "name":"devId",
+      "type": {
+        "type": "long",
+        "arg.properties":{
+          "range": { "min": 1, "max":100000}
+        }
+      }
+    },
+    { "name":"varId",
+      "type": {
+        "type": "long",
+        "arg.properties":{
+          "range": { "min": 1, "max":100000}
+        }
+      }
+    },
+    { "name":"value",
+      "type": {
+        "type": "long",
+        "arg.properties":{
+          "range": { "min": 1, "max":100000}
+        }
+      }
+    },
+    { "name":"quality",
+      "type":"boolean"
+    }
+    ]
+}
