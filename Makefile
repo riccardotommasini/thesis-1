@@ -29,3 +29,8 @@ datagen-static:
 			topic=static-data \
 			maxInterval=500 \
 			schemaRegistryUrl=schema-registry:8081
+
+ksql:
+	sudo docker run --network thesis_default --rm -ti \
+     confluentinc/cp-ksql-cli:5.0.0 \
+     http://ksql-server:8088
