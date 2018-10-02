@@ -11,6 +11,15 @@
 				}
 			}
     },
+    { "name":"dev_sn",
+      "type": {
+        "type": "string",
+        "arg.properties":{
+          "regex" : "IOTSPI[0-9]*",
+          "length": 15
+        }
+      }
+    },
     { "name":"devId",
       "type": {
         "type": "long",
