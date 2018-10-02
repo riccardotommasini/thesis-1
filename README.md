@@ -30,6 +30,7 @@
 
 - run ksql-datagen in a container with the streaming-data.avro schema (also `make datagen-stream`):
 ```bash
+docker-compose up -d
 docker run --network thesis_default --rm -v `pwd`/streaming-data.avro:/streaming-data.avro  \
     confluentinc/ksql-examples:5.0.0 \
     ksql-datagen \
