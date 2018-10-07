@@ -144,6 +144,43 @@ services:
     entrypoint: /bin/bash
     tty: true
 
+  datagen-static:
+    image: confluentinc/ksql-examples:5.0.0
+    container_name: datagen-static
+    depends_on:
+      - broker
+      - connect
+      - schema-registry
+    command: "bash -c 'ksql-datagen \
+      bootstrap-server=broker:9092 \
+      schema=/avro-generator/static-data.avro \
+      format=json \
+      key=bb_s_n \
+      topic=static-data \
+      maxInterval=500 \
+      schemaRegistryUrl=schema-registry:8081'"
+    volumes:
+      - ./avro-generator:/avro-generator/
+
+  datagen-stream:
+    image: confluentinc/ksql-examples:5.0.0
+    container_name: datagen-stream
+    depends_on:
+      - broker
+      - connect
+      - schema-registry
+    command: "bash -c 'ksql-datagen \
+      bootstrap-server=broker:9092 \
+      schema=/avro-generator/streaming-data.avro \
+      format=json \
+      key=devId \
+      topic=streaming-data \
+      maxInterval=500 \
+      schemaRegistryUrl=schema-registry:8081'"
+    volumes:
+      - ./avro-generator:/avro-generator/
+
+
     #  ksql-datagen:
     #    image: confluentinc/ksql-examples:5.0.0-beta30
     #    hostname: ksql-datagen
