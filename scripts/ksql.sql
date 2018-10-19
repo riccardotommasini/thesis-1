@@ -1,4 +1,4 @@
-create stream streaming_data (
+create stream if not exists streaming_data (
 	DATE     BIGINT,
 	DEV_SN   VARCHAR(STRING),
 	DEVID    BIGINT,
@@ -7,7 +7,7 @@ create stream streaming_data (
 	QUALITY  BOOLEAN)
 with (KAFKA_TOPIC='streaming-data', VALUE_FORMAT='JSON', KEY='devId', TIMESTAMP='date');
 
-create stream static_data (
+create stream if not exists static_data (
 	BB_S_N         	 VARCHAR(STRING),           
 	MACHINE         VARCHAR(STRING) ,          
 	CDI             VARCHAR(STRING) ,          

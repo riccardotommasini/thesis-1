@@ -173,7 +173,7 @@ services:
       bootstrap-server=broker:9092 \
       schema=/avro-generator/streaming-data.avro \
       format=json \
-      key=devId \
+      key=dev_sn \
       topic=streaming-data \
       maxInterval=500 \
       schemaRegistryUrl=schema-registry:8081'"
