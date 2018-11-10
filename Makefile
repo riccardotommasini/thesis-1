@@ -1,5 +1,6 @@
 .PHONY: datagen-stream
 
+
 datagen-stream:
 	sudo docker-compose up -d
 	sudo docker run --network thesis_default --rm -d \
@@ -35,8 +36,14 @@ ksql:
      confluentinc/cp-ksql-cli:5.0.0 \
      http://ksql-server:8088
 
+file = results/result_$(shell date +"%s")
+n = 3
+
 generate-streaming-data:
-	python3 -u script.py rdf n3 0 1000 | tee result.txt
-	cat result.txt | jq -s  -c 'sort_by(.ts) | .[]' | tee sorted_result.txt
-	du -h sorted_result.txt result.txt
+	mkdir -p results
+	python3 -u converter/script.py rdf n3 converter/construct_query.sparql converter/timestamp_query.sparql 0 $(n) > $(file).txt
+	cat $(file).txt | jq -s  -c 'sort_by(.ts) | .[]' > $(file)_sorted.txt
+	du -h $(file)_sorted.txt $(file).txt
+	rm $(file).txt
+	@echo generated $(file)_sorted.txt from: $(shell ls rdf | sort | head -n $(n))
 
