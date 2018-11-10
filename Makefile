@@ -35,7 +35,7 @@ ksql:
      confluentinc/cp-ksql-cli:5.0.0 \
      http://ksql-server:8088
 
-generate-results:
+generate-streaming-data:
 	python3 -u script.py rdf n3 0 1000 | tee result.txt
 	cat result.txt | jq -s  -c 'sort_by(.ts) | .[]' | tee sorted_result.txt
 	du -h sorted_result.txt result.txt
