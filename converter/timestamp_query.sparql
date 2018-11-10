@@ -1,0 +1,2 @@
+SELECT DISTINCT ?o 
+WHERE { ?s owl-time:inXSDDateTime ?o}

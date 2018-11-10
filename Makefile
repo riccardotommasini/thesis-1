@@ -34,3 +34,9 @@ ksql:
 	sudo docker run --network thesis_default --rm -ti \
      confluentinc/cp-ksql-cli:5.0.0 \
      http://ksql-server:8088
+
+generate-results:
+	python3 -u script.py rdf n3 0 1000 | tee result.txt
+	cat result.txt | jq -s  -c 'sort_by(.ts) | .[]' | tee sorted_result.txt
+	du -h sorted_result.txt result.txt
+

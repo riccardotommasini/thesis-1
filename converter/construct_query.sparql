@@ -1,0 +1,25 @@
+CONSTRUCT { 
+    ?s owl-time:inXSDDateTime ?o ;
+        a ?o2 . 
+    ?s2 om-owl:samplingTime ?s ;  
+        a ?o3 ;
+        om-owl:observedProperty ?o4 ;
+        om-owl:procedure ?o5 ;
+        om-owl:result ?s3 ;
+        om-owl:samplingTime ?o6.
+    ?s3 a ?o7 ;
+        om-owl:floatValue ?o8 ;
+        om-owl:uom ?o9 .
+} WHERE {
+    ?s owl-time:inXSDDateTime ?o ;
+        a ?o2 . 
+    ?s2 om-owl:samplingTime ?s ;  
+        a ?o3 ;
+        om-owl:observedProperty ?o4 ;
+        om-owl:procedure ?o5 ;
+        om-owl:result ?s3 ;
+        om-owl:samplingTime ?o6.
+    ?s3 a ?o7 ;
+        om-owl:floatValue ?o8 ;
+        om-owl:uom ?o9 .
+}
