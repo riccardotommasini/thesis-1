@@ -50,7 +50,7 @@ def batch(data):
 if __name__ == '__main__':
     if len(sys.argv) <2:
         print("Usage : script.py directory format construct_query timestamp_query [start end]", file=sys.stderr)
-        print("e.g. : script.py rdf n3 construct_query.sparql timestamp.query.sparql 0 100",file=sys.stderr)
+        print("e.g. : script.py rdf n3 construct_query.sparql timestamp_query.sparql 0 100",file=sys.stderr)
     else:
         directory, syntax, construct_query, timestamp_query = sys.argv[1:5]
         directories = sorted([el for el in os.listdir(directory) if el.endswith(syntax)])
@@ -59,6 +59,7 @@ if __name__ == '__main__':
         construct_query = " ".join(open(construct_query).readlines())
         timestamp_query = " ".join(open(timestamp_query).readlines())
         cpus = mp.cpu_count()
+        print(cpus)
         with mp.Pool(cpus) as p:
             p.map(batch, [ { "process": i, 
                     "files": files, 
