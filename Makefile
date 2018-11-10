@@ -42,7 +42,7 @@ n = 3
 generate-streaming-data:
 	mkdir -p results
 	python3 -u converter/script.py rdf n3 converter/construct_query.sparql converter/timestamp_query.sparql 0 $(n) > $(file).txt
-	cat $(file).txt | jq -s  -c 'sort_by(.ts) | .[]' > $(file)_sorted.txt
+	jq -s  -c 'sort_by(.ts) | .[]' < $(file).txt > $(file)_sorted.txt
 	du -h $(file)_sorted.txt $(file).txt
 	rm $(file).txt
 	@echo generated $(file)_sorted.txt from: $(shell ls rdf | sort | head -n $(n))
