@@ -1,5 +1,19 @@
 ## Thesis
 
+## SRBENCH
+- Download http://sonicbanana.cs.wright.edu/knoesis_linkedobservationdata_bill.tar.gz from http://wiki.knoesis.org/index.php/LinkedSensorData
+- To execute the converter from the n3 files to streamable timestamped triples in json, sorted by timestamp, `{ subject: ..., predicate: ..., object: ..., timestamp: ... }` use the template in the `Makefile`
+- To 
+
+```
+SET 'auto.offset.reset' = 'earliest';
+CREATE STREAM triples ( s VARCHAR, p VARCHAR, o VARCHAR, ts BIGINT) WITH (KAFKA_TOPIC='sorted_triples', VALUE_FORMAT='JSON', KEY='S', TIMESTAMP='ts');
+```
+
+```
+CREATE TABLE Window_one as select s, o from triples window tumbling (size 1 hour) where p = 'http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result' group by s, o;
+```
+
 ### Streaming-data:
 
 ```{"date":"Mar 26, 2018 6:01:56 PM","devSn":"IOTSPI216110315", "devId":10,"varId":5508,"value":0,"quality":false}```

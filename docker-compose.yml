@@ -2,7 +2,7 @@
 version: '2'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.0.0-beta30
+    image: confluentinc/cp-zookeeper:5.0.1
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -12,7 +12,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
-    image: confluentinc/cp-enterprise-kafka:5.0.0-beta30
+    image: confluentinc/cp-enterprise-kafka:5.0.1
     hostname: broker
     container_name: broker
     depends_on:
@@ -35,7 +35,7 @@ services:
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:5.0.0-beta30
+    image: confluentinc/cp-schema-registry:5.0.1
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
@@ -48,7 +48,7 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
 
   connect:
-    image: confluentinc/cp-kafka-connect:5.0.0-beta30
+    image: confluentinc/cp-kafka-connect:5.0.1
     hostname: connect
     container_name: connect
     depends_on:
@@ -78,15 +78,14 @@ services:
       CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.0.0-beta30.jar
+      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.0.1.jar
       CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
       CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
       CONNECT_PLUGIN_PATH: /usr/share/java
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
 
   control-center:
-    #image: confluentinc/cp-enterprise-control-center:5.0.0-beta30
-    image: confluentinc/cp-enterprise-control-center:5.0.0-beta1-2
+    image: confluentinc/cp-enterprise-control-center:5.0.1
     hostname: control-center
     container_name: control-center
     depends_on:
@@ -101,8 +100,8 @@ services:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:9092'
       CONTROL_CENTER_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       CONTROL_CENTER_CONNECT_CLUSTER: 'connect:8083'
-      #CONTROL_CENTER_KSQL_URL: "http://ksql-server:8088"
-      CONTROL_CENTER_KSQL_ENDPOINT: "http://ksql-server:8088"
+      CONTROL_CENTER_KSQL_URL: "http://ksql-server:8088"
+      CONTROL_CENTER_KSQL_ADVERTISED_URL: "http://localhost:8088"
       CONTROL_CENTER_REPLICATION_FACTOR: 1
       CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
@@ -110,7 +109,7 @@ services:
       PORT: 9021
 
   ksql-server:
-    image: confluentinc/cp-ksql-server:5.0.0-beta30
+    image: confluentinc/cp-ksql-server:5.0.1
     hostname: ksql-server
     container_name: ksql-server
     depends_on:
@@ -130,55 +129,55 @@ services:
       KSQL_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
       KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
 
-  ksql-cli:
-    image: confluentinc/cp-ksql-cli:5.0.0-beta30
-    container_name: ksql-cli
-    depends_on:
-      - broker
-      - connect
-      - ksql-server
-    environment:
-      KSQL_CLI_SERVER: "http://ksql-server:8088"
-    volumes:
-      - ./scripts:/scripts/
-    entrypoint: /bin/bash
-    tty: true
+#  ksql-cli:
+    #image: confluentinc/cp-ksql-cli:5.0.1
+    #container_name: ksql-cli
+    #depends_on:
+      #- broker
+      #- connect
+      #- ksql-server
+    #environment:
+      #KSQL_CLI_SERVER: "http://ksql-server:8088"
+    #volumes:
+      #- ./scripts:/scripts/
+    #entrypoint: /bin/bash
+#    tty: true
 
-  datagen-static:
-    image: confluentinc/ksql-examples:5.0.0
-    container_name: datagen-static
-    depends_on:
-      - broker
-      - connect
-      - schema-registry
-    command: "bash -c 'ksql-datagen \
-      bootstrap-server=broker:9092 \
-      schema=/avro-generator/static-data.avro \
-      format=json \
-      key=bb_s_n \
-      topic=static-data \
-      maxInterval=500 \
-      schemaRegistryUrl=schema-registry:8081'"
-    volumes:
-      - ./avro-generator:/avro-generator/
+#  datagen-static:
+    #image: confluentinc/ksql-examples:5.0.0
+    #container_name: datagen-static
+    #depends_on:
+      #- broker
+      #- connect
+      #- schema-registry
+    #command: "bash -c 'ksql-datagen \
+      #bootstrap-server=broker:9092 \
+      #schema=/avro-generator/static-data.avro \
+      #format=json \
+      #key=bb_s_n \
+      #topic=static-data \
+      #maxInterval=500 \
+      #schemaRegistryUrl=schema-registry:8081'"
+    #volumes:
+#      - ./avro-generator:/avro-generator/
 
-  datagen-stream:
-    image: confluentinc/ksql-examples:5.0.0
-    container_name: datagen-stream
-    depends_on:
-      - broker
-      - connect
-      - schema-registry
-    command: "bash -c 'ksql-datagen \
-      bootstrap-server=broker:9092 \
-      schema=/avro-generator/streaming-data.avro \
-      format=json \
-      key=dev_sn \
-      topic=streaming-data \
-      maxInterval=500 \
-      schemaRegistryUrl=schema-registry:8081'"
-    volumes:
-      - ./avro-generator:/avro-generator/
+#  datagen-stream:
+    #image: confluentinc/ksql-examples:5.0.0
+    #container_name: datagen-stream
+    #depends_on:
+      #- broker
+      #- connect
+      #- schema-registry
+    #command: "bash -c 'ksql-datagen \
+      #bootstrap-server=broker:9092 \
+      #schema=/avro-generator/streaming-data.avro \
+      #format=json \
+      #key=dev_sn \
+      #topic=streaming-data \
+      #maxInterval=500 \
+      #schemaRegistryUrl=schema-registry:8081'"
+    #volumes:
+      #- ./avro-generator:/avro-generator/
 
 
     #  ksql-datagen:
@@ -207,7 +206,7 @@ services:
     #      STREAMS_SCHEMA_REGISTRY_PORT: 8081
 
   rest-proxy:
-    image: confluentinc/cp-kafka-rest:latest
+    image: confluentinc/cp-kafka-rest:5.0.1
     depends_on:
       - zookeeper
       - broker

@@ -1,10 +1,39 @@
 #!/usr/bin/env python3
 from rdflib import Graph
-import sys
+from rdflib.term import URIRef, Literal, BNode
+import datetime
 import json
-import os
-import multiprocessing as mp
 import math
+import multiprocessing as mp
+import os
+import sys
+
+def getSJSON(s,p,o,t):
+    type(t)
+    r = {   "s":str(s),
+            "p":str(p),
+            "ts":t}
+    if isinstance(o, Literal):
+        r["o"]={
+                "value": o.value,
+                "type": "literal",
+                "datatype": str(o.datatype)
+                }
+    elif isinstance(o,URIRef):
+        r["o"]={
+                "value": str(o),
+                "type":"uri"
+                }
+    elif isinstance(o, BNode):
+        r["o"]={
+                "value": str(o.n3()),
+                "type": "bnode"
+                }
+    return r
+
+def datetime_converter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
 
 def divide_chunks(l, number_of_chunks): 
     n = math.ceil(len(l)/number_of_chunks)
@@ -40,10 +69,12 @@ def batch(data):
             # print(f"{header}\tparsing\t{str(t)}\t({i}/{ltimestamps})")
             rs = g.query(data["construct_query"], initBindings={"o": ts[0]})
             for s, p, o in rs:
-                print(json.dumps({ "s": str(s.toPython()), 
-                                        "p": str(p.toPython()), 
-                                        "o": str(o.toPython()),
-                                        "ts": t}))
+                print(json.dumps(getSJSON(s,p,o,t), 
+			default=datetime_converter))
+               #  print(json.dumps({ "s": str(s.toPython()), 
+                                        # "p": str(p.toPython()), 
+                                        # "o": str(o.toPython()),
+               #                          "ts": t}))
     # print(f"{header}\treturning {len(res)} lines")
 
 
@@ -59,7 +90,6 @@ if __name__ == '__main__':
         construct_query = " ".join(open(construct_query).readlines())
         timestamp_query = " ".join(open(timestamp_query).readlines())
         cpus = mp.cpu_count()
-        print(cpus)
         with mp.Pool(cpus) as p:
             p.map(batch, [ { "process": i, 
                     "files": files, 

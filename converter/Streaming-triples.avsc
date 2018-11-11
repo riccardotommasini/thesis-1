@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "SJSONTriple",
+  "fields": [
+      {"name": "s", "type": "string"},
+      {"name": "p", "type": "string"},
+      {"name": "o", "type": "record", "fields": [
+        {"name": "value", "type": ["null", "string", "int", "long", "float"]},
+        {"name": "type", "type":"enum", "symbols": ["literal", "bnode", "uri"]},
+        {"name": "datatype", "type": ["null", "string"]}
+      ]},
+      {"name": "ts", "type": "long"}
+	]
+}
