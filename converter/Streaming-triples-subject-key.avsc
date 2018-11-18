@@ -1,0 +1,8 @@
+{
+  "type": "record",
+    "name": "SJSONSubjectKey",
+    "fields": [
+      {"name": "s", "type": "string"}
+    ]
+}
+

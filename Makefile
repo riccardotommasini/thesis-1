@@ -1,8 +1,10 @@
 .PHONY: datagen-stream
 
+up:
+	sudo docker-compose up -d
 
 datagen-stream:
-	sudo docker-compose up -d
+	make up
 	sudo docker run --network thesis_default --rm -d \
 		--name datagen-stream \
 		-v `pwd`/streaming-data.avro:/streaming-data.avro \
@@ -17,7 +19,7 @@ datagen-stream:
 			schemaRegistryUrl=schema-registry:8081
 
 datagen-static:
-	sudo docker-compose up -d
+	make up
 	sudo docker run --network thesis_default --rm -d \
 		--name datagen-static \
 		-v `pwd`/static-data.avro:/static-data.avro \
@@ -32,12 +34,10 @@ datagen-static:
 			schemaRegistryUrl=schema-registry:8081
 
 ksql:
+	sudo docker-compose up -d ksql-server
 	sudo docker run --network thesis_default --rm -ti \
      confluentinc/cp-ksql-cli:5.0.1 \
      http://ksql-server:8088
-
-file = results/result_$(shell date +"%s")
-n = 3
 
 kafkacat:
 	sudo docker run --network thesis_default \
@@ -46,6 +46,7 @@ kafkacat:
            kafkacat -b broker:9092 \
                     -t sorted_triples \
                     -P -l /tmp/data.txt
+	schema-registry-cli add sorted_triples-value < converter/Streaming-triples.avsc 
 
 build-converter:
 	sudo docker build -t phisco/converter converter
@@ -53,4 +54,7 @@ build-converter:
 
 run-converter:
 	sudo docker run -v `pwd`/rdf:/rdf -v `pwd`/results:/results phisco/converter
+
+register-schema:
+	schema-registry-cli add sorted_triples_avro-value < converter/Streaming-triples.avsc
 

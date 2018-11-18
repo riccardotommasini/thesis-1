@@ -1,14 +1,47 @@
 {
   "type": "record",
-  "name": "SJSONTriple",
-  "fields": [
-      {"name": "s", "type": "string"},
-      {"name": "p", "type": "string"},
-      {"name": "o", "type": "record", "fields": [
-        {"name": "value", "type": ["null", "string", "int", "long", "float"]},
-        {"name": "type", "type":"enum", "symbols": ["literal", "bnode", "uri"]},
-        {"name": "datatype", "type": ["null", "string"]}
+    "name": "SJSONTriple",
+    "fields": [
+    {"name": "s", "type": "string"},
+    {"name": "p", "type": "string"},
+    {"name": "o",
+      "type":[ 
+      {
+        "type": "record",
+        "name": "Literal",
+        "fields": [
+          {"name": "value", "type": ["null", "string", "int", "long", "float"]},
+          {"name": "datatype", "type": ["null", "string"]},
+          {"name": "lang", "type": ["null", "string"]},
+          {"name": "type", 
+						"type":{
+						"name" : "LiteralKind", 
+						"type": "enum", 
+						"symbols": [ "literal" ]}}
+        ]},
+      {
+        "type": "record",
+        "name": "URI",
+        "fields": [
+          {"name": "value", "type": "string"},
+          {"name": "type", 
+						"type":{
+						"name" : "URIKind", 
+						"type": "enum", 
+						"symbols": [ "uri" ]}}
+        ]},
+      {
+        "type": "record",
+        "name": "BNode",
+        "fields": [
+          {"name": "value", "type": "string"},
+          {"name": "type", 
+						"type":{
+						"name" : "BnodeKind", 
+						"type": "enum", 
+						"symbols": [ "bnode" ]}}
+        ]}
       ]},
-      {"name": "ts", "type": "long"}
-	]
+    {"name": "ts", "type": "long"}
+    ]
 }

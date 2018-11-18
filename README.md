@@ -3,15 +3,23 @@
 ## SRBENCH
 - Download http://sonicbanana.cs.wright.edu/knoesis_linkedobservationdata_bill.tar.gz from http://wiki.knoesis.org/index.php/LinkedSensorData
 - To execute the converter from the n3 files to streamable timestamped triples in json, sorted by timestamp, `{ subject: ..., predicate: ..., object: ..., timestamp: ... }` use the template in the `Makefile`
-- To 
 
+## AVRO
+`java -jar ./avro-tools-1.8.2.jar compile schema converter .`
+## SCHEMA REGISTRY
+- Download the schema-registry-cli: `go get -u github.com/landoop/schema-registry/schema-registry-cli`
+- register the schema with the schema registry through `make register-schema `
+
+## KSQL
 ```
 SET 'auto.offset.reset' = 'earliest';
 CREATE STREAM triples ( s VARCHAR, p VARCHAR, o VARCHAR, ts BIGINT) WITH (KAFKA_TOPIC='sorted_triples', VALUE_FORMAT='JSON', KEY='S', TIMESTAMP='ts');
 ```
 
 ```
-CREATE TABLE Window_one as select s, o from triples window tumbling (size 1 hour) where p = 'http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result' group by s, o;
+CREATE TABLE W1 as select s, o from triples window tumbling (size 1 hour) where p = 'http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result' group by s, o;
+CREATE TABLE W2 as select s from triples window tumbling (size 1 hour) where p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' and o ='http://knoesis.wright.edu/ssw/ont/weather.owl#RainfallObservation' group by s;
+
 ```
 
 ### Streaming-data:
