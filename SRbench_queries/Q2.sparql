@@ -1,0 +1,15 @@
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+
+SELECT DISTINCT ?sensor ?value ?uom
+WHERE {
+  ?observation om-owl:procedure ?sensor ;
+               rdf:type/rdfs:subClassOf* weather:PrecipitationObservation ;
+               om-owl:result ?result .
+  ?result ?p1 ?value .
+  OPTIONAL {
+    ?result ?p2 ?uom .
+  }
+}

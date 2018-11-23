@@ -1,0 +1,198 @@
+Q1 : 
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+
+SELECT DISTINCT ?sensor ?value ?uom
+WHERE {
+  {?observation om-owl:procedure ?sensor ;
+               a weather:RainfallObservation ;
+               om-owl:result ?result}
+  {?result om-owl:floatValue ?value ;
+          om-owl:uom ?uom }
+}
+
+Algebra :
+SelectQuery(
+    p = Distinct(
+        p = Project(
+            p = Join(
+                p1 = BGP(
+                    triples = [(rdflib.term.Variable('observation'), rdflib.term.URIRef('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/weather.owl#RainfallObservation')), (rdflib.term.Variable('observation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#procedure'), rdflib.term.Variable('sensor')), (rdflib.term.Variable('observation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result'), rdflib.term.Variable('result'))]
+                    _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('result')}
+                    )
+                p2 = BGP(
+                    triples = [(rdflib.term.Variable('result'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue'), rdflib.term.Variable('value')), (rdflib.term.Variable('result'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#uom'), rdflib.term.Variable('uom'))]
+                    _vars = {rdflib.term.Variable('result'), rdflib.term.Variable('uom'), rdflib.term.Variable('value')}
+                    )
+                lazy = True
+                _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('result'), rdflib.term.Variable('uom')}
+                )
+            PV = [rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('uom')]
+            _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('result'), rdflib.term.Variable('uom')}
+            )
+        _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('result'), rdflib.term.Variable('uom')}
+        )
+    datasetClause = None
+    PV = [rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('uom')]
+    _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('result'), rdflib.term.Variable('uom')}
+    )
+=================
+Q2 : 
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+
+SELECT DISTINCT ?sensor ?value ?uom
+WHERE {
+  ?observation om-owl:procedure ?sensor ;
+               rdf:type/rdfs:subClassOf* weather:PrecipitationObservation ;
+               om-owl:result ?result .
+  ?result ?p1 ?value .
+  OPTIONAL {
+    ?result ?p2 ?uom .
+  }
+}
+
+Algebra :
+SelectQuery(
+    p = Distinct(
+        p = Project(
+            p = LeftJoin(
+                p1 = BGP(
+                    triples = [(rdflib.term.Variable('observation'), Path(http://www.w3.org/1999/02/22-rdf-syntax-ns#type / Path(http://www.w3.org/2000/01/rdf-schema#subClassOf*)), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/weather.owl#PrecipitationObservation')), (rdflib.term.Variable('observation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result'), rdflib.term.Variable('result')), (rdflib.term.Variable('observation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#procedure'), rdflib.term.Variable('sensor')), (rdflib.term.Variable('result'), rdflib.term.Variable('p1'), rdflib.term.Variable('value'))]
+                    _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('result'), rdflib.term.Variable('p1')}
+                    )
+                p2 = BGP(
+                    triples = [(rdflib.term.Variable('result'), rdflib.term.Variable('p2'), rdflib.term.Variable('uom'))]
+                    _vars = {rdflib.term.Variable('result'), rdflib.term.Variable('p2'), rdflib.term.Variable('uom')}
+                    )
+                expr = TrueFilter(
+                    _vars = set()
+                    )
+                _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('p2'), rdflib.term.Variable('value'), rdflib.term.Variable('result'), rdflib.term.Variable('p1'), rdflib.term.Variable('uom')}
+                )
+            PV = [rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('uom')]
+            _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('observation'), rdflib.term.Variable('p2'), rdflib.term.Variable('value'), rdflib.term.Variable('result'), rdflib.term.Variable('p1'), rdflib.term.Variable('uom')}
+            )
+        _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('observation'), rdflib.term.Variable('p2'), rdflib.term.Variable('value'), rdflib.term.Variable('result'), rdflib.term.Variable('p1'), rdflib.term.Variable('uom')}
+        )
+    datasetClause = None
+    PV = [rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('uom')]
+    _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('observation'), rdflib.term.Variable('p2'), rdflib.term.Variable('value'), rdflib.term.Variable('result'), rdflib.term.Variable('p1'), rdflib.term.Variable('uom')}
+    )
+=================
+Q3 : 
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+ASK
+WHERE {
+  ?observation om-owl:procedure ?sensor ;
+               om-owl:observedProperty weather:WindSpeed ;
+               om-owl:result [ om-owl:floatValue ?value ] .
+}
+GROUP BY ?sensor
+HAVING ( AVG(?value) >= "74"^^xsd:float ) #milesPerHour
+
+
+Algebra :
+AskQuery(
+    p = Project(
+        p = Filter(
+            expr = RelationalExpression(
+                expr = __agg_1__
+                op = >=
+                other = 74
+                _vars = set()
+                )
+            p = AggregateJoin(
+                A = [Aggregate_Avg_{'distinct': [], 'vars': rdflib.term.Variable('value'), 'res': rdflib.term.Variable('__agg_1__'), '_vars': {rdflib.term.Variable('value'), rdflib.term.Variable('__agg_1__')}}]
+                p = Group(
+                    p = BGP(
+                        triples = [(rdflib.term.Variable('observation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#observedProperty'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/weather.owl#WindSpeed')), (rdflib.term.Variable('observation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result'), rdflib.term.BNode('N3c6ece23093f49d582fc8611f50f5801')), (rdflib.term.Variable('observation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#procedure'), rdflib.term.Variable('sensor')), (rdflib.term.BNode('N3c6ece23093f49d582fc8611f50f5801'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue'), rdflib.term.Variable('value'))]
+                        _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value')}
+                        )
+                    expr = [rdflib.term.Variable('sensor')]
+                    _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value')}
+                    )
+                _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('__agg_1__')}
+                )
+            _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('__agg_1__')}
+            )
+        PV = [rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value')]
+        _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('__agg_1__')}
+        )
+    datasetClause = []
+    PV = [rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value')]
+    _vars = {rdflib.term.Variable('observation'), rdflib.term.Variable('sensor'), rdflib.term.Variable('value'), rdflib.term.Variable('__agg_1__')}
+    )
+=================
+Q4 : 
+PREFIX om-owl: <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#>
+PREFIX weather: <http://knoesis.wright.edu/ssw/ont/weather.owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?sensor (AVG(?windSpeed) AS ?averageWindSpeed)
+               (AVG(?temperature) AS ?averageTemperature)
+WHERE {
+  ?temperatureObservation om-owl:procedure ?sensor ;
+                          a weather:TemperatureObservation ;
+                          om-owl:result ?temperatureResult .
+  ?temperatureResult om-owl:floatValue ?temperature ;
+                     om-owl:uom ?uom .
+  FILTER(?temperature > "32"^^xsd:float)
+  ?windSpeedObservation om-owl:procedure ?sensor ;
+                        a weather:WindSpeedObservation ;
+                        om-owl:result [ om-owl:floatValue ?windSpeed ]  .
+}
+GROUP BY ?sensor
+
+Algebra :
+SelectQuery(
+    p = Project(
+        p = Extend(
+            p = Extend(
+                p = Extend(
+                    p = AggregateJoin(
+                        A = [Aggregate_Avg_{'distinct': [], 'vars': rdflib.term.Variable('windSpeed'), 'res': rdflib.term.Variable('__agg_1__'), '_vars': {rdflib.term.Variable('windSpeed'), rdflib.term.Variable('__agg_1__')}}, Aggregate_Avg_{'distinct': [], 'vars': rdflib.term.Variable('temperature'), 'res': rdflib.term.Variable('__agg_2__'), '_vars': {rdflib.term.Variable('temperature'), rdflib.term.Variable('__agg_2__')}}, Aggregate_Sample_{'vars': rdflib.term.Variable('sensor'), 'res': rdflib.term.Variable('__agg_3__'), '_vars': {rdflib.term.Variable('sensor'), rdflib.term.Variable('__agg_3__')}}]
+                        p = Group(
+                            p = Filter(
+                                expr = RelationalExpression(
+                                    expr = temperature
+                                    op = >
+                                    other = 32
+                                    _vars = set()
+                                    )
+                                p = BGP(
+                                    triples = [(rdflib.term.Variable('temperatureObservation'), rdflib.term.URIRef('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/weather.owl#TemperatureObservation')), (rdflib.term.Variable('windSpeedObservation'), rdflib.term.URIRef('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/weather.owl#WindSpeedObservation')), (rdflib.term.Variable('temperatureObservation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result'), rdflib.term.Variable('temperatureResult')), (rdflib.term.Variable('temperatureObservation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#procedure'), rdflib.term.Variable('sensor')), (rdflib.term.Variable('windSpeedObservation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#procedure'), rdflib.term.Variable('sensor')), (rdflib.term.Variable('windSpeedObservation'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result'), rdflib.term.BNode('Nb58f0d7dd4f44d4fb8ecd88db3ac8254')), (rdflib.term.Variable('temperatureResult'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue'), rdflib.term.Variable('temperature')), (rdflib.term.Variable('temperatureResult'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#uom'), rdflib.term.Variable('uom')), (rdflib.term.BNode('Nb58f0d7dd4f44d4fb8ecd88db3ac8254'), rdflib.term.URIRef('http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue'), rdflib.term.Variable('windSpeed'))]
+                                    _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('temperatureObservation'), rdflib.term.Variable('temperature'), rdflib.term.Variable('temperatureResult'), rdflib.term.Variable('windSpeedObservation'), rdflib.term.Variable('windSpeed'), rdflib.term.Variable('uom')}
+                                    )
+                                _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('temperatureObservation'), rdflib.term.Variable('temperature'), rdflib.term.Variable('temperatureResult'), rdflib.term.Variable('windSpeedObservation'), rdflib.term.Variable('windSpeed'), rdflib.term.Variable('uom')}
+                                )
+                            expr = [rdflib.term.Variable('sensor')]
+                            _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('temperatureObservation'), rdflib.term.Variable('temperature'), rdflib.term.Variable('temperatureResult'), rdflib.term.Variable('windSpeedObservation'), rdflib.term.Variable('windSpeed'), rdflib.term.Variable('uom')}
+                            )
+                        _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('temperature'), rdflib.term.Variable('__agg_2__'), rdflib.term.Variable('temperatureResult'), rdflib.term.Variable('windSpeedObservation'), rdflib.term.Variable('windSpeed'), rdflib.term.Variable('temperatureObservation'), rdflib.term.Variable('__agg_3__'), rdflib.term.Variable('uom'), rdflib.term.Variable('__agg_1__')}
+                        )
+                    expr = __agg_3__
+                    var = sensor
+                    _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('temperature'), rdflib.term.Variable('__agg_2__'), rdflib.term.Variable('temperatureResult'), rdflib.term.Variable('windSpeedObservation'), rdflib.term.Variable('windSpeed'), rdflib.term.Variable('temperatureObservation'), rdflib.term.Variable('__agg_3__'), rdflib.term.Variable('uom'), rdflib.term.Variable('__agg_1__')}
+                    )
+                expr = __agg_1__
+                var = averageWindSpeed
+                _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('temperature'), rdflib.term.Variable('__agg_2__'), rdflib.term.Variable('temperatureResult'), rdflib.term.Variable('windSpeedObservation'), rdflib.term.Variable('windSpeed'), rdflib.term.Variable('temperatureObservation'), rdflib.term.Variable('__agg_3__'), rdflib.term.Variable('averageWindSpeed'), rdflib.term.Variable('uom'), rdflib.term.Variable('__agg_1__')}
+                )
+            expr = __agg_2__
+            var = averageTemperature
+            _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('temperature'), rdflib.term.Variable('__agg_2__'), rdflib.term.Variable('temperatureResult'), rdflib.term.Variable('windSpeedObservation'), rdflib.term.Variable('windSpeed'), rdflib.term.Variable('temperatureObservation'), rdflib.term.Variable('averageTemperature'), rdflib.term.Variable('__agg_3__'), rdflib.term.Variable('averageWindSpeed'), rdflib.term.Variable('uom'), rdflib.term.Variable('__agg_1__')}
+            )
+        PV = [rdflib.term.Variable('sensor'), rdflib.term.Variable('averageWindSpeed'), rdflib.term.Variable('averageTemperature')]
+        _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('temperature'), rdflib.term.Variable('__agg_2__'), rdflib.term.Variable('temperatureResult'), rdflib.term.Variable('windSpeedObservation'), rdflib.term.Variable('windSpeed'), rdflib.term.Variable('temperatureObservation'), rdflib.term.Variable('averageTemperature'), rdflib.term.Variable('__agg_3__'), rdflib.term.Variable('averageWindSpeed'), rdflib.term.Variable('uom'), rdflib.term.Variable('__agg_1__')}
+        )
+    datasetClause = None
+    PV = [rdflib.term.Variable('sensor'), rdflib.term.Variable('averageWindSpeed'), rdflib.term.Variable('averageTemperature')]
+    _vars = {rdflib.term.Variable('sensor'), rdflib.term.Variable('temperature'), rdflib.term.Variable('__agg_2__'), rdflib.term.Variable('temperatureResult'), rdflib.term.Variable('windSpeedObservation'), rdflib.term.Variable('windSpeed'), rdflib.term.Variable('temperatureObservation'), rdflib.term.Variable('averageTemperature'), rdflib.term.Variable('__agg_3__'), rdflib.term.Variable('averageWindSpeed'), rdflib.term.Variable('uom'), rdflib.term.Variable('__agg_1__')}
+    )
+=================
