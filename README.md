@@ -17,6 +17,10 @@ CREATE STREAM triples ( s VARCHAR, p VARCHAR, o VARCHAR, ts BIGINT) WITH (KAFKA_
 ```
 
 ```
+RUN SCRIPT '/ksql-scripts/init.sql';
+```
+
+```
 CREATE TABLE W1 as select s, o from triples window tumbling (size 1 hour) where p = 'http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result' group by s, o;
 CREATE TABLE W2 as select s from triples window tumbling (size 1 hour) where p = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' and o ='http://knoesis.wright.edu/ssw/ont/weather.owl#RainfallObservation' group by s;
 

@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: avro-consumer
+spec:
+  template:
+    spec:
+      containers:
+      - name: avro-consumer
+        image: phisco/avro_consumer
+        imagePullPolicy: Always
+        env:
+        - name: TOPIC
+          value: sorted_triples_2
+        - name: BOOTSTAP_SERVER
+          value: kafka-k8s:9092
+        - name: SCHEMA_REGISTRY
+          value: http://kafka-schema-registry-k8s:8081
+      restartPolicy: Never
+

@@ -1,0 +1,4 @@
+namespace: kafka
+resources:
+- ./consumer/job.yml
+- ./producer/job.yml

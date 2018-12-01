@@ -27,21 +27,19 @@ public class StreamingTriplesExample
     public static void main( String[] args )
     {
         Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "meta");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
-        Serde<JsonNode> serde = Serdes.serdeFrom(new JsonSerializer(),new JsonDeserializer());
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put("schema.registry.url", "http://localhost:8081");
+        //props.put("schema.registry.url", "http://localhost:8081");
 
-        final Serde<SJSONTriple> valueSpecificAvroSerde = new SpecificAvroSerde<>(new CachedSchemaRegistryClient("http://localhost:8081", 10));
+        final Serde<SJSONTriple> valueSpecificAvroSerde = new SpecificAvroSerde<>(new CachedSchemaRegistryClient("http://kafka-k8s:8081", 10));
         final Map<String, String> serdeConfig = Collections.singletonMap("schema.registry.url",
-                "http://localhost:8081");
+                "http://kafka-schema-registry-k8s:8081");
         valueSpecificAvroSerde.configure(serdeConfig,false);
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, SJSONTriple> s0 = builder.stream("sorted_triples_avro", Consumed.with(new Serdes.StringSerde(), valueSpecificAvroSerde));
+        KStream<String, SJSONTriple> s0 = builder.stream("sorted_triples_2", Consumed.with(new Serdes.StringSerde(), valueSpecificAvroSerde));
         s0.print(Printed.toSysOut());
-
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();

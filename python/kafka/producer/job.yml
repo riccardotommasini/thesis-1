@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: avro-producer
+spec:
+  template:
+    spec:
+      containers:
+      - name: avro-producer
+        image: phisco/avro_producer
+        imagePullPolicy: Always
+        env:
+        - name: TOPIC
+          value: sorted_triples_2
+        - name: TIMESTAMP_KEY
+          value: ts
+        - name: BOOTSTAP_SERVER
+          value: kafka-k8s:9092
+        - name: SCHEMA_REGISTRY
+          value: http://kafka-schema-registry-k8s:8081
+      restartPolicy: Never
+

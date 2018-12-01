@@ -3,3 +3,4 @@ knoesis_linkedobservationdata_bill*
 .ipynb_checkpoints
 \.idea/
 Metamorphosys/target
+python/kafka/producer/big_sorted_result.txt

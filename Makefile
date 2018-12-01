@@ -58,3 +58,7 @@ run-converter:
 register-schema:
 	schema-registry-cli add sorted_triples_avro-value < converter/Streaming-triples.avsc
 
+ksql-remote:
+	kubectl port-forward  svc/ksql-server 8088 > /dev/null &
+	sudo docker run --network host --rm -ti -v `pwd`/ksql-scripts:/ksql-scripts \
+	confluentinc/cp-ksql-cli:5.0.1 http://localhost:8088
