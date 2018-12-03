@@ -62,3 +62,5 @@ ksql-remote:
 	kubectl port-forward  svc/ksql-server 8088 > /dev/null &
 	sudo docker run --network host --rm -ti -v `pwd`/ksql-scripts:/ksql-scripts \
 	confluentinc/cp-ksql-cli:5.0.1 http://localhost:8088
+generate-data:
+	./python/rdf_to_stream/script.sh 0 10 rdf python/rdf_to_stream/construct_query.sparql python/rdf_to_stream/timestamp_query.sparql
