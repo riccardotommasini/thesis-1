@@ -1,0 +1,8 @@
+{
+  "type": "record",
+    "name": "SJSONtKey",
+    "fields": [
+      {"name": "key", "type": "string"}
+    ]
+}
+
