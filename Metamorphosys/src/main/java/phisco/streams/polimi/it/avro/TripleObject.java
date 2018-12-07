@@ -12,23 +12,23 @@ import org.apache.avro.message.SchemaStore;
 
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
-public class Literal extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 4443229805794369508L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Literal\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"value\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"},\"int\",\"long\",\"float\"]},{\"name\":\"datatype\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"lang\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"LiteralKind\",\"symbols\":[\"literal\"]}}]}");
+public class TripleObject extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+  private static final long serialVersionUID = -4066954954952653578L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"TripleObject\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"value\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"},\"int\",\"long\",\"float\"]},{\"name\":\"datatype\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"Kind\",\"symbols\":[\"literal\",\"uri\",\"bnode\"]}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
 
-  private static final BinaryMessageEncoder<Literal> ENCODER =
-      new BinaryMessageEncoder<Literal>(MODEL$, SCHEMA$);
+  private static final BinaryMessageEncoder<TripleObject> ENCODER =
+      new BinaryMessageEncoder<TripleObject>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<Literal> DECODER =
-      new BinaryMessageDecoder<Literal>(MODEL$, SCHEMA$);
+  private static final BinaryMessageDecoder<TripleObject> DECODER =
+      new BinaryMessageDecoder<TripleObject>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
    */
-  public static BinaryMessageDecoder<Literal> getDecoder() {
+  public static BinaryMessageDecoder<TripleObject> getDecoder() {
     return DECODER;
   }
 
@@ -36,44 +36,41 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
    * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    */
-  public static BinaryMessageDecoder<Literal> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<Literal>(MODEL$, SCHEMA$, resolver);
+  public static BinaryMessageDecoder<TripleObject> createDecoder(SchemaStore resolver) {
+    return new BinaryMessageDecoder<TripleObject>(MODEL$, SCHEMA$, resolver);
   }
 
-  /** Serializes this Literal to a ByteBuffer. */
+  /** Serializes this TripleObject to a ByteBuffer. */
   public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
     return ENCODER.encode(this);
   }
 
-  /** Deserializes a Literal from a ByteBuffer. */
-  public static Literal fromByteBuffer(
+  /** Deserializes a TripleObject from a ByteBuffer. */
+  public static TripleObject fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
 
   @Deprecated public java.lang.Object value;
   @Deprecated public java.lang.String datatype;
-  @Deprecated public java.lang.String lang;
-  @Deprecated public phisco.streams.polimi.it.avro.LiteralKind type;
+  @Deprecated public phisco.streams.polimi.it.avro.Kind type;
 
   /**
    * Default constructor.  Note that this does not initialize fields
    * to their default values from the schema.  If that is desired then
    * one should use <code>newBuilder()</code>.
    */
-  public Literal() {}
+  public TripleObject() {}
 
   /**
    * All-args constructor.
    * @param value The new value for value
    * @param datatype The new value for datatype
-   * @param lang The new value for lang
    * @param type The new value for type
    */
-  public Literal(java.lang.Object value, java.lang.String datatype, java.lang.String lang, phisco.streams.polimi.it.avro.LiteralKind type) {
+  public TripleObject(java.lang.Object value, java.lang.String datatype, phisco.streams.polimi.it.avro.Kind type) {
     this.value = value;
     this.datatype = datatype;
-    this.lang = lang;
     this.type = type;
   }
 
@@ -83,8 +80,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
     switch (field$) {
     case 0: return value;
     case 1: return datatype;
-    case 2: return lang;
-    case 3: return type;
+    case 2: return type;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -95,8 +91,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
     switch (field$) {
     case 0: value = (java.lang.Object)value$; break;
     case 1: datatype = (java.lang.String)value$; break;
-    case 2: lang = (java.lang.String)value$; break;
-    case 3: type = (phisco.streams.polimi.it.avro.LiteralKind)value$; break;
+    case 2: type = (phisco.streams.polimi.it.avro.Kind)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -134,26 +129,10 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
   }
 
   /**
-   * Gets the value of the 'lang' field.
-   * @return The value of the 'lang' field.
-   */
-  public java.lang.String getLang() {
-    return lang;
-  }
-
-  /**
-   * Sets the value of the 'lang' field.
-   * @param value the value to set.
-   */
-  public void setLang(java.lang.String value) {
-    this.lang = value;
-  }
-
-  /**
    * Gets the value of the 'type' field.
    * @return The value of the 'type' field.
    */
-  public phisco.streams.polimi.it.avro.LiteralKind getType() {
+  public phisco.streams.polimi.it.avro.Kind getType() {
     return type;
   }
 
@@ -161,46 +140,45 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'type' field.
    * @param value the value to set.
    */
-  public void setType(phisco.streams.polimi.it.avro.LiteralKind value) {
+  public void setType(phisco.streams.polimi.it.avro.Kind value) {
     this.type = value;
   }
 
   /**
-   * Creates a new Literal RecordBuilder.
-   * @return A new Literal RecordBuilder
+   * Creates a new TripleObject RecordBuilder.
+   * @return A new TripleObject RecordBuilder
    */
-  public static phisco.streams.polimi.it.avro.Literal.Builder newBuilder() {
-    return new phisco.streams.polimi.it.avro.Literal.Builder();
+  public static phisco.streams.polimi.it.avro.TripleObject.Builder newBuilder() {
+    return new phisco.streams.polimi.it.avro.TripleObject.Builder();
   }
 
   /**
-   * Creates a new Literal RecordBuilder by copying an existing Builder.
+   * Creates a new TripleObject RecordBuilder by copying an existing Builder.
    * @param other The existing builder to copy.
-   * @return A new Literal RecordBuilder
+   * @return A new TripleObject RecordBuilder
    */
-  public static phisco.streams.polimi.it.avro.Literal.Builder newBuilder(phisco.streams.polimi.it.avro.Literal.Builder other) {
-    return new phisco.streams.polimi.it.avro.Literal.Builder(other);
+  public static phisco.streams.polimi.it.avro.TripleObject.Builder newBuilder(phisco.streams.polimi.it.avro.TripleObject.Builder other) {
+    return new phisco.streams.polimi.it.avro.TripleObject.Builder(other);
   }
 
   /**
-   * Creates a new Literal RecordBuilder by copying an existing Literal instance.
+   * Creates a new TripleObject RecordBuilder by copying an existing TripleObject instance.
    * @param other The existing instance to copy.
-   * @return A new Literal RecordBuilder
+   * @return A new TripleObject RecordBuilder
    */
-  public static phisco.streams.polimi.it.avro.Literal.Builder newBuilder(phisco.streams.polimi.it.avro.Literal other) {
-    return new phisco.streams.polimi.it.avro.Literal.Builder(other);
+  public static phisco.streams.polimi.it.avro.TripleObject.Builder newBuilder(phisco.streams.polimi.it.avro.TripleObject other) {
+    return new phisco.streams.polimi.it.avro.TripleObject.Builder(other);
   }
 
   /**
-   * RecordBuilder for Literal instances.
+   * RecordBuilder for TripleObject instances.
    */
-  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<Literal>
-    implements org.apache.avro.data.RecordBuilder<Literal> {
+  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<TripleObject>
+    implements org.apache.avro.data.RecordBuilder<TripleObject> {
 
     private java.lang.Object value;
     private java.lang.String datatype;
-    private java.lang.String lang;
-    private phisco.streams.polimi.it.avro.LiteralKind type;
+    private phisco.streams.polimi.it.avro.Kind type;
 
     /** Creates a new Builder */
     private Builder() {
@@ -211,7 +189,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(phisco.streams.polimi.it.avro.Literal.Builder other) {
+    private Builder(phisco.streams.polimi.it.avro.TripleObject.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.value)) {
         this.value = data().deepCopy(fields()[0].schema(), other.value);
@@ -221,21 +199,17 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
         this.datatype = data().deepCopy(fields()[1].schema(), other.datatype);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.lang)) {
-        this.lang = data().deepCopy(fields()[2].schema(), other.lang);
+      if (isValidValue(fields()[2], other.type)) {
+        this.type = data().deepCopy(fields()[2].schema(), other.type);
         fieldSetFlags()[2] = true;
-      }
-      if (isValidValue(fields()[3], other.type)) {
-        this.type = data().deepCopy(fields()[3].schema(), other.type);
-        fieldSetFlags()[3] = true;
       }
     }
 
     /**
-     * Creates a Builder by copying an existing Literal instance
+     * Creates a Builder by copying an existing TripleObject instance
      * @param other The existing instance to copy.
      */
-    private Builder(phisco.streams.polimi.it.avro.Literal other) {
+    private Builder(phisco.streams.polimi.it.avro.TripleObject other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.value)) {
         this.value = data().deepCopy(fields()[0].schema(), other.value);
@@ -245,13 +219,9 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
         this.datatype = data().deepCopy(fields()[1].schema(), other.datatype);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.lang)) {
-        this.lang = data().deepCopy(fields()[2].schema(), other.lang);
+      if (isValidValue(fields()[2], other.type)) {
+        this.type = data().deepCopy(fields()[2].schema(), other.type);
         fieldSetFlags()[2] = true;
-      }
-      if (isValidValue(fields()[3], other.type)) {
-        this.type = data().deepCopy(fields()[3].schema(), other.type);
-        fieldSetFlags()[3] = true;
       }
     }
 
@@ -268,7 +238,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * @param value The value of 'value'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.Literal.Builder setValue(java.lang.Object value) {
+    public phisco.streams.polimi.it.avro.TripleObject.Builder setValue(java.lang.Object value) {
       validate(fields()[0], value);
       this.value = value;
       fieldSetFlags()[0] = true;
@@ -288,7 +258,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * Clears the value of the 'value' field.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.Literal.Builder clearValue() {
+    public phisco.streams.polimi.it.avro.TripleObject.Builder clearValue() {
       value = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -307,7 +277,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * @param value The value of 'datatype'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.Literal.Builder setDatatype(java.lang.String value) {
+    public phisco.streams.polimi.it.avro.TripleObject.Builder setDatatype(java.lang.String value) {
       validate(fields()[1], value);
       this.datatype = value;
       fieldSetFlags()[1] = true;
@@ -327,48 +297,9 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * Clears the value of the 'datatype' field.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.Literal.Builder clearDatatype() {
+    public phisco.streams.polimi.it.avro.TripleObject.Builder clearDatatype() {
       datatype = null;
       fieldSetFlags()[1] = false;
-      return this;
-    }
-
-    /**
-      * Gets the value of the 'lang' field.
-      * @return The value.
-      */
-    public java.lang.String getLang() {
-      return lang;
-    }
-
-    /**
-      * Sets the value of the 'lang' field.
-      * @param value The value of 'lang'.
-      * @return This builder.
-      */
-    public phisco.streams.polimi.it.avro.Literal.Builder setLang(java.lang.String value) {
-      validate(fields()[2], value);
-      this.lang = value;
-      fieldSetFlags()[2] = true;
-      return this;
-    }
-
-    /**
-      * Checks whether the 'lang' field has been set.
-      * @return True if the 'lang' field has been set, false otherwise.
-      */
-    public boolean hasLang() {
-      return fieldSetFlags()[2];
-    }
-
-
-    /**
-      * Clears the value of the 'lang' field.
-      * @return This builder.
-      */
-    public phisco.streams.polimi.it.avro.Literal.Builder clearLang() {
-      lang = null;
-      fieldSetFlags()[2] = false;
       return this;
     }
 
@@ -376,7 +307,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * Gets the value of the 'type' field.
       * @return The value.
       */
-    public phisco.streams.polimi.it.avro.LiteralKind getType() {
+    public phisco.streams.polimi.it.avro.Kind getType() {
       return type;
     }
 
@@ -385,10 +316,10 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * @param value The value of 'type'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.Literal.Builder setType(phisco.streams.polimi.it.avro.LiteralKind value) {
-      validate(fields()[3], value);
+    public phisco.streams.polimi.it.avro.TripleObject.Builder setType(phisco.streams.polimi.it.avro.Kind value) {
+      validate(fields()[2], value);
       this.type = value;
-      fieldSetFlags()[3] = true;
+      fieldSetFlags()[2] = true;
       return this;
     }
 
@@ -397,7 +328,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * @return True if the 'type' field has been set, false otherwise.
       */
     public boolean hasType() {
-      return fieldSetFlags()[3];
+      return fieldSetFlags()[2];
     }
 
 
@@ -405,21 +336,20 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * Clears the value of the 'type' field.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.Literal.Builder clearType() {
+    public phisco.streams.polimi.it.avro.TripleObject.Builder clearType() {
       type = null;
-      fieldSetFlags()[3] = false;
+      fieldSetFlags()[2] = false;
       return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Literal build() {
+    public TripleObject build() {
       try {
-        Literal record = new Literal();
+        TripleObject record = new TripleObject();
         record.value = fieldSetFlags()[0] ? this.value : (java.lang.Object) defaultValue(fields()[0]);
         record.datatype = fieldSetFlags()[1] ? this.datatype : (java.lang.String) defaultValue(fields()[1]);
-        record.lang = fieldSetFlags()[2] ? this.lang : (java.lang.String) defaultValue(fields()[2]);
-        record.type = fieldSetFlags()[3] ? this.type : (phisco.streams.polimi.it.avro.LiteralKind) defaultValue(fields()[3]);
+        record.type = fieldSetFlags()[2] ? this.type : (phisco.streams.polimi.it.avro.Kind) defaultValue(fields()[2]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
@@ -428,8 +358,8 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<Literal>
-    WRITER$ = (org.apache.avro.io.DatumWriter<Literal>)MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<TripleObject>
+    WRITER$ = (org.apache.avro.io.DatumWriter<TripleObject>)MODEL$.createDatumWriter(SCHEMA$);
 
   @Override public void writeExternal(java.io.ObjectOutput out)
     throws java.io.IOException {
@@ -437,8 +367,8 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<Literal>
-    READER$ = (org.apache.avro.io.DatumReader<Literal>)MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<TripleObject>
+    READER$ = (org.apache.avro.io.DatumReader<TripleObject>)MODEL$.createDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
     throws java.io.IOException {

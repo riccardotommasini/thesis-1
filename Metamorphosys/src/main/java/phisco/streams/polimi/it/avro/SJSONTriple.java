@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 9110606108457841464L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SJSONTriple\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"s\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"p\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"o\",\"type\":[{\"type\":\"record\",\"name\":\"Literal\",\"fields\":[{\"name\":\"value\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"},\"int\",\"long\",\"float\"]},{\"name\":\"datatype\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"lang\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"LiteralKind\",\"symbols\":[\"literal\"]}}]},{\"type\":\"record\",\"name\":\"URI\",\"fields\":[{\"name\":\"value\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"URIKind\",\"symbols\":[\"uri\"]}}]},{\"type\":\"record\",\"name\":\"BNode\",\"fields\":[{\"name\":\"value\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"BnodeKind\",\"symbols\":[\"bnode\"]}}]}]},{\"name\":\"ts\",\"type\":\"long\"}]}");
+  private static final long serialVersionUID = -3080858522466305209L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SJSONTriple\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"s\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"p\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"o\",\"type\":{\"type\":\"record\",\"name\":\"TripleObject\",\"fields\":[{\"name\":\"value\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"},\"int\",\"long\",\"float\"]},{\"name\":\"datatype\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"Kind\",\"symbols\":[\"literal\",\"uri\",\"bnode\"]}}]}},{\"name\":\"ts\",\"type\":\"long\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -53,7 +53,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
 
   @Deprecated public java.lang.String s;
   @Deprecated public java.lang.String p;
-  @Deprecated public java.lang.Object o;
+  @Deprecated public phisco.streams.polimi.it.avro.TripleObject o;
   @Deprecated public long ts;
 
   /**
@@ -70,7 +70,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
    * @param o The new value for o
    * @param ts The new value for ts
    */
-  public SJSONTriple(java.lang.String s, java.lang.String p, java.lang.Object o, java.lang.Long ts) {
+  public SJSONTriple(java.lang.String s, java.lang.String p, phisco.streams.polimi.it.avro.TripleObject o, java.lang.Long ts) {
     this.s = s;
     this.p = p;
     this.o = o;
@@ -95,7 +95,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
     switch (field$) {
     case 0: s = (java.lang.String)value$; break;
     case 1: p = (java.lang.String)value$; break;
-    case 2: o = (java.lang.Object)value$; break;
+    case 2: o = (phisco.streams.polimi.it.avro.TripleObject)value$; break;
     case 3: ts = (java.lang.Long)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
@@ -137,7 +137,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
    * Gets the value of the 'o' field.
    * @return The value of the 'o' field.
    */
-  public java.lang.Object getO() {
+  public phisco.streams.polimi.it.avro.TripleObject getO() {
     return o;
   }
 
@@ -145,7 +145,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
    * Sets the value of the 'o' field.
    * @param value the value to set.
    */
-  public void setO(java.lang.Object value) {
+  public void setO(phisco.streams.polimi.it.avro.TripleObject value) {
     this.o = value;
   }
 
@@ -199,7 +199,8 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
 
     private java.lang.String s;
     private java.lang.String p;
-    private java.lang.Object o;
+    private phisco.streams.polimi.it.avro.TripleObject o;
+    private phisco.streams.polimi.it.avro.TripleObject.Builder oBuilder;
     private long ts;
 
     /** Creates a new Builder */
@@ -225,6 +226,9 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
         this.o = data().deepCopy(fields()[2].schema(), other.o);
         fieldSetFlags()[2] = true;
       }
+      if (other.hasOBuilder()) {
+        this.oBuilder = phisco.streams.polimi.it.avro.TripleObject.newBuilder(other.getOBuilder());
+      }
       if (isValidValue(fields()[3], other.ts)) {
         this.ts = data().deepCopy(fields()[3].schema(), other.ts);
         fieldSetFlags()[3] = true;
@@ -249,6 +253,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
         this.o = data().deepCopy(fields()[2].schema(), other.o);
         fieldSetFlags()[2] = true;
       }
+      this.oBuilder = null;
       if (isValidValue(fields()[3], other.ts)) {
         this.ts = data().deepCopy(fields()[3].schema(), other.ts);
         fieldSetFlags()[3] = true;
@@ -337,7 +342,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
       * Gets the value of the 'o' field.
       * @return The value.
       */
-    public java.lang.Object getO() {
+    public phisco.streams.polimi.it.avro.TripleObject getO() {
       return o;
     }
 
@@ -346,8 +351,9 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
       * @param value The value of 'o'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.SJSONTriple.Builder setO(java.lang.Object value) {
+    public phisco.streams.polimi.it.avro.SJSONTriple.Builder setO(phisco.streams.polimi.it.avro.TripleObject value) {
       validate(fields()[2], value);
+      this.oBuilder = null;
       this.o = value;
       fieldSetFlags()[2] = true;
       return this;
@@ -361,6 +367,39 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
       return fieldSetFlags()[2];
     }
 
+    /**
+     * Gets the Builder instance for the 'o' field and creates one if it doesn't exist yet.
+     * @return This builder.
+     */
+    public phisco.streams.polimi.it.avro.TripleObject.Builder getOBuilder() {
+      if (oBuilder == null) {
+        if (hasO()) {
+          setOBuilder(phisco.streams.polimi.it.avro.TripleObject.newBuilder(o));
+        } else {
+          setOBuilder(phisco.streams.polimi.it.avro.TripleObject.newBuilder());
+        }
+      }
+      return oBuilder;
+    }
+
+    /**
+     * Sets the Builder instance for the 'o' field
+     * @param value The builder instance that must be set.
+     * @return This builder.
+     */
+    public phisco.streams.polimi.it.avro.SJSONTriple.Builder setOBuilder(phisco.streams.polimi.it.avro.TripleObject.Builder value) {
+      clearO();
+      oBuilder = value;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'o' field has an active Builder instance
+     * @return True if the 'o' field has an active Builder instance
+     */
+    public boolean hasOBuilder() {
+      return oBuilder != null;
+    }
 
     /**
       * Clears the value of the 'o' field.
@@ -368,6 +407,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
       */
     public phisco.streams.polimi.it.avro.SJSONTriple.Builder clearO() {
       o = null;
+      oBuilder = null;
       fieldSetFlags()[2] = false;
       return this;
     }
@@ -417,7 +457,11 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
         SJSONTriple record = new SJSONTriple();
         record.s = fieldSetFlags()[0] ? this.s : (java.lang.String) defaultValue(fields()[0]);
         record.p = fieldSetFlags()[1] ? this.p : (java.lang.String) defaultValue(fields()[1]);
-        record.o = fieldSetFlags()[2] ? this.o : (java.lang.Object) defaultValue(fields()[2]);
+        if (oBuilder != null) {
+          record.o = this.oBuilder.build();
+        } else {
+          record.o = fieldSetFlags()[2] ? this.o : (phisco.streams.polimi.it.avro.TripleObject) defaultValue(fields()[2]);
+        }
         record.ts = fieldSetFlags()[3] ? this.ts : (java.lang.Long) defaultValue(fields()[3]);
         return record;
       } catch (java.lang.Exception e) {
