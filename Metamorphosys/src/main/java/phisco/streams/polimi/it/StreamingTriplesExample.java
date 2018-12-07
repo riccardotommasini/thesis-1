@@ -15,6 +15,7 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.*;
 import phisco.streams.polimi.it.avro.SJSONTriple;
 import phisco.streams.polimi.it.avro.SJSONtKey;
+import phisco.streams.polimi.it.avro.URI;
 
 import java.sql.Time;
 import java.time.Duration;
@@ -48,12 +49,33 @@ public class StreamingTriplesExample
         serde.configure(serdeConfig,false);
 
         KStream<SJSONtKey, SJSONTriple> s0 = builder.stream("sorted_triples");
-        KTable<Windowed<SJSONtKey>, ArrayList<SJSONTriple>> s1 = s0.groupByKey()
+        @SuppressWarnings("unchecked")
+        KTable<Windowed<SJSONtKey>, ArrayList<SJSONTriple>> t1 = s0
+                .filter((k,v) -> v.getP().toString().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#procedure") )
+                .groupByKey()
                 .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
                 .aggregate(ArrayList<SJSONTriple>::new, (k, v1, list) -> {list.add(v1); return list;},
                         Materialized.with(keySerde, serde)
                 );
-        s1.toStream().print(Printed.toSysOut());
+        @SuppressWarnings("unchecked")
+        KTable<Windowed<SJSONtKey>, ArrayList<SJSONTriple>> t2 = s0
+                .filter((k,v) -> v.getP().toString().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
+                        && (v.getO() instanceof URI)
+                        && ((URI) v.getO()).getValue().toString().equals("http://knoesis.wright.edu/ssw/ont/weather.owl#RainfallObservation"))
+                .groupByKey()
+                .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
+                .aggregate(ArrayList<SJSONTriple>::new, (k, v1, list) -> {list.add(v1); return list;},
+                        Materialized.with(keySerde, serde)
+                );
+        @SuppressWarnings("unchecked")
+        KTable<Windowed<SJSONtKey>, ArrayList<SJSONTriple>> t3 = s0
+                .filter((k,v) -> v.getP().toString().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result") ).groupByKey()
+                .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
+                .aggregate(ArrayList<SJSONTriple>::new, (k, v1, list) -> {list.add(v1); return list;},
+                        Materialized.with(keySerde, serde)
+                );
+
+        t1.join(t2, (v1, v2) -> {v1.addAll(v2); return v1;} ).toStream().print(Printed.toSysOut());
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
