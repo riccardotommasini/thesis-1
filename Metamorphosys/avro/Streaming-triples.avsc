@@ -1,6 +1,7 @@
 {
   "type": "record",
     "name": "SJSONTriple",
+    "namespace" : "phisco.streams.polimi.it.avro",
     "fields": [
     {"name": "s", "type": "string"},
     {"name": "p", "type": "string"},

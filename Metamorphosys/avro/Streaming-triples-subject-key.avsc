@@ -1,5 +1,6 @@
 {
   "type": "record",
+    "namespace" : "phisco.streams.polimi.it.avro",
     "name": "SJSONtKey",
     "fields": [
       {"name": "key", "type": "string"}

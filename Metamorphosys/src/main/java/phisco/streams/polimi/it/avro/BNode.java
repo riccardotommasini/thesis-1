@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class BNode extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 3652320611335534149L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BNode\",\"fields\":[{\"name\":\"value\",\"type\":\"string\"},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"BnodeKind\",\"symbols\":[\"bnode\"]}}]}");
+  private static final long serialVersionUID = -6018838347297433533L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BNode\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"value\",\"type\":\"string\"},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"BnodeKind\",\"symbols\":[\"bnode\"]}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -52,7 +52,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
   }
 
   @Deprecated public java.lang.CharSequence value;
-  @Deprecated public BnodeKind type;
+  @Deprecated public phisco.streams.polimi.it.avro.BnodeKind type;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -66,7 +66,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
    * @param value The new value for value
    * @param type The new value for type
    */
-  public BNode(java.lang.CharSequence value, BnodeKind type) {
+  public BNode(java.lang.CharSequence value, phisco.streams.polimi.it.avro.BnodeKind type) {
     this.value = value;
     this.type = type;
   }
@@ -86,7 +86,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: value = (java.lang.CharSequence)value$; break;
-    case 1: type = (BnodeKind)value$; break;
+    case 1: type = (phisco.streams.polimi.it.avro.BnodeKind)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -111,7 +111,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'type' field.
    * @return The value of the 'type' field.
    */
-  public BnodeKind getType() {
+  public phisco.streams.polimi.it.avro.BnodeKind getType() {
     return type;
   }
 
@@ -119,7 +119,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
    * Sets the value of the 'type' field.
    * @param value the value to set.
    */
-  public void setType(BnodeKind value) {
+  public void setType(phisco.streams.polimi.it.avro.BnodeKind value) {
     this.type = value;
   }
 
@@ -127,8 +127,8 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
    * Creates a new BNode RecordBuilder.
    * @return A new BNode RecordBuilder
    */
-  public static BNode.Builder newBuilder() {
-    return new BNode.Builder();
+  public static phisco.streams.polimi.it.avro.BNode.Builder newBuilder() {
+    return new phisco.streams.polimi.it.avro.BNode.Builder();
   }
 
   /**
@@ -136,8 +136,8 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
    * @param other The existing builder to copy.
    * @return A new BNode RecordBuilder
    */
-  public static BNode.Builder newBuilder(BNode.Builder other) {
-    return new BNode.Builder(other);
+  public static phisco.streams.polimi.it.avro.BNode.Builder newBuilder(phisco.streams.polimi.it.avro.BNode.Builder other) {
+    return new phisco.streams.polimi.it.avro.BNode.Builder(other);
   }
 
   /**
@@ -145,8 +145,8 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
    * @param other The existing instance to copy.
    * @return A new BNode RecordBuilder
    */
-  public static BNode.Builder newBuilder(BNode other) {
-    return new BNode.Builder(other);
+  public static phisco.streams.polimi.it.avro.BNode.Builder newBuilder(phisco.streams.polimi.it.avro.BNode other) {
+    return new phisco.streams.polimi.it.avro.BNode.Builder(other);
   }
 
   /**
@@ -156,7 +156,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
     implements org.apache.avro.data.RecordBuilder<BNode> {
 
     private java.lang.CharSequence value;
-    private BnodeKind type;
+    private phisco.streams.polimi.it.avro.BnodeKind type;
 
     /** Creates a new Builder */
     private Builder() {
@@ -167,7 +167,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(BNode.Builder other) {
+    private Builder(phisco.streams.polimi.it.avro.BNode.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.value)) {
         this.value = data().deepCopy(fields()[0].schema(), other.value);
@@ -183,7 +183,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
      * Creates a Builder by copying an existing BNode instance
      * @param other The existing instance to copy.
      */
-    private Builder(BNode other) {
+    private Builder(phisco.streams.polimi.it.avro.BNode other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.value)) {
         this.value = data().deepCopy(fields()[0].schema(), other.value);
@@ -208,7 +208,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'value'.
       * @return This builder.
       */
-    public BNode.Builder setValue(java.lang.CharSequence value) {
+    public phisco.streams.polimi.it.avro.BNode.Builder setValue(java.lang.CharSequence value) {
       validate(fields()[0], value);
       this.value = value;
       fieldSetFlags()[0] = true;
@@ -228,7 +228,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'value' field.
       * @return This builder.
       */
-    public BNode.Builder clearValue() {
+    public phisco.streams.polimi.it.avro.BNode.Builder clearValue() {
       value = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -238,7 +238,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
       * Gets the value of the 'type' field.
       * @return The value.
       */
-    public BnodeKind getType() {
+    public phisco.streams.polimi.it.avro.BnodeKind getType() {
       return type;
     }
 
@@ -247,7 +247,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'type'.
       * @return This builder.
       */
-    public BNode.Builder setType(BnodeKind value) {
+    public phisco.streams.polimi.it.avro.BNode.Builder setType(phisco.streams.polimi.it.avro.BnodeKind value) {
       validate(fields()[1], value);
       this.type = value;
       fieldSetFlags()[1] = true;
@@ -267,7 +267,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'type' field.
       * @return This builder.
       */
-    public BNode.Builder clearType() {
+    public phisco.streams.polimi.it.avro.BNode.Builder clearType() {
       type = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -279,7 +279,7 @@ public class BNode extends org.apache.avro.specific.SpecificRecordBase implement
       try {
         BNode record = new BNode();
         record.value = fieldSetFlags()[0] ? this.value : (java.lang.CharSequence) defaultValue(fields()[0]);
-        record.type = fieldSetFlags()[1] ? this.type : (BnodeKind) defaultValue(fields()[1]);
+        record.type = fieldSetFlags()[1] ? this.type : (phisco.streams.polimi.it.avro.BnodeKind) defaultValue(fields()[1]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
