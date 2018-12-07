@@ -17,6 +17,7 @@ import phisco.streams.polimi.it.avro.SJSONTriple;
 import phisco.streams.polimi.it.avro.SJSONtKey;
 
 import java.sql.Time;
+import java.time.Duration;
 import java.util.*;
 
 
@@ -37,16 +38,18 @@ public class StreamingTriplesExample
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
         props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
 
+        Map serdeConfig = Collections.singletonMap(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG,
+                "http://localhost:8081");
+
         StreamsBuilder builder = new StreamsBuilder();
-        ArrayListSerde serde = new ArrayListSerde<>(new SpecificAvroSerde<>());
-        serde.configure(Collections.singletonMap(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG,
-                                                "http://localhost:8081"),false);
         SpecificAvroSerde keySerde = new SpecificAvroSerde<>();
-        keySerde.configure(Collections.singletonMap(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG,
-                "http://localhost:8081"),true);
+        keySerde.configure(serdeConfig,true);
+        ArrayListSerde serde = new ArrayListSerde<>(new SpecificAvroSerde<>());
+        serde.configure(serdeConfig,false);
+
         KStream<SJSONtKey, SJSONTriple> s0 = builder.stream("sorted_triples");
         KTable<Windowed<SJSONtKey>, ArrayList<SJSONTriple>> s1 = s0.groupByKey()
-                .windowedBy(TimeWindows.of(10))
+                .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
                 .aggregate(ArrayList<SJSONTriple>::new, (k, v1, list) -> {list.add(v1); return list;},
                         Materialized.with(keySerde, serde)
                 );
