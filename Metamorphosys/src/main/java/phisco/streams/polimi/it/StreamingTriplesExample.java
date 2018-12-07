@@ -1,25 +1,20 @@
 package phisco.streams.polimi.it;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
-import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.*;
-import org.apache.kafka.streams.kstream.internals.TimeWindow;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.processor.To;
 import phisco.streams.polimi.it.avro.*;
 
-import javax.rmi.PortableRemoteObject;
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static jdk.nashorn.internal.objects.NativeArray.join;
 
 /**
  * Hello world!
@@ -69,7 +64,8 @@ public class StreamingTriplesExample
         };
 
 
-        t1.join(t2, SJSONtripleMapsJoiner).join(t3, SJSONtripleMapsJoiner).toStream()
+        KTable<Windowed<SJSONtKey>,SJSONTripleMap> t4 = t1.join(t2, SJSONtripleMapsJoiner)
+                .join(t3, SJSONtripleMapsJoiner).toStream()
                 .flatMap((k,v) -> {
                     List result = new ArrayList();
                     v.getData().forEach((k1,v1) ->{
@@ -82,7 +78,8 @@ public class StreamingTriplesExample
                         });
                     } );
                     return result;
-            }).transform(() -> new Transformer<SJSONtKey, SJSONTriple,Object>() {
+                })
+                .transform(() -> new Transformer<SJSONtKey, SJSONTriple,Object>() {
                 private ProcessorContext context;
                     @Override
                     public void init(ProcessorContext processorContext) {
@@ -99,9 +96,21 @@ public class StreamingTriplesExample
                     public void close() {
 
                     }
-        }).groupByKey().windowedBy(TimeWindows.of(Duration.ofSeconds(10))).aggregate(() -> new SJSONTripleMap(new HashMap<>()),SJSONTripleStream.aggregator("t4")).toStream()
-                .print(Printed.toSysOut());
+            })
+                .groupByKey()
+                .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
+                .aggregate(() -> new SJSONTripleMap(new HashMap<>()),SJSONTripleStream.aggregator("t4"));
+                //.toStream()
+                //.print(Printed.toSysOut());
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t5 = st0.getTable("t5",
+                (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue"),
+                TimeWindows.of(Duration.ofSeconds(10)));
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t6 = st0.getTable("t6",
+                (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#uom"),
+                TimeWindows.of(Duration.ofSeconds(10)));
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t7 = t5.join(t6,SJSONtripleMapsJoiner);
 
+        t7.join(t4,SJSONtripleMapsJoiner).toStream().print(Printed.toSysOut());
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
