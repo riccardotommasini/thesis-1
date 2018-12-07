@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class SJSONTripleStream{
 
     KStream<SJSONtKey, SJSONTriple> s;
@@ -18,26 +19,26 @@ public class SJSONTripleStream{
         this.s = stream;
     }
 
-    @SuppressWarnings("unchecked")
     public KTable<Windowed<SJSONtKey>, SJSONTripleMap> getTable(String name, Predicate<SJSONtKey, SJSONTriple> filter, Windows window){
         return this.s.filter(filter)
                 .groupByKey()
                 .windowedBy(window)
                 .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
-                        new Aggregator<SJSONtKey,SJSONTriple, SJSONTripleMap>() {
-                            @Override
-                            public SJSONTripleMap apply(SJSONtKey k, SJSONTriple v1, SJSONTripleMap map) {
-                                Map<String, List<SJSONTriple>> d = map.getData();
-                                if (d.containsKey(name)) {
-                                    d.get(name).add(v1);
-                                } else {
-                                    List<SJSONTriple> a = new ArrayList<>();
-                                    a.add(v1);
-                                    d.put(name, a);
-                                }
-                                return map;
-                            }
-                        });
+                        this.aggregator(name)
+                        );
     }
 
+    public static Aggregator<SJSONtKey,SJSONTriple, SJSONTripleMap> aggregator(String name){
+        return (k,v1, map)-> {
+            Map<String, List<SJSONTriple>> d = map.getData();
+            if (d.containsKey(name)) {
+                d.get(name).add(v1);
+            } else {
+                List<SJSONTriple> a = new ArrayList<>();
+                a.add(v1);
+                d.put(name, a);
+            }
+            return map;
+        };
+    }
 }

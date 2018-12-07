@@ -1,6 +1,7 @@
 package phisco.streams.polimi.it;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KeyValue;
@@ -8,8 +9,11 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.kstream.internals.TimeWindow;
+import org.apache.kafka.streams.processor.ProcessorContext;
+import org.apache.kafka.streams.processor.To;
 import phisco.streams.polimi.it.avro.*;
 
+import javax.rmi.PortableRemoteObject;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collector;
@@ -23,6 +27,8 @@ import java.util.stream.Stream;
  */
 public class StreamingTriplesExample
 {
+
+    @SuppressWarnings("unchecked")
     public static void main( String[] args )
     {
         Properties props = new Properties();
@@ -63,7 +69,6 @@ public class StreamingTriplesExample
         };
 
 
-
         t1.join(t2, SJSONtripleMapsJoiner).join(t3, SJSONtripleMapsJoiner).toStream()
                 .flatMap((k,v) -> {
                     List result = new ArrayList();
@@ -71,12 +76,31 @@ public class StreamingTriplesExample
                         v1.forEach((SJSONTriple el) -> {
                             Object value =el.getO().getValue();
                             if (value instanceof String) {
+                                //result.add(new KeyValue<>(new Windowed<>(new SJSONtKey((String)value),k.window()),el));
                                 result.add(new KeyValue<>(new SJSONtKey((String)value),el));
                             }
                         });
                     } );
                     return result;
-                }).print(Printed.toSysOut());
+            }).transform(() -> new Transformer<SJSONtKey, SJSONTriple,Object>() {
+                private ProcessorContext context;
+                    @Override
+                    public void init(ProcessorContext processorContext) {
+                        this.context = processorContext;
+                    }
+
+                    @Override
+                    public Object transform(SJSONtKey k, SJSONTriple v) {
+                        context.forward(k,v, To.all().withTimestamp(v.getTs()));
+                        return null;
+                    }
+
+                    @Override
+                    public void close() {
+
+                    }
+        }).groupByKey().windowedBy(TimeWindows.of(Duration.ofSeconds(10))).aggregate(() -> new SJSONTripleMap(new HashMap<>()),SJSONTripleStream.aggregator("t4")).toStream()
+                .print(Printed.toSysOut());
 
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
