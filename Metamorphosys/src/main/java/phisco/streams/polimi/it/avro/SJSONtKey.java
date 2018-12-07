@@ -14,7 +14,7 @@ import org.apache.avro.message.SchemaStore;
 @org.apache.avro.specific.AvroGenerated
 public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = -1904466314675074810L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SJSONtKey\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"key\",\"type\":\"string\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SJSONtKey\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"key\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -51,7 +51,7 @@ public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase imple
     return DECODER.decode(b);
   }
 
-  @Deprecated public java.lang.CharSequence key;
+  @Deprecated public java.lang.String key;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -64,7 +64,7 @@ public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase imple
    * All-args constructor.
    * @param key The new value for key
    */
-  public SJSONtKey(java.lang.CharSequence key) {
+  public SJSONtKey(java.lang.String key) {
     this.key = key;
   }
 
@@ -81,7 +81,7 @@ public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase imple
   @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: key = (java.lang.CharSequence)value$; break;
+    case 0: key = (java.lang.String)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -90,7 +90,7 @@ public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase imple
    * Gets the value of the 'key' field.
    * @return The value of the 'key' field.
    */
-  public java.lang.CharSequence getKey() {
+  public java.lang.String getKey() {
     return key;
   }
 
@@ -98,7 +98,7 @@ public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase imple
    * Sets the value of the 'key' field.
    * @param value the value to set.
    */
-  public void setKey(java.lang.CharSequence value) {
+  public void setKey(java.lang.String value) {
     this.key = value;
   }
 
@@ -134,7 +134,7 @@ public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase imple
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<SJSONtKey>
     implements org.apache.avro.data.RecordBuilder<SJSONtKey> {
 
-    private java.lang.CharSequence key;
+    private java.lang.String key;
 
     /** Creates a new Builder */
     private Builder() {
@@ -169,7 +169,7 @@ public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase imple
       * Gets the value of the 'key' field.
       * @return The value.
       */
-    public java.lang.CharSequence getKey() {
+    public java.lang.String getKey() {
       return key;
     }
 
@@ -178,7 +178,7 @@ public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase imple
       * @param value The value of 'key'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.SJSONtKey.Builder setKey(java.lang.CharSequence value) {
+    public phisco.streams.polimi.it.avro.SJSONtKey.Builder setKey(java.lang.String value) {
       validate(fields()[0], value);
       this.key = value;
       fieldSetFlags()[0] = true;
@@ -209,7 +209,7 @@ public class SJSONtKey extends org.apache.avro.specific.SpecificRecordBase imple
     public SJSONtKey build() {
       try {
         SJSONtKey record = new SJSONtKey();
-        record.key = fieldSetFlags()[0] ? this.key : (java.lang.CharSequence) defaultValue(fields()[0]);
+        record.key = fieldSetFlags()[0] ? this.key : (java.lang.String) defaultValue(fields()[0]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

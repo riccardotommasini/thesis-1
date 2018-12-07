@@ -14,7 +14,7 @@ import org.apache.avro.message.SchemaStore;
 @org.apache.avro.specific.AvroGenerated
 public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = 9110606108457841464L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SJSONTriple\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"s\",\"type\":\"string\"},{\"name\":\"p\",\"type\":\"string\"},{\"name\":\"o\",\"type\":[{\"type\":\"record\",\"name\":\"Literal\",\"fields\":[{\"name\":\"value\",\"type\":[\"null\",\"string\",\"int\",\"long\",\"float\"]},{\"name\":\"datatype\",\"type\":[\"null\",\"string\"]},{\"name\":\"lang\",\"type\":[\"null\",\"string\"]},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"LiteralKind\",\"symbols\":[\"literal\"]}}]},{\"type\":\"record\",\"name\":\"URI\",\"fields\":[{\"name\":\"value\",\"type\":\"string\"},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"URIKind\",\"symbols\":[\"uri\"]}}]},{\"type\":\"record\",\"name\":\"BNode\",\"fields\":[{\"name\":\"value\",\"type\":\"string\"},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"BnodeKind\",\"symbols\":[\"bnode\"]}}]}]},{\"name\":\"ts\",\"type\":\"long\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SJSONTriple\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"s\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"p\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"o\",\"type\":[{\"type\":\"record\",\"name\":\"Literal\",\"fields\":[{\"name\":\"value\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"},\"int\",\"long\",\"float\"]},{\"name\":\"datatype\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"lang\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"LiteralKind\",\"symbols\":[\"literal\"]}}]},{\"type\":\"record\",\"name\":\"URI\",\"fields\":[{\"name\":\"value\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"URIKind\",\"symbols\":[\"uri\"]}}]},{\"type\":\"record\",\"name\":\"BNode\",\"fields\":[{\"name\":\"value\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"BnodeKind\",\"symbols\":[\"bnode\"]}}]}]},{\"name\":\"ts\",\"type\":\"long\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -51,8 +51,8 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
     return DECODER.decode(b);
   }
 
-  @Deprecated public java.lang.CharSequence s;
-  @Deprecated public java.lang.CharSequence p;
+  @Deprecated public java.lang.String s;
+  @Deprecated public java.lang.String p;
   @Deprecated public java.lang.Object o;
   @Deprecated public long ts;
 
@@ -70,7 +70,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
    * @param o The new value for o
    * @param ts The new value for ts
    */
-  public SJSONTriple(java.lang.CharSequence s, java.lang.CharSequence p, java.lang.Object o, java.lang.Long ts) {
+  public SJSONTriple(java.lang.String s, java.lang.String p, java.lang.Object o, java.lang.Long ts) {
     this.s = s;
     this.p = p;
     this.o = o;
@@ -93,8 +93,8 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
   @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: s = (java.lang.CharSequence)value$; break;
-    case 1: p = (java.lang.CharSequence)value$; break;
+    case 0: s = (java.lang.String)value$; break;
+    case 1: p = (java.lang.String)value$; break;
     case 2: o = (java.lang.Object)value$; break;
     case 3: ts = (java.lang.Long)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
@@ -105,7 +105,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
    * Gets the value of the 's' field.
    * @return The value of the 's' field.
    */
-  public java.lang.CharSequence getS() {
+  public java.lang.String getS() {
     return s;
   }
 
@@ -113,7 +113,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
    * Sets the value of the 's' field.
    * @param value the value to set.
    */
-  public void setS(java.lang.CharSequence value) {
+  public void setS(java.lang.String value) {
     this.s = value;
   }
 
@@ -121,7 +121,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
    * Gets the value of the 'p' field.
    * @return The value of the 'p' field.
    */
-  public java.lang.CharSequence getP() {
+  public java.lang.String getP() {
     return p;
   }
 
@@ -129,7 +129,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
    * Sets the value of the 'p' field.
    * @param value the value to set.
    */
-  public void setP(java.lang.CharSequence value) {
+  public void setP(java.lang.String value) {
     this.p = value;
   }
 
@@ -197,8 +197,8 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<SJSONTriple>
     implements org.apache.avro.data.RecordBuilder<SJSONTriple> {
 
-    private java.lang.CharSequence s;
-    private java.lang.CharSequence p;
+    private java.lang.String s;
+    private java.lang.String p;
     private java.lang.Object o;
     private long ts;
 
@@ -259,7 +259,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
       * Gets the value of the 's' field.
       * @return The value.
       */
-    public java.lang.CharSequence getS() {
+    public java.lang.String getS() {
       return s;
     }
 
@@ -268,7 +268,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
       * @param value The value of 's'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.SJSONTriple.Builder setS(java.lang.CharSequence value) {
+    public phisco.streams.polimi.it.avro.SJSONTriple.Builder setS(java.lang.String value) {
       validate(fields()[0], value);
       this.s = value;
       fieldSetFlags()[0] = true;
@@ -298,7 +298,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
       * Gets the value of the 'p' field.
       * @return The value.
       */
-    public java.lang.CharSequence getP() {
+    public java.lang.String getP() {
       return p;
     }
 
@@ -307,7 +307,7 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
       * @param value The value of 'p'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.SJSONTriple.Builder setP(java.lang.CharSequence value) {
+    public phisco.streams.polimi.it.avro.SJSONTriple.Builder setP(java.lang.String value) {
       validate(fields()[1], value);
       this.p = value;
       fieldSetFlags()[1] = true;
@@ -415,8 +415,8 @@ public class SJSONTriple extends org.apache.avro.specific.SpecificRecordBase imp
     public SJSONTriple build() {
       try {
         SJSONTriple record = new SJSONTriple();
-        record.s = fieldSetFlags()[0] ? this.s : (java.lang.CharSequence) defaultValue(fields()[0]);
-        record.p = fieldSetFlags()[1] ? this.p : (java.lang.CharSequence) defaultValue(fields()[1]);
+        record.s = fieldSetFlags()[0] ? this.s : (java.lang.String) defaultValue(fields()[0]);
+        record.p = fieldSetFlags()[1] ? this.p : (java.lang.String) defaultValue(fields()[1]);
         record.o = fieldSetFlags()[2] ? this.o : (java.lang.Object) defaultValue(fields()[2]);
         record.ts = fieldSetFlags()[3] ? this.ts : (java.lang.Long) defaultValue(fields()[3]);
         return record;

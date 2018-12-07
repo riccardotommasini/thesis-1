@@ -14,7 +14,7 @@ import org.apache.avro.message.SchemaStore;
 @org.apache.avro.specific.AvroGenerated
 public class URI extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = 1550411936125114225L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"URI\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"value\",\"type\":\"string\"},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"URIKind\",\"symbols\":[\"uri\"]}}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"URI\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"value\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"URIKind\",\"symbols\":[\"uri\"]}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -51,7 +51,7 @@ public class URI extends org.apache.avro.specific.SpecificRecordBase implements 
     return DECODER.decode(b);
   }
 
-  @Deprecated public java.lang.CharSequence value;
+  @Deprecated public java.lang.String value;
   @Deprecated public phisco.streams.polimi.it.avro.URIKind type;
 
   /**
@@ -66,7 +66,7 @@ public class URI extends org.apache.avro.specific.SpecificRecordBase implements 
    * @param value The new value for value
    * @param type The new value for type
    */
-  public URI(java.lang.CharSequence value, phisco.streams.polimi.it.avro.URIKind type) {
+  public URI(java.lang.String value, phisco.streams.polimi.it.avro.URIKind type) {
     this.value = value;
     this.type = type;
   }
@@ -85,7 +85,7 @@ public class URI extends org.apache.avro.specific.SpecificRecordBase implements 
   @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: value = (java.lang.CharSequence)value$; break;
+    case 0: value = (java.lang.String)value$; break;
     case 1: type = (phisco.streams.polimi.it.avro.URIKind)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
@@ -95,7 +95,7 @@ public class URI extends org.apache.avro.specific.SpecificRecordBase implements 
    * Gets the value of the 'value' field.
    * @return The value of the 'value' field.
    */
-  public java.lang.CharSequence getValue() {
+  public java.lang.String getValue() {
     return value;
   }
 
@@ -103,7 +103,7 @@ public class URI extends org.apache.avro.specific.SpecificRecordBase implements 
    * Sets the value of the 'value' field.
    * @param value the value to set.
    */
-  public void setValue(java.lang.CharSequence value) {
+  public void setValue(java.lang.String value) {
     this.value = value;
   }
 
@@ -155,7 +155,7 @@ public class URI extends org.apache.avro.specific.SpecificRecordBase implements 
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<URI>
     implements org.apache.avro.data.RecordBuilder<URI> {
 
-    private java.lang.CharSequence value;
+    private java.lang.String value;
     private phisco.streams.polimi.it.avro.URIKind type;
 
     /** Creates a new Builder */
@@ -199,7 +199,7 @@ public class URI extends org.apache.avro.specific.SpecificRecordBase implements 
       * Gets the value of the 'value' field.
       * @return The value.
       */
-    public java.lang.CharSequence getValue() {
+    public java.lang.String getValue() {
       return value;
     }
 
@@ -208,7 +208,7 @@ public class URI extends org.apache.avro.specific.SpecificRecordBase implements 
       * @param value The value of 'value'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.URI.Builder setValue(java.lang.CharSequence value) {
+    public phisco.streams.polimi.it.avro.URI.Builder setValue(java.lang.String value) {
       validate(fields()[0], value);
       this.value = value;
       fieldSetFlags()[0] = true;
@@ -278,7 +278,7 @@ public class URI extends org.apache.avro.specific.SpecificRecordBase implements 
     public URI build() {
       try {
         URI record = new URI();
-        record.value = fieldSetFlags()[0] ? this.value : (java.lang.CharSequence) defaultValue(fields()[0]);
+        record.value = fieldSetFlags()[0] ? this.value : (java.lang.String) defaultValue(fields()[0]);
         record.type = fieldSetFlags()[1] ? this.type : (phisco.streams.polimi.it.avro.URIKind) defaultValue(fields()[1]);
         return record;
       } catch (java.lang.Exception e) {

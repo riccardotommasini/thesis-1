@@ -1,12 +1,17 @@
 {
   "type": "record",
-    "name": "SJSONTriple",
+    "name": "SJSONTripleMap",
     "namespace" : "phisco.streams.polimi.it.avro",
-    "fields": [
+    "fields" : [ { "name" : "data", "type": { "type" :"map",
+    "values": { "type" : "array", "items" :
+     {
+        "type": "record",
+        "name": "SJSONTriple",
+        "fields": [
     {"name": "s", "type": "string"},
     {"name": "p", "type": "string"},
     {"name": "o",
-      "type":[ 
+      "type":[
       {
         "type": "record",
         "name": "Literal",
@@ -14,10 +19,10 @@
           {"name": "value", "type": ["null", "string", "int", "long", "float"]},
           {"name": "datatype", "type": ["null", "string"]},
           {"name": "lang", "type": ["null", "string"]},
-          {"name": "type", 
+          {"name": "type",
 						"type":{
-						"name" : "LiteralKind", 
-						"type": "enum", 
+						"name" : "LiteralKind",
+						"type": "enum",
 						"symbols": [ "literal" ]}}
         ]},
       {
@@ -25,10 +30,10 @@
         "name": "URI",
         "fields": [
           {"name": "value", "type": "string"},
-          {"name": "type", 
+          {"name": "type",
 						"type":{
-						"name" : "URIKind", 
-						"type": "enum", 
+						"name" : "URIKind",
+						"type": "enum",
 						"symbols": [ "uri" ]}}
         ]},
       {
@@ -36,13 +41,16 @@
         "name": "BNode",
         "fields": [
           {"name": "value", "type": "string"},
-          {"name": "type", 
+          {"name": "type",
 						"type":{
-						"name" : "BnodeKind", 
-						"type": "enum", 
+						"name" : "BnodeKind",
+						"type": "enum",
 						"symbols": [ "bnode" ]}}
         ]}
       ]},
     {"name": "ts", "type": "long"}
     ]
+    }
+    }
+    }}]
 }

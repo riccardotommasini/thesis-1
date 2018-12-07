@@ -14,7 +14,7 @@ import org.apache.avro.message.SchemaStore;
 @org.apache.avro.specific.AvroGenerated
 public class Literal extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = 4443229805794369508L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Literal\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"value\",\"type\":[\"null\",\"string\",\"int\",\"long\",\"float\"]},{\"name\":\"datatype\",\"type\":[\"null\",\"string\"]},{\"name\":\"lang\",\"type\":[\"null\",\"string\"]},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"LiteralKind\",\"symbols\":[\"literal\"]}}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Literal\",\"namespace\":\"phisco.streams.polimi.it.avro\",\"fields\":[{\"name\":\"value\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"},\"int\",\"long\",\"float\"]},{\"name\":\"datatype\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"lang\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}]},{\"name\":\"type\",\"type\":{\"type\":\"enum\",\"name\":\"LiteralKind\",\"symbols\":[\"literal\"]}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -52,8 +52,8 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
   }
 
   @Deprecated public java.lang.Object value;
-  @Deprecated public java.lang.CharSequence datatype;
-  @Deprecated public java.lang.CharSequence lang;
+  @Deprecated public java.lang.String datatype;
+  @Deprecated public java.lang.String lang;
   @Deprecated public phisco.streams.polimi.it.avro.LiteralKind type;
 
   /**
@@ -70,7 +70,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
    * @param lang The new value for lang
    * @param type The new value for type
    */
-  public Literal(java.lang.Object value, java.lang.CharSequence datatype, java.lang.CharSequence lang, phisco.streams.polimi.it.avro.LiteralKind type) {
+  public Literal(java.lang.Object value, java.lang.String datatype, java.lang.String lang, phisco.streams.polimi.it.avro.LiteralKind type) {
     this.value = value;
     this.datatype = datatype;
     this.lang = lang;
@@ -94,8 +94,8 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: value = (java.lang.Object)value$; break;
-    case 1: datatype = (java.lang.CharSequence)value$; break;
-    case 2: lang = (java.lang.CharSequence)value$; break;
+    case 1: datatype = (java.lang.String)value$; break;
+    case 2: lang = (java.lang.String)value$; break;
     case 3: type = (phisco.streams.polimi.it.avro.LiteralKind)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
@@ -121,7 +121,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
    * Gets the value of the 'datatype' field.
    * @return The value of the 'datatype' field.
    */
-  public java.lang.CharSequence getDatatype() {
+  public java.lang.String getDatatype() {
     return datatype;
   }
 
@@ -129,7 +129,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'datatype' field.
    * @param value the value to set.
    */
-  public void setDatatype(java.lang.CharSequence value) {
+  public void setDatatype(java.lang.String value) {
     this.datatype = value;
   }
 
@@ -137,7 +137,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
    * Gets the value of the 'lang' field.
    * @return The value of the 'lang' field.
    */
-  public java.lang.CharSequence getLang() {
+  public java.lang.String getLang() {
     return lang;
   }
 
@@ -145,7 +145,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'lang' field.
    * @param value the value to set.
    */
-  public void setLang(java.lang.CharSequence value) {
+  public void setLang(java.lang.String value) {
     this.lang = value;
   }
 
@@ -198,8 +198,8 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
     implements org.apache.avro.data.RecordBuilder<Literal> {
 
     private java.lang.Object value;
-    private java.lang.CharSequence datatype;
-    private java.lang.CharSequence lang;
+    private java.lang.String datatype;
+    private java.lang.String lang;
     private phisco.streams.polimi.it.avro.LiteralKind type;
 
     /** Creates a new Builder */
@@ -298,7 +298,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * Gets the value of the 'datatype' field.
       * @return The value.
       */
-    public java.lang.CharSequence getDatatype() {
+    public java.lang.String getDatatype() {
       return datatype;
     }
 
@@ -307,7 +307,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * @param value The value of 'datatype'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.Literal.Builder setDatatype(java.lang.CharSequence value) {
+    public phisco.streams.polimi.it.avro.Literal.Builder setDatatype(java.lang.String value) {
       validate(fields()[1], value);
       this.datatype = value;
       fieldSetFlags()[1] = true;
@@ -337,7 +337,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * Gets the value of the 'lang' field.
       * @return The value.
       */
-    public java.lang.CharSequence getLang() {
+    public java.lang.String getLang() {
       return lang;
     }
 
@@ -346,7 +346,7 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       * @param value The value of 'lang'.
       * @return This builder.
       */
-    public phisco.streams.polimi.it.avro.Literal.Builder setLang(java.lang.CharSequence value) {
+    public phisco.streams.polimi.it.avro.Literal.Builder setLang(java.lang.String value) {
       validate(fields()[2], value);
       this.lang = value;
       fieldSetFlags()[2] = true;
@@ -417,8 +417,8 @@ public class Literal extends org.apache.avro.specific.SpecificRecordBase impleme
       try {
         Literal record = new Literal();
         record.value = fieldSetFlags()[0] ? this.value : (java.lang.Object) defaultValue(fields()[0]);
-        record.datatype = fieldSetFlags()[1] ? this.datatype : (java.lang.CharSequence) defaultValue(fields()[1]);
-        record.lang = fieldSetFlags()[2] ? this.lang : (java.lang.CharSequence) defaultValue(fields()[2]);
+        record.datatype = fieldSetFlags()[1] ? this.datatype : (java.lang.String) defaultValue(fields()[1]);
+        record.lang = fieldSetFlags()[2] ? this.lang : (java.lang.String) defaultValue(fields()[2]);
         record.type = fieldSetFlags()[3] ? this.type : (phisco.streams.polimi.it.avro.LiteralKind) defaultValue(fields()[3]);
         return record;
       } catch (java.lang.Exception e) {

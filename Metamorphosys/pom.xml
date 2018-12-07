@@ -116,6 +116,7 @@
                         <configuration>
                             <sourceDirectory>${project.basedir}/avro</sourceDirectory>
                             <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+                            <stringType>String</stringType>
                         </configuration>
                     </execution>
                 </executions>
