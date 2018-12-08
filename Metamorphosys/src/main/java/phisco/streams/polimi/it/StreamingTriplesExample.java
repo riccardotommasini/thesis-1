@@ -26,6 +26,19 @@ public class StreamingTriplesExample
     @SuppressWarnings("unchecked")
     public static void main( String[] args )
     {
+
+        /*
+            SELECT DISTINCT ?sensor ?value ?uom
+            WHERE {
+                {?observation om-owl:procedure ?sensor ;            [1]
+				              a weather:RainfallObservation ;       [2]
+				              om-owl:result ?result}                [3]
+                {?result 	om-owl:floatValue ?value ;              [4]
+  			                om-owl:uom ?uom }                       [5]
+}
+         */
+
+        //properties
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys");
         props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys");
@@ -37,37 +50,47 @@ public class StreamingTriplesExample
 
         StreamsBuilder builder = new StreamsBuilder();
 
+        //FROM partitioned by subject (known)
         KStream<SJSONtKey, SJSONTriple> s0 = builder.stream("sorted_triples");
-
         SJSONTripleStream st0 = new SJSONTripleStream(s0);
+
+        //BGP1
+        // first triple pattern
         KTable<Windowed<SJSONtKey>, SJSONTripleMap> t1 = st0.getTable("t1",
                 (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#procedure"),
                 TimeWindows.of(Duration.ofSeconds(10)));
 
+        // second triple pattern
         KTable<Windowed<SJSONtKey>, SJSONTripleMap> t2 = st0.getTable("t2",
                 (k, v) -> v.getP().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
                         && (v.getO().getValue().equals("http://knoesis.wright.edu/ssw/ont/weather.owl#RainfallObservation")),
                 TimeWindows.of(Duration.ofSeconds(10)));
 
+        // third triple pattern
         KTable<Windowed<SJSONtKey>, SJSONTripleMap> t3 = st0.getTable("t3",
                 (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result"),
                 TimeWindows.of(Duration.ofSeconds(10)));
 
-        ValueJoiner<SJSONTripleMap, SJSONTripleMap, SJSONTripleMap> SJSONtripleMapsJoiner = (v1, v2) ->{
-            v1.getData().forEach((k, v) ->
-                    v2.getData().merge(k, v, (value1, value2) ->
-                    {
-                        value1.addAll(value2);
-                        return value1;
-                    }));
-            return v2;
-        };
+        // fourth triple pattern
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t5 = st0.getTable("t5",
+                (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue"),
+                TimeWindows.of(Duration.ofSeconds(10)));
+
+        // fifth triple pattern
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t6 = st0.getTable("t6",
+                (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#uom"),
+                TimeWindows.of(Duration.ofSeconds(10)));
 
 
-        KTable<Windowed<SJSONtKey>,SJSONTripleMap> t4 = t1.join(t2, SJSONtripleMapsJoiner)
-                .join(t3, SJSONtripleMapsJoiner)
+        // join first, second, third by subject
+        KTable<Windowed<SJSONtKey>,SJSONTripleMap> t4 = t1
+                .join(t2, SJSONTripleStream.SJSONtripleMapsJoiner())
+                .join(t3, SJSONTripleStream.SJSONtripleMapsJoiner())
+                // filter out if not all 3 sources have been joined
                 .filter((k,v)->{ Map d = v.getData();
                     return d.containsKey("t1") && d.containsKey("t2") && d.containsKey("t3");})
+                // rekey needed for the next join
+                // due to previous grouping, flatmap is needded in order to split the aggregates per partition
                 .toStream()
                 .flatMap((k,v) -> {
                     List result = new ArrayList();
@@ -78,8 +101,8 @@ public class StreamingTriplesExample
                         result.add(new KeyValue<>(new SJSONtKey(el.getO().getValue().toString()),new SJSONTripleMap(map)));
                     });
                     return result;
-                }
-                )
+                })
+                // toStream looses timestamps, need to extract one again
                 .transform(() -> new Transformer<SJSONtKey, SJSONTripleMap,Object>() {
                     private ProcessorContext context;
                     @Override
@@ -98,6 +121,7 @@ public class StreamingTriplesExample
 
                     }
                 })
+                //regroup by the new key not loosing origin information
                 .groupByKey()
                 .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
                 .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
@@ -113,20 +137,19 @@ public class StreamingTriplesExample
                 );
                 //.toStream()
                 //.print(Printed.toSysOut());
-        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t5 = st0.getTable("t5",
-                (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue"),
-                TimeWindows.of(Duration.ofSeconds(10)));
-        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t6 = st0.getTable("t6",
-                (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#uom"),
-                TimeWindows.of(Duration.ofSeconds(10)));
-        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t7 = t5.join(t6,SJSONtripleMapsJoiner)
-                .filter((k,v)->{ Map d = v.getData();
-                    return d.containsKey("t5") && d.containsKey("t6");})
-                ;
 
-        t7.join(t4,SJSONtripleMapsJoiner)
+        // join fourth and fifth triple patter
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t7 = t5.join(t6,SJSONTripleStream.SJSONtripleMapsJoiner())
+                // filter out if not all incoming streams have been used
+                .filter((k,v)->{ Map d = v.getData();
+                    return d.containsKey("t5") && d.containsKey("t6");});
+
+        // join result of thirst and second join and prepare for final result
+        t7.join(t4,SJSONTripleStream.SJSONtripleMapsJoiner())
                 .toStream()
+                // rekey over windows to print per windows
                 .map((k,v)-> new KeyValue<>(new SJSONtKey(k.window().start()+","+k.window().end()),v))
+                // extract timestamp lost due to the toStream
                 .transform(() -> new Transformer<SJSONtKey, SJSONTripleMap,KeyValue<SJSONtKey,SJSONTripleMap>>() {
                     private ProcessorContext context;
                     @Override
@@ -145,8 +168,11 @@ public class StreamingTriplesExample
 
                     }
                 })
+                // group by window
                 .groupByKey()
+                // add windowed, could be omitted, windowing is already in the key
                 .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
+                // aggregate by window
                 .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
                         new Aggregator<SJSONtKey,SJSONTripleMap,SJSONTripleMap>() {
                             @Override
@@ -158,6 +184,7 @@ public class StreamingTriplesExample
                                 return map;
                             }}
                 )
+                // PROJECT
                 .mapValues((v)-> {
                     Map<String,List<SJSONTriple>> d = v.getData();
                     Set result = new HashSet<>();
@@ -171,6 +198,8 @@ public class StreamingTriplesExample
                                     )));
                     return result; })
                 .toStream().print(Printed.toSysOut());
+
+        // stream the whole thing
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));

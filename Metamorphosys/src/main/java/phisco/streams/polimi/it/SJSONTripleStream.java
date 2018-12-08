@@ -41,4 +41,16 @@ public class SJSONTripleStream{
             return map;
         };
     }
+
+    public static ValueJoiner<SJSONTripleMap, SJSONTripleMap, SJSONTripleMap> SJSONtripleMapsJoiner(){
+        return (v1, v2) ->{
+            v1.getData().forEach((k, v) ->
+                    v2.getData().merge(k, v, (value1, value2) ->
+                    {
+                        value1.addAll(value2);
+                        return value1;
+                    }));
+            return v2;
+        };
+    }
 }
