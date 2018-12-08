@@ -4,3 +4,7 @@ knoesis_linkedobservationdata_bill*
 \.idea/
 Metamorphosys/target
 python/kafka/producer/big_sorted_result.txt
+
+big_sorted_result\.txt
+
+rdf
