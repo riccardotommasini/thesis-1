@@ -67,7 +67,7 @@ public class StreamingTriplesExample
         KTable<Windowed<SJSONtKey>,SJSONTripleMap> t4 = t1.join(t2, SJSONtripleMapsJoiner)
                 .join(t3, SJSONtripleMapsJoiner)
                 .filter((k,v)->{ Map d = v.getData();
-                return d.containsKey("t1") && d.containsKey("t2") && d.containsKey("t3");})
+                    return d.containsKey("t1") && d.containsKey("t2") && d.containsKey("t3");})
                 .toStream()
                 .flatMap((k,v) -> {
                     List result = new ArrayList();
@@ -100,16 +100,17 @@ public class StreamingTriplesExample
                 })
                 .groupByKey()
                 .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
-                .aggregate(() -> new SJSONTripleMap(new HashMap<>()), new Aggregator<SJSONtKey,SJSONTripleMap,SJSONTripleMap>() {
-                    @Override
-                    public SJSONTripleMap apply(SJSONtKey k1, SJSONTripleMap v1, SJSONTripleMap map) {
-                        Map<String,List<SJSONTriple>> d = map.getData();
-                        v1.getData().forEach((k,v)->{
-                            d.merge(k, v, (List oldVal, List newVal) -> { Set old = new HashSet<>(oldVal); old.addAll(newVal); return new ArrayList<>(old);});
-                        });
-                        return map;
-                    }}
-                    );
+                .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
+                        new Aggregator<SJSONtKey,SJSONTripleMap,SJSONTripleMap>() {
+                            @Override
+                            public SJSONTripleMap apply(SJSONtKey k1, SJSONTripleMap v1, SJSONTripleMap map) {
+                                Map<String,List<SJSONTriple>> d = map.getData();
+                                v1.getData().forEach((k,v)->{
+                                    d.merge(k, v, (List oldVal, List newVal) -> { Set old = new HashSet<>(oldVal); old.addAll(newVal); return new ArrayList<>(old);});
+                                });
+                                return map;
+                            }}
+                );
                 //.toStream()
                 //.print(Printed.toSysOut());
         KTable<Windowed<SJSONtKey>, SJSONTripleMap> t5 = st0.getTable("t5",
@@ -123,19 +124,53 @@ public class StreamingTriplesExample
                     return d.containsKey("t5") && d.containsKey("t6");})
                 ;
 
-        t7.join(t4,SJSONtripleMapsJoiner).mapValues((v)-> {
-            Map<String,List<SJSONTriple>> d = v.getData();
-            Set result = new HashSet<>();
-            d.get("t1").forEach(t1el ->
+        t7.join(t4,SJSONtripleMapsJoiner)
+                .toStream()
+                .map((k,v)-> new KeyValue<>(new SJSONtKey(k.window().start()+","+k.window().end()),v))
+                .transform(() -> new Transformer<SJSONtKey, SJSONTripleMap,KeyValue<SJSONtKey,SJSONTripleMap>>() {
+                    private ProcessorContext context;
+                    @Override
+                    public void init(ProcessorContext processorContext) {
+                        this.context = processorContext;
+                    }
+
+                    @Override
+                    public KeyValue transform(SJSONtKey k, SJSONTripleMap v) {
+                        context.forward(k,v, To.all().withTimestamp(v.getData().get("t3").get(0).getTs()));
+                        return null;
+                    }
+
+                    @Override
+                    public void close() {
+
+                    }
+                })
+                .groupByKey()
+                .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
+                .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
+                        new Aggregator<SJSONtKey,SJSONTripleMap,SJSONTripleMap>() {
+                            @Override
+                            public SJSONTripleMap apply(SJSONtKey k1, SJSONTripleMap v1, SJSONTripleMap map) {
+                                Map<String,List<SJSONTriple>> d = map.getData();
+                                v1.getData().forEach((k,v)->{
+                                    d.merge(k, v, (List oldVal, List newVal) -> { Set old = new HashSet<>(oldVal); old.addAll(newVal); return new ArrayList<>(old);});
+                                });
+                                return map;
+                            }}
+                )
+                .mapValues((v)-> {
+                    Map<String,List<SJSONTriple>> d = v.getData();
+                    Set result = new HashSet<>();
+                    d.get("t1").forEach(t1el ->
                             d.get("t5").forEach(t5el ->
                                     d.get("t6").forEach(t6el ->
                                                     /*result.add(Arrays.asList(t1el
                                                             ,t5el,t6el))*/
                                             result.add(Arrays.asList(t1el.getO().getValue()
                                                     ,t5el.getO().getValue(),t6el.getO().getValue()))
-                                            )));
-            return result;
-        }).toStream().print(Printed.toSysOut());
+                                    )));
+                    return result; })
+                .toStream().print(Printed.toSysOut());
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
