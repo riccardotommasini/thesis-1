@@ -14,8 +14,6 @@ import phisco.streams.polimi.it.avro.*;
 import java.time.Duration;
 import java.util.*;
 
-import static jdk.nashorn.internal.objects.NativeArray.join;
-
 /**
  * Hello world!
  *
@@ -40,8 +38,8 @@ public class StreamingTriplesExample
 
         //properties
         Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys");
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys10");
+        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys10");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
@@ -135,8 +133,6 @@ public class StreamingTriplesExample
                                 return map;
                             }}
                 );
-                //.toStream()
-                //.print(Printed.toSysOut());
 
         // join fourth and fifth triple patter
         KTable<Windowed<SJSONtKey>, SJSONTripleMap> t7 = t5.join(t6,SJSONTripleStream.SJSONtripleMapsJoiner())
@@ -144,7 +140,7 @@ public class StreamingTriplesExample
                 .filter((k,v)->{ Map d = v.getData();
                     return d.containsKey("t5") && d.containsKey("t6");});
 
-        // join result of thirst and second join and prepare for final result
+        // join result of first and second join and prepare for final result
         t7.join(t4,SJSONTripleStream.SJSONtripleMapsJoiner())
                 .toStream()
                 // rekey over windows to print per windows
@@ -179,7 +175,11 @@ public class StreamingTriplesExample
                             public SJSONTripleMap apply(SJSONtKey k1, SJSONTripleMap v1, SJSONTripleMap map) {
                                 Map<String,List<SJSONTriple>> d = map.getData();
                                 v1.getData().forEach((k,v)->{
-                                    d.merge(k, v, (List oldVal, List newVal) -> { Set old = new HashSet<>(oldVal); old.addAll(newVal); return new ArrayList<>(old);});
+                                    d.merge(k, v, (List oldVal, List newVal) ->
+                                    {
+                                        Set old = new HashSet<>(oldVal); old.addAll(newVal);
+                                        return new ArrayList<>(old);
+                                    });
                                 });
                                 return map;
                             }}
