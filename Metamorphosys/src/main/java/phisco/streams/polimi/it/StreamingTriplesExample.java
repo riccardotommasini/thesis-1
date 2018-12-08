@@ -65,30 +65,30 @@ public class StreamingTriplesExample
 
 
         KTable<Windowed<SJSONtKey>,SJSONTripleMap> t4 = t1.join(t2, SJSONtripleMapsJoiner)
-                .join(t3, SJSONtripleMapsJoiner).toStream()
+                .join(t3, SJSONtripleMapsJoiner)
+                .filter((k,v)->v.getData().containsKey("t3"))
+                .toStream()
                 .flatMap((k,v) -> {
                     List result = new ArrayList();
-                    v.getData().forEach((k1,v1) ->{
-                        v1.forEach((SJSONTriple el) -> {
-                            Object value =el.getO().getValue();
-                            if (value instanceof String) {
-                                //result.add(new KeyValue<>(new Windowed<>(new SJSONtKey((String)value),k.window()),el));
-                                result.add(new KeyValue<>(new SJSONtKey((String)value),el));
-                            }
-                        });
-                    } );
+                    List<SJSONTriple> t3s = v.getData().get("t3");
+                    Map map = v.getData();
+                    t3s.forEach((el)->{
+                        map.put("t3",Arrays.asList(el));
+                        result.add(new KeyValue<>(new SJSONtKey(el.getO().getValue().toString()),new SJSONTripleMap(map)));
+                    });
                     return result;
-                })
-                .transform(() -> new Transformer<SJSONtKey, SJSONTriple,Object>() {
-                private ProcessorContext context;
+                }
+                )
+                .transform(() -> new Transformer<SJSONtKey, SJSONTripleMap,Object>() {
+                    private ProcessorContext context;
                     @Override
                     public void init(ProcessorContext processorContext) {
                         this.context = processorContext;
                     }
 
                     @Override
-                    public Object transform(SJSONtKey k, SJSONTriple v) {
-                        context.forward(k,v, To.all().withTimestamp(v.getTs()));
+                    public Object transform(SJSONtKey k, SJSONTripleMap v) {
+                        context.forward(k,v, To.all().withTimestamp(v.getData().get("t3").get(0).getTs()));
                         return null;
                     }
 
@@ -96,10 +96,19 @@ public class StreamingTriplesExample
                     public void close() {
 
                     }
-            })
+                })
                 .groupByKey()
                 .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
-                .aggregate(() -> new SJSONTripleMap(new HashMap<>()),SJSONTripleStream.aggregator("t4"));
+                .aggregate(() -> new SJSONTripleMap(new HashMap<>()), new Aggregator<SJSONtKey,SJSONTripleMap,SJSONTripleMap>() {
+                    @Override
+                    public SJSONTripleMap apply(SJSONtKey k1, SJSONTripleMap v1, SJSONTripleMap map) {
+                        Map<String,List<SJSONTriple>> d = map.getData();
+                        v1.getData().forEach((k,v)->{
+                            d.merge(k, v, (List oldVal, List newVal) -> {oldVal.addAll(newVal); return oldVal;});
+                        });
+                        return map;
+                    }}
+                    );
                 //.toStream()
                 //.print(Printed.toSysOut());
         KTable<Windowed<SJSONtKey>, SJSONTripleMap> t5 = st0.getTable("t5",
@@ -111,7 +120,6 @@ public class StreamingTriplesExample
         KTable<Windowed<SJSONtKey>, SJSONTripleMap> t7 = t5.join(t6,SJSONtripleMapsJoiner);
 
         t7.join(t4,SJSONtripleMapsJoiner).toStream().print(Printed.toSysOut());
-
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
