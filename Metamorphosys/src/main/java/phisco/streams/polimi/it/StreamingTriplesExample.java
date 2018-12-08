@@ -66,7 +66,8 @@ public class StreamingTriplesExample
 
         KTable<Windowed<SJSONtKey>,SJSONTripleMap> t4 = t1.join(t2, SJSONtripleMapsJoiner)
                 .join(t3, SJSONtripleMapsJoiner)
-                .filter((k,v)->v.getData().containsKey("t3"))
+                .filter((k,v)->{ Map d = v.getData();
+                return d.containsKey("t1") && d.containsKey("t2") && d.containsKey("t3");})
                 .toStream()
                 .flatMap((k,v) -> {
                     List result = new ArrayList();
@@ -104,7 +105,7 @@ public class StreamingTriplesExample
                     public SJSONTripleMap apply(SJSONtKey k1, SJSONTripleMap v1, SJSONTripleMap map) {
                         Map<String,List<SJSONTriple>> d = map.getData();
                         v1.getData().forEach((k,v)->{
-                            d.merge(k, v, (List oldVal, List newVal) -> {oldVal.addAll(newVal); return oldVal;});
+                            d.merge(k, v, (List oldVal, List newVal) -> { Set old = new HashSet<>(oldVal); old.addAll(newVal); return new ArrayList<>(old);});
                         });
                         return map;
                     }}
@@ -117,9 +118,24 @@ public class StreamingTriplesExample
         KTable<Windowed<SJSONtKey>, SJSONTripleMap> t6 = st0.getTable("t6",
                 (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#uom"),
                 TimeWindows.of(Duration.ofSeconds(10)));
-        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t7 = t5.join(t6,SJSONtripleMapsJoiner);
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t7 = t5.join(t6,SJSONtripleMapsJoiner)
+                .filter((k,v)->{ Map d = v.getData();
+                    return d.containsKey("t5") && d.containsKey("t6");})
+                ;
 
-        t7.join(t4,SJSONtripleMapsJoiner).toStream().print(Printed.toSysOut());
+        t7.join(t4,SJSONtripleMapsJoiner).mapValues((v)-> {
+            Map<String,List<SJSONTriple>> d = v.getData();
+            Set result = new HashSet<>();
+            d.get("t1").forEach(t1el ->
+                            d.get("t5").forEach(t5el ->
+                                    d.get("t6").forEach(t6el ->
+                                                    /*result.add(Arrays.asList(t1el
+                                                            ,t5el,t6el))*/
+                                            result.add(Arrays.asList(t1el.getO().getValue()
+                                                    ,t5el.getO().getValue(),t6el.getO().getValue()))
+                                            )));
+            return result;
+        }).toStream().print(Printed.toSysOut());
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
