@@ -5,10 +5,7 @@ import phisco.streams.polimi.it.avro.SJSONTriple;
 import phisco.streams.polimi.it.avro.SJSONTripleMap;
 import phisco.streams.polimi.it.avro.SJSONtKey;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class SJSONTripleStream{
@@ -42,14 +39,25 @@ public class SJSONTripleStream{
         };
     }
 
-    public static ValueJoiner<SJSONTripleMap, SJSONTripleMap, SJSONTripleMap> SJSONtripleMapsJoiner(){
+    public static ValueJoiner<SJSONTripleMap, SJSONTripleMap, SJSONTripleMap> SJSONtripleMapsJoiner(List<String> keep_keys_left, List<String> keep_keys_right){
         return (v1, v2) ->{
-            v1.getData().forEach((k, v) ->
-                    v2.getData().merge(k, v, (value1, value2) ->
+            keep_keys_left.forEach(key ->
+                    v2.getData().merge(key, v1.getData().get(key), (value1, value2) ->
                     {
-                        value1.addAll(value2);
-                        return value1;
-                    }));
+                        Set res = new HashSet(value1);
+                        res.addAll(value2);
+                        return new ArrayList<>(res);
+                    })
+            );
+            keep_keys_right.forEach(key ->
+                    v1.getData().merge(key, v2.getData().get(key), (value1, value2) ->
+                    {
+                        Set res = new HashSet(value1);
+                        res.addAll(value2);
+                        return new ArrayList<>(res);
+                    })
+            );
+
             return v2;
         };
     }
