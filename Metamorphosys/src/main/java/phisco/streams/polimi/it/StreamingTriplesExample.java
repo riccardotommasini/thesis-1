@@ -3,6 +3,7 @@ import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import org.apache.commons.collections.map.SingletonMap;
 import org.apache.kafka.common.serialization.Serde;
+import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.KeyValue;
@@ -39,8 +40,8 @@ public class StreamingTriplesExample
 
         //properties
         Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys24");
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys24");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-example");
+        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-example");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
@@ -58,7 +59,10 @@ public class StreamingTriplesExample
         keySpecificAvroSerde.configure(serdeConfig,true);
         valueSpecificAvroSerde.configure(serdeConfig,false);
 
-        Serde<Windowed<SJSONtKey>> windowedSerde = new WindowedSerdes.TimeWindowedSerde(keySpecificAvroSerde);
+        Serde<Windowed<SJSONtKey>> windowedSerde = new Serdes.WrapperSerde<Windowed<SJSONtKey>>(new TimeWindowedSerializer<SJSONtKey>(keySpecificAvroSerde.serializer()),
+                new TimeWindowedDeserializer<>(keySpecificAvroSerde.deserializer(),Duration.ofSeconds(10).toMillis()));
+        // WindowedSerdes.TimeWindowedSerde is bugged and do not deserialize correctly the window length
+//        Serde<Windowed<SJSONtKey>> windowedSerde = new WindowedSerdes.TimeWindowedSerde(keySpecificAvroSerde);
 
 
         StreamsBuilder builder = new StreamsBuilder();
@@ -84,6 +88,7 @@ public class StreamingTriplesExample
                 (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result"),
                 TimeWindows.of(Duration.ofSeconds(10)));
 
+        //BGP2
         // fourth triple pattern
         KTable<Windowed<SJSONtKey>, SJSONTripleMap> t5 = st0.getTable("value",
                 (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue"),
@@ -99,31 +104,11 @@ public class StreamingTriplesExample
         KTable<Windowed<SJSONtKey>,SJSONTripleMap> t4 = t1
                 .join(t2, SJSONTripleStream.SJSONtripleMapsJoiner(Arrays.asList("sensor"),Arrays.asList()))
                 .join(t3, SJSONTripleStream.SJSONtripleMapsJoiner(Arrays.asList("sensor"),Arrays.asList()))
-                // filter out if not all 3 sources have been joined
                 .filter((k,v)->{ Map d = v.getData();
                     return d.containsKey("sensor");})
                 // rekey needed for the next join
                 // due to previous grouping, flatmap is needded in order to split the aggregates per partition
                 .toStream()
-                // toStream looses timestamps, need to extract one again
-//                .transform(() -> new Transformer<Windowed<SJSONtKey>, SJSONTripleMap, KeyValue<Windowed,SJSONTripleMap>>() {
-//                    private ProcessorContext context;
-//                    @Override
-//                    public void init(ProcessorContext processorContext) {
-//                        this.context = processorContext;
-//                    }
-//
-//                    @Override
-//                    public KeyValue transform(Windowed<SJSONtKey> k, SJSONTripleMap v) {
-//                        context.forward(k,v, To.all().withTimestamp(v.getData().get("t3").get(0).getTs()));
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    public void close() {
-//
-//                    }
-//                })
                 .flatMap((k,v) -> {
                         List < KeyValue < Windowed < SJSONtKey >, SJSONTripleMap >> result = new ArrayList();
                         List<SJSONTriple> t3s = v.getData().get("t3");
@@ -135,7 +120,6 @@ public class StreamingTriplesExample
                 })
                 //regroup by the new key not loosing origin information
                 .groupByKey(Grouped.with(windowedSerde,valueSpecificAvroSerde))
-//                .windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
                 .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
                         new Aggregator<Windowed,SJSONTripleMap,SJSONTripleMap>() {
                             @Override
@@ -161,29 +145,12 @@ public class StreamingTriplesExample
         KTable<Windowed<SJSONtKey>,SJSONTripleMap>  t8 = t7.join(t4,SJSONTripleStream.SJSONtripleMapsJoiner(Arrays.asList("value","uom"),Arrays.asList("sensor")))
                 .toStream()
                 // rekey over windows to print per windows
-                .map((k,v)-> new KeyValue<>(new Windowed<>(k.key(),k.window()),v))
-                // extract timestamp lost due to the toStream
-//                .transform(() -> new Transformer<SJSONtKey, SJSONTripleMap,KeyValue<SJSONtKey,SJSONTripleMap>>() {
-//                    private ProcessorContext context;
-//                    @Override
-//                    public void init(ProcessorContext processorContext) {
-//                        this.context = processorContext;
-//                    }
-//
-//                    @Override
-//                    public KeyValue transform(SJSONtKey k, SJSONTripleMap v) {
-//                        context.forward(k,v, To.all().withTimestamp(v.getData().get("sensor").get(0).getTs()));
-//                        return null;
-//                    }
-//                    @Override
-//                    public void close() {
-//
-//                    }
-//                })
+                .map((k,v)-> {
+                    KeyValue newKV = new KeyValue<>(new Windowed<>(k.key(), k.window()), v);
+                    return newKV;
+                })
                 // group by window
                 .groupByKey(Grouped.with(windowedSerde,valueSpecificAvroSerde))
-                // add windowed, could be omitted, windowing is already in the key
-                //.windowedBy(TimeWindows.of(Duration.ofSeconds(10)))
                 // aggregate by window
                 .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
                         new Aggregator<Windowed<SJSONtKey>,SJSONTripleMap,SJSONTripleMap>() {
@@ -210,19 +177,7 @@ public class StreamingTriplesExample
                     res.put("uom", new ArrayList<>(d.get("uom").stream().map((el) -> el.getO().getValue().toString()).collect(Collectors.toSet())));
                     return res;
                 })
-                // PROJECT
-//                .mapValues((v)-> {
-//                    Map<String,List<SJSONTriple>> d = v.getData();
-//                    Set result = new HashSet<>();
-//                    d.get("t1").forEach(t1el ->
-//                            d.get("t5").forEach(t5el ->
-//                                    d.get("t6").forEach(t6el ->
-//                                                    /*result.add(Arrays.asList(t1el
-//                                                            ,t5el,t6el))*/
-//                                            result.add(Arrays.asList(t1el.getO().getValue()
-//                                                    ,t5el.getO().getValue(),t6el.getO().getValue()))
-//                                    )));
-//                    return result; })
+                        // here construct can be done
                 .toStream().print(Printed.toSysOut());
 
         // stream the whole thing
