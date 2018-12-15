@@ -10,7 +10,7 @@ import java.util.*;
 @SuppressWarnings("unchecked")
 public class SJSONTripleStream{
 
-    KStream<SJSONtKey, SJSONTriple> s;
+    private KStream<SJSONtKey, SJSONTriple> s;
 
     public SJSONTripleStream(KStream<SJSONtKey,SJSONTriple> stream){
         this.s = stream;
@@ -26,6 +26,9 @@ public class SJSONTripleStream{
     }
 
     public static Aggregator<SJSONtKey,SJSONTriple, SJSONTripleMap> aggregator(String name){
+        if (name.equals("")){
+            return (k,v,map) -> map;
+        }
         return (k,v1, map)-> {
             Map<String, List<SJSONTriple>> d = map.getData();
             if (d.containsKey(name)) {
@@ -38,6 +41,18 @@ public class SJSONTripleStream{
             return map;
         };
     }
+    public static Aggregator<Windowed,SJSONTripleMap, SJSONTripleMap>  aggregatorPostRekey= new Aggregator<Windowed,SJSONTripleMap,SJSONTripleMap>() {
+                            @Override
+                            public SJSONTripleMap apply(Windowed k1, SJSONTripleMap v1, SJSONTripleMap map) {
+                                Map<String,List<SJSONTriple>> d = map.getData();
+                                v1.getData().forEach((k,v)->{
+                                    d.merge(k, v, (List oldVal, List newVal) -> {
+                                        Set old = new HashSet<>(oldVal);
+                                        old.addAll(newVal);
+                                        return new ArrayList<>(old);});
+                                });
+                                return map;
+                            }};
 
     public static ValueJoiner<SJSONTripleMap, SJSONTripleMap, SJSONTripleMap> SJSONtripleMapsJoiner(List<String> keep_keys_left, List<String> keep_keys_right){
         return (v1, v2) ->{

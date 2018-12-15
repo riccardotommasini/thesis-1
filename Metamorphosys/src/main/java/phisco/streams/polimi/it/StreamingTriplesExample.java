@@ -40,8 +40,8 @@ public class StreamingTriplesExample
 
         //properties
         Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-example");
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-example");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-example-5");
+        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-example-5");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
@@ -78,13 +78,13 @@ public class StreamingTriplesExample
                 TimeWindows.of(Duration.ofSeconds(10)));
 
         // second triple pattern
-        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t2 = st0.getTable("t2",
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t2 = st0.getTable("",
                 (k, v) -> v.getP().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
                         && (v.getO().getValue().equals("http://knoesis.wright.edu/ssw/ont/weather.owl#RainfallObservation")),
                 TimeWindows.of(Duration.ofSeconds(10)));
 
         // third triple pattern
-        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t3 = st0.getTable("t3",
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t3 = st0.getTable("result",
                 (k, v) -> v.getP().equals("http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result"),
                 TimeWindows.of(Duration.ofSeconds(10)));
 
@@ -104,14 +104,14 @@ public class StreamingTriplesExample
         KTable<Windowed<SJSONtKey>,SJSONTripleMap> t4 = t1
                 .join(t2, SJSONTripleStream.SJSONtripleMapsJoiner(Arrays.asList("sensor"),Arrays.asList()))
                 .join(t3, SJSONTripleStream.SJSONtripleMapsJoiner(Arrays.asList("sensor"),Arrays.asList()))
-                .filter((k,v)->{ Map d = v.getData();
-                    return d.containsKey("sensor");})
+//                .filter((k,v)->{ Map d = v.getData();
+//                    return d.containsKey("sensor");})
                 // rekey needed for the next join
                 // due to previous grouping, flatmap is needded in order to split the aggregates per partition
                 .toStream()
                 .flatMap((k,v) -> {
                         List < KeyValue < Windowed < SJSONtKey >, SJSONTripleMap >> result = new ArrayList();
-                        List<SJSONTriple> t3s = v.getData().get("t3");
+                        List<SJSONTriple> t3s = v.getData().get("result");
                         Map<String,List<SJSONTriple>> map = v.getData();
                         //SJSONTripleMap t1_object = new SJSONTripleMap(new SingletonMap("sensor",map.get("t1").stream().map(t1_el -> t1_el.getO().getValue().toString()).collect(Collectors.toSet())));
                         SJSONTripleMap t1_object = new SJSONTripleMap(new SingletonMap("sensor",map.get("sensor")));
@@ -121,18 +121,7 @@ public class StreamingTriplesExample
                 //regroup by the new key not loosing origin information
                 .groupByKey(Grouped.with(windowedSerde,valueSpecificAvroSerde))
                 .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
-                        new Aggregator<Windowed,SJSONTripleMap,SJSONTripleMap>() {
-                            @Override
-                            public SJSONTripleMap apply(Windowed k1, SJSONTripleMap v1, SJSONTripleMap map) {
-                                Map<String,List<SJSONTriple>> d = map.getData();
-                                v1.getData().forEach((k,v)->{
-                                    d.merge(k, v, (List oldVal, List newVal) -> {
-                                        Set old = new HashSet<>(oldVal);
-                                        old.addAll(newVal);
-                                        return new ArrayList<>(old);});
-                                });
-                                return map;
-                            }}
+                       SJSONTripleStream.aggregatorPostRekey
                 );
 
         // join fourth and fifth triple patter
@@ -153,20 +142,7 @@ public class StreamingTriplesExample
                 .groupByKey(Grouped.with(windowedSerde,valueSpecificAvroSerde))
                 // aggregate by window
                 .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
-                        new Aggregator<Windowed<SJSONtKey>,SJSONTripleMap,SJSONTripleMap>() {
-                            @Override
-                            public SJSONTripleMap apply(Windowed<SJSONtKey> k1, SJSONTripleMap v1, SJSONTripleMap map) {
-                                Map<String,List<SJSONTriple>> d = map.getData();
-                                v1.getData().forEach((k,v)->{
-                                    d.merge(k, v, (List oldVal, List newVal) ->
-                                    {
-                                        Set old = new HashSet<>(oldVal);
-                                        old.addAll(newVal);
-                                        return new ArrayList<>(old);
-                                    });
-                                });
-                                return map;
-                            }}
+                        SJSONTripleStream.aggregatorPostRekey
                 );
 
                 t8.mapValues(v -> {
