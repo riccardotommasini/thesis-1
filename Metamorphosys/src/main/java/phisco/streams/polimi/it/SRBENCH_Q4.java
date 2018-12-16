@@ -75,8 +75,8 @@ public class SRBENCH_Q4
 
         //properties
         Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-SRBENCH-Q4");
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-SRBENCH-Q4");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-SRBENCH-Q4-1");
+        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-SRBENCH-Q4-1");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
@@ -232,11 +232,14 @@ public class SRBENCH_Q4
 
 
 //        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t5 = t2.join(t4, SJSONTripleStream.SJSONtripleMapsJoiner(Arrays.asList("temperature"), Arrays.asList("speed")));
-        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t5 = t2.join(t4,
-                (v1, v2) -> {
-
-                });
-        t5.toStream().print(Printed.toSysOut());
+        KTable<Windowed<SJSONtKey>, SJSONTripleMap> t5 = t2.join(t4, SJSONTripleStream.SJSONtripleMapsJoiner(Arrays.asList("temperature"), Arrays.asList("speed")));
+        t5.mapValues(v -> {
+            Map<String,List<SJSONTriple>> d = v.getData();
+            Map<String,Double> res = new HashMap<>();
+            res.put("speed", d.get("speed").stream().mapToDouble((el) -> (Float)(el.getO().getValue())).average().getAsDouble());
+            res.put("temperature", d.get("temperature").stream().mapToDouble((el) -> (Float)(el.getO().getValue())).average().getAsDouble());
+            return res;
+        }).toStream().print(Printed.toSysOut());
 
 
         // stream the whole thing
