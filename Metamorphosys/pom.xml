@@ -98,7 +98,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>phisco.streams.polimi.it.StreamingTriplesExample</mainClass>
+                            <mainClass>phisco.streams.polimi.it.SRBENCH_Q1</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
