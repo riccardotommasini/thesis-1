@@ -12,6 +12,10 @@
                 <url>http://packages.confluent.io/maven/</url>
             </repository>
     </repositories>
+    <properties>
+        <antlr4.visitor>true</antlr4.visitor>
+        <antlr4.listener>true</antlr4.listener>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -77,6 +81,12 @@
             <artifactId>kafka-schema-registry-client</artifactId>
             <version>5.0.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.antlr/antlr4-runtime -->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>4.7.2</version>
+        </dependency>
 
     </dependencies>
     <build>
@@ -118,6 +128,26 @@
                             <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
                             <stringType>String</stringType>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>4.3</version>
+                <configuration>
+                    <arguments>
+                        <argument>-package</argument>
+                        <argument>phisco.streams.polimi.it.antlr4</argument>
+                    </arguments>
+                    <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>antlr</id>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
