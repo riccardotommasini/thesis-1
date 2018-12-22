@@ -34,14 +34,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPathAlternative(@NotNull RSPQLParser.PathAlternativeContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitBrackettedExpression(@NotNull RSPQLParser.BrackettedExpressionContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -67,14 +59,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitGraphPatternNotTriples(@NotNull RSPQLParser.GraphPatternNotTriplesContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitPath(@NotNull RSPQLParser.PathContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -202,14 +186,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPathOneInPropertySet(@NotNull RSPQLParser.PathOneInPropertySetContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitHavingCondition(@NotNull RSPQLParser.HavingConditionContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -282,14 +258,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAdditiveExpression(@NotNull RSPQLParser.AdditiveExpressionContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitDataBlockValue(@NotNull RSPQLParser.DataBlockValueContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -354,14 +322,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPathMod(@NotNull RSPQLParser.PathModContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitNumericLiteralNegative(@NotNull RSPQLParser.NumericLiteralNegativeContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -394,23 +354,7 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVerbPath(@NotNull RSPQLParser.VerbPathContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitPhysicalStep(@NotNull RSPQLParser.PhysicalStepContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitGroupGraphPatternSub(@NotNull RSPQLParser.GroupGraphPatternSubContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -498,14 +442,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPathNegatedPropertySet(@NotNull RSPQLParser.PathNegatedPropertySetContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitConditionalAndExpression(@NotNull RSPQLParser.ConditionalAndExpressionContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -539,14 +475,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitFilter(@NotNull RSPQLParser.FilterContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitSubSelect(@NotNull RSPQLParser.SubSelectContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -738,14 +666,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPathElt(@NotNull RSPQLParser.PathEltContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitTriplesNodePath(@NotNull RSPQLParser.TriplesNodePathContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -779,14 +699,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitSolutionModifier(@NotNull RSPQLParser.SolutionModifierContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitPathEltOrInverse(@NotNull RSPQLParser.PathEltOrInverseContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -906,14 +818,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPathSequence(@NotNull RSPQLParser.PathSequenceContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitInlineData(@NotNull RSPQLParser.InlineDataContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -971,14 +875,6 @@ public class RSPQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitDistinct(@NotNull RSPQLParser.DistinctContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitPathPrimary(@NotNull RSPQLParser.PathPrimaryContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

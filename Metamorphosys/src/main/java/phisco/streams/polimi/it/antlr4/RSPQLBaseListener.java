@@ -43,19 +43,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathAlternative(@NotNull RSPQLParser.PathAlternativeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPathAlternative(@NotNull RSPQLParser.PathAlternativeContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBrackettedExpression(@NotNull RSPQLParser.BrackettedExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -102,19 +89,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitGraphPatternNotTriples(@NotNull RSPQLParser.GraphPatternNotTriplesContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPath(@NotNull RSPQLParser.PathContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPath(@NotNull RSPQLParser.PathContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -316,19 +290,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathOneInPropertySet(@NotNull RSPQLParser.PathOneInPropertySetContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPathOneInPropertySet(@NotNull RSPQLParser.PathOneInPropertySetContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterHavingCondition(@NotNull RSPQLParser.HavingConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -446,19 +407,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAdditiveExpression(@NotNull RSPQLParser.AdditiveExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAdditiveExpression(@NotNull RSPQLParser.AdditiveExpressionContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterDataBlockValue(@NotNull RSPQLParser.DataBlockValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -563,19 +511,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathMod(@NotNull RSPQLParser.PathModContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPathMod(@NotNull RSPQLParser.PathModContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterNumericLiteralNegative(@NotNull RSPQLParser.NumericLiteralNegativeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -628,19 +563,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVerbPath(@NotNull RSPQLParser.VerbPathContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVerbPath(@NotNull RSPQLParser.VerbPathContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterPhysicalStep(@NotNull RSPQLParser.PhysicalStepContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -648,19 +570,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPhysicalStep(@NotNull RSPQLParser.PhysicalStepContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterGroupGraphPatternSub(@NotNull RSPQLParser.GroupGraphPatternSubContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGroupGraphPatternSub(@NotNull RSPQLParser.GroupGraphPatternSubContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -797,19 +706,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathNegatedPropertySet(@NotNull RSPQLParser.PathNegatedPropertySetContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPathNegatedPropertySet(@NotNull RSPQLParser.PathNegatedPropertySetContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterConditionalAndExpression(@NotNull RSPQLParser.ConditionalAndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -869,19 +765,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFilter(@NotNull RSPQLParser.FilterContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSubSelect(@NotNull RSPQLParser.SubSelectContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSubSelect(@NotNull RSPQLParser.SubSelectContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -1187,19 +1070,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathElt(@NotNull RSPQLParser.PathEltContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPathElt(@NotNull RSPQLParser.PathEltContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterTriplesNodePath(@NotNull RSPQLParser.TriplesNodePathContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1259,19 +1129,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSolutionModifier(@NotNull RSPQLParser.SolutionModifierContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPathEltOrInverse(@NotNull RSPQLParser.PathEltOrInverseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPathEltOrInverse(@NotNull RSPQLParser.PathEltOrInverseContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -1460,19 +1317,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPathSequence(@NotNull RSPQLParser.PathSequenceContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPathSequence(@NotNull RSPQLParser.PathSequenceContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterInlineData(@NotNull RSPQLParser.InlineDataContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1571,19 +1415,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDistinct(@NotNull RSPQLParser.DistinctContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPathPrimary(@NotNull RSPQLParser.PathPrimaryContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPathPrimary(@NotNull RSPQLParser.PathPrimaryContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

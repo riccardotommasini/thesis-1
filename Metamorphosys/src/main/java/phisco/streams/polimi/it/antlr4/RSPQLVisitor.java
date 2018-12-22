@@ -26,13 +26,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitGroupCondition(@NotNull RSPQLParser.GroupConditionContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#pathAlternative}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPathAlternative(@NotNull RSPQLParser.PathAlternativeContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#brackettedExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -59,13 +52,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitGraphPatternNotTriples(@NotNull RSPQLParser.GraphPatternNotTriplesContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#path}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPath(@NotNull RSPQLParser.PathContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#bind}.
@@ -173,13 +159,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitWindowGraphPattern(@NotNull RSPQLParser.WindowGraphPatternContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#pathOneInPropertySet}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPathOneInPropertySet(@NotNull RSPQLParser.PathOneInPropertySetContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#havingCondition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -243,13 +222,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitResultVar(@NotNull RSPQLParser.ResultVarContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#additiveExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAdditiveExpression(@NotNull RSPQLParser.AdditiveExpressionContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#dataBlockValue}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -306,13 +278,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitWindowUri(@NotNull RSPQLParser.WindowUriContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#pathMod}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPathMod(@NotNull RSPQLParser.PathModContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#numericLiteralNegative}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -341,25 +306,11 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitVarOrTerm(@NotNull RSPQLParser.VarOrTermContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#verbPath}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVerbPath(@NotNull RSPQLParser.VerbPathContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#physicalStep}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPhysicalStep(@NotNull RSPQLParser.PhysicalStepContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#groupGraphPatternSub}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroupGraphPatternSub(@NotNull RSPQLParser.GroupGraphPatternSubContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#blankNode}.
@@ -432,13 +383,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitUndef(@NotNull RSPQLParser.UndefContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#pathNegatedPropertySet}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPathNegatedPropertySet(@NotNull RSPQLParser.PathNegatedPropertySetContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#conditionalAndExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -472,13 +416,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFilter(@NotNull RSPQLParser.FilterContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#subSelect}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSubSelect(@NotNull RSPQLParser.SubSelectContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#notExistsFunc}.
@@ -642,13 +579,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitConditionalOrExpression(@NotNull RSPQLParser.ConditionalOrExpressionContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#pathElt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPathElt(@NotNull RSPQLParser.PathEltContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#triplesNodePath}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -682,13 +612,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSolutionModifier(@NotNull RSPQLParser.SolutionModifierContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#pathEltOrInverse}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPathEltOrInverse(@NotNull RSPQLParser.PathEltOrInverseContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#query}.
@@ -789,13 +712,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDataBlock(@NotNull RSPQLParser.DataBlockContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#pathSequence}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPathSequence(@NotNull RSPQLParser.PathSequenceContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#inlineData}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -850,13 +766,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDistinct(@NotNull RSPQLParser.DistinctContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#pathPrimary}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPathPrimary(@NotNull RSPQLParser.PathPrimaryContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#askQuery}.

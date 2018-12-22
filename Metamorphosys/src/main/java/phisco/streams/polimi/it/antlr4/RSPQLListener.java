@@ -31,17 +31,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	void exitGroupCondition(@NotNull RSPQLParser.GroupConditionContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#pathAlternative}.
-	 * @param ctx the parse tree
-	 */
-	void enterPathAlternative(@NotNull RSPQLParser.PathAlternativeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#pathAlternative}.
-	 * @param ctx the parse tree
-	 */
-	void exitPathAlternative(@NotNull RSPQLParser.PathAlternativeContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#brackettedExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -84,17 +73,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGraphPatternNotTriples(@NotNull RSPQLParser.GraphPatternNotTriplesContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#path}.
-	 * @param ctx the parse tree
-	 */
-	void enterPath(@NotNull RSPQLParser.PathContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#path}.
-	 * @param ctx the parse tree
-	 */
-	void exitPath(@NotNull RSPQLParser.PathContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#bind}.
@@ -262,17 +240,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	void exitWindowGraphPattern(@NotNull RSPQLParser.WindowGraphPatternContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#pathOneInPropertySet}.
-	 * @param ctx the parse tree
-	 */
-	void enterPathOneInPropertySet(@NotNull RSPQLParser.PathOneInPropertySetContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#pathOneInPropertySet}.
-	 * @param ctx the parse tree
-	 */
-	void exitPathOneInPropertySet(@NotNull RSPQLParser.PathOneInPropertySetContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#havingCondition}.
 	 * @param ctx the parse tree
 	 */
@@ -372,17 +339,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	void exitResultVar(@NotNull RSPQLParser.ResultVarContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#additiveExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAdditiveExpression(@NotNull RSPQLParser.AdditiveExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#additiveExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAdditiveExpression(@NotNull RSPQLParser.AdditiveExpressionContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#dataBlockValue}.
 	 * @param ctx the parse tree
 	 */
@@ -471,17 +427,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	void exitWindowUri(@NotNull RSPQLParser.WindowUriContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#pathMod}.
-	 * @param ctx the parse tree
-	 */
-	void enterPathMod(@NotNull RSPQLParser.PathModContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#pathMod}.
-	 * @param ctx the parse tree
-	 */
-	void exitPathMod(@NotNull RSPQLParser.PathModContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#numericLiteralNegative}.
 	 * @param ctx the parse tree
 	 */
@@ -526,17 +471,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	void exitVarOrTerm(@NotNull RSPQLParser.VarOrTermContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#verbPath}.
-	 * @param ctx the parse tree
-	 */
-	void enterVerbPath(@NotNull RSPQLParser.VerbPathContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#verbPath}.
-	 * @param ctx the parse tree
-	 */
-	void exitVerbPath(@NotNull RSPQLParser.VerbPathContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#physicalStep}.
 	 * @param ctx the parse tree
 	 */
@@ -546,17 +480,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPhysicalStep(@NotNull RSPQLParser.PhysicalStepContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#groupGraphPatternSub}.
-	 * @param ctx the parse tree
-	 */
-	void enterGroupGraphPatternSub(@NotNull RSPQLParser.GroupGraphPatternSubContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#groupGraphPatternSub}.
-	 * @param ctx the parse tree
-	 */
-	void exitGroupGraphPatternSub(@NotNull RSPQLParser.GroupGraphPatternSubContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#blankNode}.
@@ -669,17 +592,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	void exitUndef(@NotNull RSPQLParser.UndefContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#pathNegatedPropertySet}.
-	 * @param ctx the parse tree
-	 */
-	void enterPathNegatedPropertySet(@NotNull RSPQLParser.PathNegatedPropertySetContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#pathNegatedPropertySet}.
-	 * @param ctx the parse tree
-	 */
-	void exitPathNegatedPropertySet(@NotNull RSPQLParser.PathNegatedPropertySetContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#conditionalAndExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -733,17 +645,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFilter(@NotNull RSPQLParser.FilterContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#subSelect}.
-	 * @param ctx the parse tree
-	 */
-	void enterSubSelect(@NotNull RSPQLParser.SubSelectContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#subSelect}.
-	 * @param ctx the parse tree
-	 */
-	void exitSubSelect(@NotNull RSPQLParser.SubSelectContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#notExistsFunc}.
@@ -999,17 +900,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	void exitConditionalOrExpression(@NotNull RSPQLParser.ConditionalOrExpressionContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#pathElt}.
-	 * @param ctx the parse tree
-	 */
-	void enterPathElt(@NotNull RSPQLParser.PathEltContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#pathElt}.
-	 * @param ctx the parse tree
-	 */
-	void exitPathElt(@NotNull RSPQLParser.PathEltContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#triplesNodePath}.
 	 * @param ctx the parse tree
 	 */
@@ -1063,17 +953,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSolutionModifier(@NotNull RSPQLParser.SolutionModifierContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#pathEltOrInverse}.
-	 * @param ctx the parse tree
-	 */
-	void enterPathEltOrInverse(@NotNull RSPQLParser.PathEltOrInverseContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#pathEltOrInverse}.
-	 * @param ctx the parse tree
-	 */
-	void exitPathEltOrInverse(@NotNull RSPQLParser.PathEltOrInverseContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#query}.
@@ -1230,17 +1109,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	void exitDataBlock(@NotNull RSPQLParser.DataBlockContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#pathSequence}.
-	 * @param ctx the parse tree
-	 */
-	void enterPathSequence(@NotNull RSPQLParser.PathSequenceContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#pathSequence}.
-	 * @param ctx the parse tree
-	 */
-	void exitPathSequence(@NotNull RSPQLParser.PathSequenceContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#inlineData}.
 	 * @param ctx the parse tree
 	 */
@@ -1327,17 +1195,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDistinct(@NotNull RSPQLParser.DistinctContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#pathPrimary}.
-	 * @param ctx the parse tree
-	 */
-	void enterPathPrimary(@NotNull RSPQLParser.PathPrimaryContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#pathPrimary}.
-	 * @param ctx the parse tree
-	 */
-	void exitPathPrimary(@NotNull RSPQLParser.PathPrimaryContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#askQuery}.
