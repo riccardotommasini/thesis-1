@@ -3,207 +3,161 @@
 grammar RSPQL;
 
 
+// root 
 queryUnit :  query ; 
-query :  prologue registerClause? (  selectQuery |  constructQuery |  describeQuery |  askQuery )  valuesClause ;
+// query structure
+query :  prologue registerClause? (  selectQuery |  constructQuery |  describeQuery |  askQuery ) ;
+// prologue
 prologue : (  baseDecl |  prefixDecl )* ;
 baseDecl : 'BASE' IRIREF ; 
 prefixDecl : 'PREFIX' PNAME_NS IRIREF ;
-registerClause : 'REGISTER' outputStreamType outputStream 'AS' ;
-outputStreamType : 'ISTREAM' | 'RSTREAM' | 'DSTREAM' ;
-outputStream : sourceSelector ;
+// types of query
+// register
+registerClause : 'REGISTER' streamType=('ISTREAM' | 'RSTREAM' | 'DSTREAM' ) outputStream=iri 'AS' ;
+// select
 selectQuery :  selectClause  datasetClause*  whereClause  solutionModifier ;
-selectClause : 'SELECT'  ( distinct | reduced )? ( ( resultVar )+ | resultStar ) ;
-resultStar : '*' ;
-resultVar :  var | ( '('  expression 'AS'  var ')' ) ;
-distinct : 'DISTINCT' ;
-reduced : 'REDUCED' ;
-constructQuery : 'CONSTRUCT' (  constructTemplate  datasetClause*  whereClause  solutionModifier |  datasetClause* 'WHERE' '{'  triplesTemplate? '}'  solutionModifier ) ; 
-describeQuery : 'DESCRIBE' (  varOrIri+ | resultStar )  datasetClause*  whereClause?  solutionModifier ;
-askQuery : 'ASK'  datasetClause*  whereClause  solutionModifier ; 
-datasetClause : 'FROM' (  defaultGraphClause |  namedGraphClause | namedWindowClause ) ;
-defaultGraphClause :  sourceSelector ; 
-namedGraphClause : 'NAMED'  sourceSelector ;
-namedWindowClause : 'NAMED' 'WINDOW' windowUri 'ON' streamUri '[' window ']' ;
-windowUri : sourceSelector ;
-streamUri : sourceSelector ;
-window : physicalWindow | logicalWindow ;
+selectClause : 'SELECT'  selectModifier? ( ( resultVar )+ | STAR ) ;
+selectModifier: DISTINCT | REDUCED;
+resultVar :  VAR | ( '('  expression 'AS'  VAR')' ) ;
+// construct
+constructQuery : 'CONSTRUCT' '{' triplesSameSubject '.'?  '}' datasetClause*  whereClause  solutionModifier; 
+// describe 
+describeQuery : 'DESCRIBE' (  varOrIri+ | STAR )  datasetClause*  whereClause?  solutionModifier ;
+// ask
+askQuery : 'ASK'  datasetClause+  whereClause  solutionModifier ; 
+// dataset declaration
+datasetClause : 'FROM' (  anonymousGraph=iri |  namedGraphClause | namedWindowClause ) ;
+namedGraphClause : 'NAMED'  graphIRI=iri ;
+namedWindowClause : 'NAMED' 'WINDOW' windowIRI=iri 'ON' streamIRI=iri '[' windowDefinition ']' ;
+// window
+windowDefinition : physicalWindow | logicalWindow ;
 physicalWindow :  physicalRange physicalStep? ;
-physicalRange : 'ELEMENTS' integer ;
-physicalStep : 'STEP' integer ;
+physicalRange : 'ELEMENTS' INTEGER ;
+physicalStep : 'STEP' INTEGER ;
 logicalWindow : logicalRange logicalStep? ;
 logicalRange : 'RANGE' duration ;
 logicalStep : 'STEP' duration ;
+whereClause : 'WHERE'  groupGraphPattern ; 
 duration : DURATION ;
-sourceSelector : iri ; 
-whereClause : 'WHERE'?  groupGraphPattern ; 
+// solution modifiers 
 solutionModifier :  groupClause?  havingClause?  orderClause?  limitOffsetClauses? ; 
 groupClause : 'GROUP' 'BY'  groupCondition+ ; 
-groupCondition :  builtInCall |  functionCall | '('  expression ( 'AS'  var )? ')' |  var ; 
+groupCondition :  builtInCall  | '('  expression ( 'AS'  VAR )? ')' |  VAR ; 
 havingClause : 'HAVING'  havingCondition+ ; 
 havingCondition :  constraint ; 
 orderClause : 'ORDER' 'BY'  orderCondition+ ; 
-orderCondition : ( ( 'ASC' | 'DESC' )  brackettedExpression ) | (  constraint |  var ) ; 
+orderCondition : ( ( 'ASC' | 'DESC' )  brackettedExpression ) | (  constraint |  VAR ) ; 
 limitOffsetClauses :  limitClause  offsetClause? |  offsetClause  limitClause? ; 
 limitClause : 'LIMIT' INTEGER ; 
 offsetClause : 'OFFSET' INTEGER ; 
-valuesClause : ( 'VALUES'  dataBlock )? ;
-graphOrDefault : 'DEFAULT' | 'GRAPH'? iri ; 
-graphRef : 'GRAPH' iri ;
-quadPattern : '{'  quads '}' ;
-quads :  triplesTemplate? (  quadsNotTriples '.'?  triplesTemplate? )* ;
-quadsNotTriples : 'GRAPH'  varOrIri '{'  triplesTemplate? '}' ; 
-triplesTemplate :  triplesSameSubject ( '.'  triplesTemplate? )? ; 
-groupGraphPattern : '{' triplesBlock? (  graphPatternNotTriples '.'?  triplesBlock? )* '}' ;
-triplesBlock :  triplesSameSubjectPath ( '.'  triplesBlock? )? ;
-graphPatternNotTriples :  groupOrUnionGraphPattern |  optionalGraphPattern |  minusGraphPattern |  graphGraphPattern | windowGraphPattern |  serviceGraphPattern |  filter |  bind |  inlineData ;
+
+// BGPs no paths allowed
+groupGraphPattern : '{'  ( graphPatternSub )+ '}' ;
+graphPatternSub : ( triplesSameSubject '.'? | graphPatternNotTriples );
+
+triplesSameSubject :  varOrTerm  propertyListNotEmpty |  blankNodePropertyList  propertyListNotEmpty? ;
+propertyListNotEmpty :  property ( ';' (  property )? )* ;
+property :  verb  objectList ;
+verb :  varOrIri | TYPE ;
+objectList :  object ( ','  object )* ; 
+object :  varOrTerm | blankNodePropertyList ; 
+blankNodePropertyList : '['  propertyListNotEmpty ']' ; 
+
+graphPatternNotTriples :  groupOrUnionGraphPattern 
+												|  optionalGraphPattern 
+												|  minusGraphPattern 
+												|  graphGraphPattern 
+												|  windowGraphPattern 
+												|  serviceGraphPattern 
+												|  filter 
+												|  bindPattern;
+groupOrUnionGraphPattern :  groupGraphPattern ( 'UNION'  groupGraphPattern )+ ; 
 optionalGraphPattern : 'OPTIONAL'  groupGraphPattern ; 
+minusGraphPattern : 'MINUS'  groupGraphPattern ; 
 graphGraphPattern : 'GRAPH'  varOrIri  groupGraphPattern ;
 windowGraphPattern : 'WINDOW'  varOrIri  groupGraphPattern ;
 serviceGraphPattern : 'SERVICE' 'SILENT'?  varOrIri  groupGraphPattern ;
-bind : 'BIND' '('  expression 'AS'  var ')' ; 
-inlineData : 'VALUES'  dataBlock ; 
-dataBlock :  inlineDataOneVar |  inlineDataFull ; 
-inlineDataOneVar :  var '{'  dataBlockValue* '}' ; 
-inlineDataFull : ( NIL | '('  var* ')' ) '{' ( dataBlockValues | NIL )* '}' ;
-dataBlockValues : '('  dataBlockValue* ')' ;
-dataBlockValue : iri |  rdfliteral |  numericLiteral |  booleanLiteral | undef ;
-undef : 'UNDEF' ;
-minusGraphPattern : 'MINUS'  groupGraphPattern ; 
-groupOrUnionGraphPattern :  groupGraphPattern ( 'UNION'  groupGraphPattern )* ; 
 filter : 'FILTER'  constraint ;
-constraint :  brackettedExpression |  builtInCall |  functionCall ;
-functionCall : iri  argList ; 
-argList : NIL | '(' distinct?  expression ( ','  expression )* ')' ;
-expressionList : NIL | '('  expression ( ','  expression )* ')' ; 
-constructTemplate : '{'  quads '}' ;
-constructTriples :  triplesSameSubject ( '.'  constructTriples? )? ; 
-triplesSameSubject :  varOrTerm  propertyListNotEmpty |  triplesNode  propertyListNotEmpty? ;
-propertyListNotEmpty :  propertyList ( ';' (  propertyList )? )* ;
-propertyList :  verb  objectList ;
-verb :  varOrIri | type ;
-type : TYPE ;
-objectList :  object ( ','  object )* ; 
-object :  graphNode ; 
-triplesSameSubjectPath : varOrTerm  propertyListPathNotEmpty |  triplesNodePath  propertyListPathNotEmpty? ;
-// Implemented errata-query-3 https://www.w3.org/2013/sparql-errata#errata-query-3
-propertyListPathNotEmpty : propertyListPath ( ';' propertyListPath )* ;
-propertyListPath :  verbSimple objectListPath ;
-verbSimple :  var | type ;
-objectListPath :  objectPath ( ','  objectPath )* ; 
-objectPath :  graphNodePath ; 
-integer : INTEGER ;
-triplesNode :  collection |  blankNodePropertyList ; 
-blankNodePropertyList : '['  propertyListNotEmpty ']' ; 
-triplesNodePath :  collectionPath |  blankNodePropertyListPath ;
-blankNodePropertyListPath : '['  propertyListPathNotEmpty ']' ; 
-collection : '('  graphNode+ ')' ; 
-collectionPath : '('  graphNodePath+ ')' ; 
-graphNode :  varOrTerm |  triplesNode ; 
-graphNodePath :  varOrTerm |  triplesNodePath ; 
-varOrTerm :  var |  graphTerm ; 
-varOrIri :  var | iri ; 
-var : VAR1 | VAR2 ;
-graphTerm : iri |  rdfliteral |  numericLiteral |  booleanLiteral |  blankNode | NIL ;
-expression :  conditionalOrExpression ; 
-conditionalOrExpression :  conditionalAndExpression ( '||'  conditionalAndExpression )* ; 
+bindPattern : 'BIND' '('  expression 'AS'  VAR ')' ; 
+
+varOrTerm :  VAR |  graphTerm ; 
+varOrIri :  VAR | iri ; 
+graphTerm : iri |  rdfliteral |  numericLiteral |  blankNode | NIL |  BOOL ;
+expression : conditionalAndExpression ( '||'  conditionalAndExpression )* ; 
 conditionalAndExpression :  valueLogical ( '&&'  valueLogical )* ; 
 valueLogical :  relationalExpression ; 
-relationalExpression :  numericExpression ( BINARY_OPERATOR numericExpression | 'NOT'? 'IN'  expressionList )? ;
-numericExpression : multiplicativeExpression ( multiExpr )* ;
-multiExpr : '+'  multiplicativeExpression | '-'  multiplicativeExpression | (  numericLiteralPositive |  numericLiteralNegative ) ( '*'  unaryExpression | '/'  unaryExpression )* ;
-multiplicativeExpression :  unaryExpression ( '*'  unaryExpression | '/'  unaryExpression )* ;
-unaryExpression : '!'  primaryExpression | '+'  primaryExpression | '-'  primaryExpression |  primaryExpression ;
-primaryExpression :  brackettedExpression |  builtInCall | iriOrFunction |  rdfliteral |  numericLiteral |  booleanLiteral |  var ;
+relationalExpression :  numericExpression ( BINARY_OPERATOR numericExpression | NOT? 'IN' expressionList )? ;
+expressionList : '('  expression ( ','  expression )* ')' ; 
+numericExpression : multiplicativeExpression ( op=('+' | '-' ) multiplicativeExpression )* ;
+multiplicativeExpression :  unaryExpression ( op=('*'|'/')  unaryExpression )* ;
+unaryExpression : op=('!' | '+' | '-')?  primaryExpression ;
+
+primaryExpression :  brackettedExpression 
+									|  builtInCall 
+									|  rdfliteral 
+									|  numericLiteral 
+									|  BOOL 
+									|  VAR ;
+
 brackettedExpression : '('  expression ')' ; 
-builtInCall :  aggregate
-	| 'STR' '('  expression ')'
-	| 'LANG' '('  expression ')'
-	| 'LANGMATCHES' '('  expression ','  expression ')'
-	| 'DATATYPE' '('  expression ')'
-	| 'BOUND' '('  var ')'
-	| 'IRI' '('  expression ')'
-	| 'URI' '('  expression ')'
-	| 'BNODE' ( '('  expression ')' | NIL )
-	| 'RAND' NIL
-	| 'ABS' '('  expression ')'
-	| 'CEIL' '('  expression ')'
-	| 'FLOOR' '('  expression ')'
-	| 'ROUND' '('  expression ')'
-	| 'CONCAT'  expressionList
-	|  substringExpression
-	| 'STRLEN' '('  expression ')'
-	|  strReplaceExpression
-	| 'UCASE' '('  expression ')'
-	| 'LCASE' '('  expression ')'
-	| 'ENCODE_FOR_URI' '('  expression ')'
-	| 'CONTAINS' '('  expression ','  expression ')'
-	| 'STRSTARTS' '('  expression ','  expression ')'
-	| 'STRENDS' '('  expression ','  expression ')'
-	| 'STRBEFORE' '('  expression ','  expression ')'
-	| 'STRAFTER' '('  expression ','  expression ')'
-	| 'YEAR' '('  expression ')'
-	| 'MONTH' '('  expression ')'
-	| 'DAY' '('  expression ')'
-	| 'HOURS' '('  expression ')'
-	| 'MINUTES' '('  expression ')'
-	| 'SECONDS' '('  expression ')'
-	| 'TIMEZONE' '('  expression ')'
-	| 'TZ' '('  expression ')'
-	| 'NOW' NIL
-	| 'UUID' NIL
-	| 'STRUUID' NIL
-	| 'MD5' '('  expression ')'
-	| 'SHA1' '('  expression ')'
-	| 'SHA256' '('  expression ')'
-	| 'SHA384' '('  expression ')'
-	| 'SHA512' '('  expression ')'
-	| 'COALESCE'  expressionList
-	| 'IF' '('  expression ','  expression ','  expression ')'
-	| 'STRLANG' '('  expression ','  expression ')'
-	| 'STRDT' '('  expression ','  expression ')'
-	| 'SAMETERM' '('  expression ','  expression ')'
-	| 'ISIRI' '('  expression ')'
-	| 'ISURI' '('  expression ')'
-	| 'ISBLANK' '('  expression ')'
-	| 'ISLITERAL' '('  expression ')'
-	| 'ISNUMERIC' '('  expression ')'
-	|  regexExpression
-	|  existsFunc
-	|  notExistsFunc ; 
-regexExpression : 'REGEX' '('  expression ','  expression ( ','  expression )? ')' ;
-substringExpression : 'SUBSTR' '('  expression ','  expression ( ','  expression )? ')' ; 
-strReplaceExpression : 'REPLACE' '('  expression ','  expression ','  expression ( ','  expression )? ')' ; 
-existsFunc : 'EXISTS'  groupGraphPattern ; 
-notExistsFunc : 'NOT' 'EXISTS'  groupGraphPattern ; 
-aggregate : 'COUNT' '(' distinct? ( '*' |  expression ) ')'
-    | 'SUM' '(' distinct?  expression ')'
-    | 'MIN' '(' distinct?  expression ')'
-    | 'MAX' '(' distinct?  expression ')'
-    | 'AVG' '(' distinct?  expression ')'
-    | 'SAMPLE' '(' distinct?  expression ')'
-    | 'GROUP_CONCAT' '(' distinct?  expression ( ';' 'SEPARATOR' '='  string )? ')' ;
-iriOrFunction : iri  argList? ; 
+builtInCall : aggregate
+					| unaryBuiltin
+					| binaryBuiltin
+					| ternaryBuiltin
+					| ternaryOrBinaryBuiltin
+					| strReplaceExpression
+					| boundExpression
+					| NOT? existsFunc;
 rdfliteral :  string ( LANGTAG | ( '^^' iri ) )? ; 
 numericLiteral :  numericLiteralUnsigned |  numericLiteralPositive |  numericLiteralNegative ; 
 numericLiteralUnsigned : INTEGER | DECIMAL | DOUBLE ; 
 numericLiteralPositive : INTEGER_POSITIVE | DECIMAL_POSITIVE | DOUBLE_POSITIVE ; 
 numericLiteralNegative : INTEGER_NEGATIVE | DECIMAL_NEGATIVE | DOUBLE_NEGATIVE ; 
-booleanLiteral : 'TRUE' | 'FALSE' ;
+
+argList : NIL | '(' DISTINCT?  expression ( ','  expression )* ')' ;
+constraint :  brackettedExpression |  builtInCall ;
+
+aggregate : f='COUNT' '(' DISTINCT? ( '*' |  expression ) ')'
+    | f=( 'SUM'| 'MIN' | 'MAX' | 'AVG' | 'SAMPLE' ) '(' DISTINCT?  expression ')'
+    | f='GROUP_CONCAT' '(' DISTINCT?  expression ( ';' 'SEPARATOR' '='  string )? ')' ;
+unaryBuiltin : f=( 'STR' | 'LANG' | 'DATATYPE'  | 'IRI' | 'URI' 
+				| 'ABS' | 'CEIL' | 'FLOOR' | 'ROUND' | 'UCASE' 
+				| 'LCASE' | 'YEAR'  | 'MONTH' | 'DAY'  | 'HOURS' 
+				| 'MINUTES' | 'SECONDS'  | 'TIMEZONE' | 'TZ' 
+				| 'MD5' | 'SHA1' | 'SHA256' | 'SHA384' | 'SHA512' 
+				| 'ISIRI' | 'ISURI' | 'ISBLANK' | 'ISLITERAL' 
+				| 'ISNUMERIC' | 'STRLEN' | 'ENCODE_FOR_URI' ) '('  expression ')'
+				| f='BNODE' ( '('  expression ')' | NIL )
+				| f=('NOW' | 'UUID' | 'STRUUID' | 'RAND') NIL;
+binaryBuiltin : f=( 'CONTAINS'	| 'STRSTARTS'	| 'STRENDS'	
+			| 'STRBEFORE'	| 'STRAFTER'	| 'STRLANG'	
+			| 'STRDT'	| 'SAMETERM' | 'LANGMATCHES') '('  expression ','  expression ')';
+ternaryBuiltin: 'IF' '(' expression ',' expression ',' expression ')' ;
+ternaryOrBinaryBuiltin : f=('REGEX' |'SUBSTR') '('  expression ','  expression ( ','  expression )? ')' ; 
+strReplaceExpression : 'REPLACE' '('  expression ','  expression ','  expression ( ','  expression )? ')' ; 
+boundExpression : 'BOUND' '(' VAR ')';
+existsFunc : 'EXISTS'  groupGraphPattern ; 
+
 string : STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2 ;
 iri : IRIREF |  prefixedName ; 
 prefixedName : PNAME_LN | PNAME_NS ; 
 blankNode : BLANK_NODE_LABEL | ANON ;
 
 //  Terminals
+NOT : 'NOT';
+DISTINCT : 'DISTINCT' ;
+REDUCED : 'REDUCED' ;
+BOOL : 'TRUE' | 'FALSE' ;
+STAR : '*' ;
+UNDEF : 'UNDEF' ;
 TYPE : 'A' | 'a' ;
 COMMENT : '#' ( ~( '\r' | '\n' ) )* -> skip;
 DURATION : 'P' ( INTEGER 'Y' )? ( INTEGER 'M' )? ( INTEGER 'D' )? 'T' ( INTEGER 'H' )? ( INTEGER 'M' )? ( INTEGER ( '.' INTEGER )? 'S' )? ;
-IRIREF  : '<' ~( '<' | '>' | '"' | '{' | '}' | '|' | '^' | '`' )* '>' ; //  multi-character literals are not allowed in lexer sets
+IRIREF  : '<' ~( '<' | '>' | '"' | '{' | '}' | '|' | '^' | '`' )* '>' ;
 PNAME_NS : PN_PREFIX? ':' ;
 PNAME_LN : PNAME_NS PN_LOCAL ;
 BLANK_NODE_LABEL : '_:' ( PN_CHARS_U | '0'..'9' ) ((PN_CHARS|'.')* PN_CHARS)? ;
-VAR1 : '?' VARNAME ;
-VAR2 : '$' VARNAME ;
+VAR : ('?'|'$') VARNAME ;
 LANGTAG : '@' ( 'a'..'z' | 'A'..'Z' )+ ('-' ( 'a'..'z' | 'A'..'Z' | '0'..'9')+ )* ;
 INTEGER : '0'..'9'+ ;
 DECIMAL : '0'..'9'* '.' '0'..'9'+ ;
@@ -215,8 +169,8 @@ INTEGER_NEGATIVE : '-' INTEGER ;
 DECIMAL_NEGATIVE : '-' DECIMAL ;
 DOUBLE_NEGATIVE : '-' DOUBLE ;
 EXPONENT : ( 'e' | 'E' ) ( '+' | '-' )? '0'..'9'+ ;
-STRING_LITERAL1 : '\'' ( ~( '\'' ) | ECHAR )* '\'' ; // multi-character literals are not allowed in lexer sets
-STRING_LITERAL2 : '"' ( ~( '"' ) | ECHAR )*? '"' ;   // multi-character literals are not allowed in lexer sets
+STRING_LITERAL1 : '\'' ( ~( '\'' ) | ECHAR )* '\'' ; 
+STRING_LITERAL2 : '"' ( ~( '"' ) | ECHAR )*? '"' ;
 STRING_LITERAL_LONG1 : '\'\'\'' ( ( '\'' | '\'\'' )? ( ~('\'' | '\\' ) | ECHAR ) )* '\'\'\'' ;
 STRING_LITERAL_LONG2 : '"""' ( ( '"' | '""' )? ( ~( '"' | '\\' ) | ECHAR ) )* '"""' ;
 BINARY_OPERATOR : '=' | '!=' | '<' | '>' | '<=' | '>=' ;
