@@ -6,7 +6,7 @@ grammar RSPQL;
 // root 
 queryUnit :  query ; 
 // query structure
-query :  prologue registerClause? (  selectQuery |  constructQuery |  describeQuery |  askQuery ) ;
+query :  prologue registerClause? (  selectQuery |  constructQuery |  describeQuery |  askQuery ) ';' ;
 // prologue
 prologue : (  baseDecl |  prefixDecl )* ;
 baseDecl : 'BASE' IRIREF ; 
@@ -15,10 +15,10 @@ prefixDecl : 'PREFIX' PNAME_NS IRIREF ;
 // register
 registerClause : 'REGISTER' streamType=('ISTREAM' | 'RSTREAM' | 'DSTREAM' ) outputStream=iri 'AS' ;
 // select
-selectQuery :  selectClause  datasetClause*  whereClause  solutionModifier ;
+selectQuery :  selectClause  datasetClause*  whereClause  solutionModifier? ;
 selectClause : 'SELECT'  selectModifier? ( ( resultVar )+ | STAR ) ;
 selectModifier: DISTINCT | REDUCED;
-resultVar :  VAR | ( '('  expression 'AS'  VAR')' ) ;
+resultVar :  var | ( '('  expression 'AS'  var')' ) ;
 // construct
 constructQuery : 'CONSTRUCT' '{' triplesSameSubject '.'?  '}' datasetClause*  whereClause  solutionModifier; 
 // describe 
@@ -42,11 +42,11 @@ duration : DURATION ;
 // solution modifiers 
 solutionModifier :  groupClause?  havingClause?  orderClause?  limitOffsetClauses? ; 
 groupClause : 'GROUP' 'BY'  groupCondition+ ; 
-groupCondition :  builtInCall  | '('  expression ( 'AS'  VAR )? ')' |  VAR ; 
+groupCondition :  builtInCall  | '('  expression ( 'AS'  var)? ')' |  var;
 havingClause : 'HAVING'  havingCondition+ ; 
 havingCondition :  constraint ; 
 orderClause : 'ORDER' 'BY'  orderCondition+ ; 
-orderCondition : ( ( 'ASC' | 'DESC' )  brackettedExpression ) | (  constraint |  VAR ) ; 
+orderCondition : ( ( 'ASC' | 'DESC' )  brackettedExpression ) | (  constraint |  var) ;
 limitOffsetClauses :  limitClause  offsetClause? |  offsetClause  limitClause? ; 
 limitClause : 'LIMIT' INTEGER ; 
 offsetClause : 'OFFSET' INTEGER ; 
@@ -61,6 +61,7 @@ property :  verb  objectList ;
 verb :  varOrIri | TYPE ;
 objectList :  object ( ','  object )* ; 
 object :  varOrTerm | blankNodePropertyList ; 
+varOrTerm :  var|  graphTerm ;
 blankNodePropertyList : '['  propertyListNotEmpty ']' ; 
 
 graphPatternNotTriples :  groupOrUnionGraphPattern 
@@ -68,7 +69,6 @@ graphPatternNotTriples :  groupOrUnionGraphPattern
 												|  minusGraphPattern 
 												|  graphGraphPattern 
 												|  windowGraphPattern 
-												|  serviceGraphPattern 
 												|  filter 
 												|  bindPattern;
 groupOrUnionGraphPattern :  groupGraphPattern ( 'UNION'  groupGraphPattern )+ ; 
@@ -76,12 +76,10 @@ optionalGraphPattern : 'OPTIONAL'  groupGraphPattern ;
 minusGraphPattern : 'MINUS'  groupGraphPattern ; 
 graphGraphPattern : 'GRAPH'  varOrIri  groupGraphPattern ;
 windowGraphPattern : 'WINDOW'  varOrIri  groupGraphPattern ;
-serviceGraphPattern : 'SERVICE' 'SILENT'?  varOrIri  groupGraphPattern ;
 filter : 'FILTER'  constraint ;
-bindPattern : 'BIND' '('  expression 'AS'  VAR ')' ; 
+bindPattern : 'BIND' '('  expression 'AS'  var')' ;
 
-varOrTerm :  VAR |  graphTerm ; 
-varOrIri :  VAR | iri ; 
+varOrIri :  var| iri ;
 graphTerm : iri |  rdfliteral |  numericLiteral |  blankNode | NIL |  BOOL ;
 expression : conditionalAndExpression ( '||'  conditionalAndExpression )* ; 
 conditionalAndExpression :  valueLogical ( '&&'  valueLogical )* ; 
@@ -96,8 +94,8 @@ primaryExpression :  brackettedExpression
 									|  builtInCall 
 									|  rdfliteral 
 									|  numericLiteral 
-									|  BOOL 
-									|  VAR ;
+									|  BOOL
+									|  var;
 
 brackettedExpression : '('  expression ')' ; 
 builtInCall : aggregate
@@ -135,13 +133,16 @@ binaryBuiltin : f=( 'CONTAINS'	| 'STRSTARTS'	| 'STRENDS'
 ternaryBuiltin: 'IF' '(' expression ',' expression ',' expression ')' ;
 ternaryOrBinaryBuiltin : f=('REGEX' |'SUBSTR') '('  expression ','  expression ( ','  expression )? ')' ; 
 strReplaceExpression : 'REPLACE' '('  expression ','  expression ','  expression ( ','  expression )? ')' ; 
-boundExpression : 'BOUND' '(' VAR ')';
+boundExpression : 'BOUND' '(' var')';
 existsFunc : 'EXISTS'  groupGraphPattern ; 
 
 string : STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2 ;
 iri : IRIREF |  prefixedName ; 
 prefixedName : PNAME_LN | PNAME_NS ; 
 blankNode : BLANK_NODE_LABEL | ANON ;
+var : ('?'|'$') varname ;
+varname : VARNAME | VAR_SINGLE_CHAR ;
+VAR_SINGLE_CHAR : [a-zA-Z];
 
 //  Terminals
 NOT : 'NOT';
@@ -157,7 +158,6 @@ IRIREF  : '<' ~( '<' | '>' | '"' | '{' | '}' | '|' | '^' | '`' )* '>' ;
 PNAME_NS : PN_PREFIX? ':' ;
 PNAME_LN : PNAME_NS PN_LOCAL ;
 BLANK_NODE_LABEL : '_:' ( PN_CHARS_U | '0'..'9' ) ((PN_CHARS|'.')* PN_CHARS)? ;
-VAR : ('?'|'$') VARNAME ;
 LANGTAG : '@' ( 'a'..'z' | 'A'..'Z' )+ ('-' ( 'a'..'z' | 'A'..'Z' | '0'..'9')+ )* ;
 INTEGER : '0'..'9'+ ;
 DECIMAL : '0'..'9'* '.' '0'..'9'+ ;

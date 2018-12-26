@@ -1,8 +1,7 @@
-// Generated from phisco/streams/polimi/it/antlr4/RSPQL.g4 by ANTLR 4.3
+// Generated from phisco/streams/polimi/it/antlr4/RSPQL.g4 by ANTLR 4.7.2
 package phisco.streams.polimi.it.antlr4;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -17,1141 +16,1068 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArgList(@NotNull RSPQLParser.ArgListContext ctx) { }
+	@Override public void enterQueryUnit(RSPQLParser.QueryUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArgList(@NotNull RSPQLParser.ArgListContext ctx) { }
-
+	@Override public void exitQueryUnit(RSPQLParser.QueryUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNamedGraphClause(@NotNull RSPQLParser.NamedGraphClauseContext ctx) { }
+	@Override public void enterQuery(RSPQLParser.QueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNamedGraphClause(@NotNull RSPQLParser.NamedGraphClauseContext ctx) { }
-
+	@Override public void exitQuery(RSPQLParser.QueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBuiltInCall(@NotNull RSPQLParser.BuiltInCallContext ctx) { }
+	@Override public void enterPrologue(RSPQLParser.PrologueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBuiltInCall(@NotNull RSPQLParser.BuiltInCallContext ctx) { }
-
+	@Override public void exitPrologue(RSPQLParser.PrologueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTernaryBuiltin(@NotNull RSPQLParser.TernaryBuiltinContext ctx) { }
+	@Override public void enterBaseDecl(RSPQLParser.BaseDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTernaryBuiltin(@NotNull RSPQLParser.TernaryBuiltinContext ctx) { }
-
+	@Override public void exitBaseDecl(RSPQLParser.BaseDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWhereClause(@NotNull RSPQLParser.WhereClauseContext ctx) { }
+	@Override public void enterPrefixDecl(RSPQLParser.PrefixDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWhereClause(@NotNull RSPQLParser.WhereClauseContext ctx) { }
-
+	@Override public void exitPrefixDecl(RSPQLParser.PrefixDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGroupCondition(@NotNull RSPQLParser.GroupConditionContext ctx) { }
+	@Override public void enterRegisterClause(RSPQLParser.RegisterClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGroupCondition(@NotNull RSPQLParser.GroupConditionContext ctx) { }
-
+	@Override public void exitRegisterClause(RSPQLParser.RegisterClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBrackettedExpression(@NotNull RSPQLParser.BrackettedExpressionContext ctx) { }
+	@Override public void enterSelectQuery(RSPQLParser.SelectQueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBrackettedExpression(@NotNull RSPQLParser.BrackettedExpressionContext ctx) { }
-
+	@Override public void exitSelectQuery(RSPQLParser.SelectQueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBindPattern(@NotNull RSPQLParser.BindPatternContext ctx) { }
+	@Override public void enterSelectClause(RSPQLParser.SelectClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBindPattern(@NotNull RSPQLParser.BindPatternContext ctx) { }
-
+	@Override public void exitSelectClause(RSPQLParser.SelectClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarOrIri(@NotNull RSPQLParser.VarOrIriContext ctx) { }
+	@Override public void enterSelectModifier(RSPQLParser.SelectModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarOrIri(@NotNull RSPQLParser.VarOrIriContext ctx) { }
-
+	@Override public void exitSelectModifier(RSPQLParser.SelectModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGroupGraphPattern(@NotNull RSPQLParser.GroupGraphPatternContext ctx) { }
+	@Override public void enterResultVar(RSPQLParser.ResultVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGroupGraphPattern(@NotNull RSPQLParser.GroupGraphPatternContext ctx) { }
-
+	@Override public void exitResultVar(RSPQLParser.ResultVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGraphPatternNotTriples(@NotNull RSPQLParser.GraphPatternNotTriplesContext ctx) { }
+	@Override public void enterConstructQuery(RSPQLParser.ConstructQueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGraphPatternNotTriples(@NotNull RSPQLParser.GraphPatternNotTriplesContext ctx) { }
-
+	@Override public void exitConstructQuery(RSPQLParser.ConstructQueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumericExpression(@NotNull RSPQLParser.NumericExpressionContext ctx) { }
+	@Override public void enterDescribeQuery(RSPQLParser.DescribeQueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumericExpression(@NotNull RSPQLParser.NumericExpressionContext ctx) { }
-
+	@Override public void exitDescribeQuery(RSPQLParser.DescribeQueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLimitOffsetClauses(@NotNull RSPQLParser.LimitOffsetClausesContext ctx) { }
+	@Override public void enterAskQuery(RSPQLParser.AskQueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLimitOffsetClauses(@NotNull RSPQLParser.LimitOffsetClausesContext ctx) { }
-
+	@Override public void exitAskQuery(RSPQLParser.AskQueryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLogicalWindow(@NotNull RSPQLParser.LogicalWindowContext ctx) { }
+	@Override public void enterDatasetClause(RSPQLParser.DatasetClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLogicalWindow(@NotNull RSPQLParser.LogicalWindowContext ctx) { }
-
+	@Override public void exitDatasetClause(RSPQLParser.DatasetClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlankNodePropertyList(@NotNull RSPQLParser.BlankNodePropertyListContext ctx) { }
+	@Override public void enterNamedGraphClause(RSPQLParser.NamedGraphClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBlankNodePropertyList(@NotNull RSPQLParser.BlankNodePropertyListContext ctx) { }
-
+	@Override public void exitNamedGraphClause(RSPQLParser.NamedGraphClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProperty(@NotNull RSPQLParser.PropertyContext ctx) { }
+	@Override public void enterNamedWindowClause(RSPQLParser.NamedWindowClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProperty(@NotNull RSPQLParser.PropertyContext ctx) { }
-
+	@Override public void exitNamedWindowClause(RSPQLParser.NamedWindowClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWindowDefinition(@NotNull RSPQLParser.WindowDefinitionContext ctx) { }
+	@Override public void enterWindowDefinition(RSPQLParser.WindowDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWindowDefinition(@NotNull RSPQLParser.WindowDefinitionContext ctx) { }
-
+	@Override public void exitWindowDefinition(RSPQLParser.WindowDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValueLogical(@NotNull RSPQLParser.ValueLogicalContext ctx) { }
+	@Override public void enterPhysicalWindow(RSPQLParser.PhysicalWindowContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValueLogical(@NotNull RSPQLParser.ValueLogicalContext ctx) { }
-
+	@Override public void exitPhysicalWindow(RSPQLParser.PhysicalWindowContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpression(@NotNull RSPQLParser.UnaryExpressionContext ctx) { }
+	@Override public void enterPhysicalRange(RSPQLParser.PhysicalRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpression(@NotNull RSPQLParser.UnaryExpressionContext ctx) { }
-
+	@Override public void exitPhysicalRange(RSPQLParser.PhysicalRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumericLiteral(@NotNull RSPQLParser.NumericLiteralContext ctx) { }
+	@Override public void enterPhysicalStep(RSPQLParser.PhysicalStepContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumericLiteral(@NotNull RSPQLParser.NumericLiteralContext ctx) { }
-
+	@Override public void exitPhysicalStep(RSPQLParser.PhysicalStepContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOrderCondition(@NotNull RSPQLParser.OrderConditionContext ctx) { }
+	@Override public void enterLogicalWindow(RSPQLParser.LogicalWindowContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOrderCondition(@NotNull RSPQLParser.OrderConditionContext ctx) { }
-
+	@Override public void exitLogicalWindow(RSPQLParser.LogicalWindowContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGraphPatternSub(@NotNull RSPQLParser.GraphPatternSubContext ctx) { }
+	@Override public void enterLogicalRange(RSPQLParser.LogicalRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGraphPatternSub(@NotNull RSPQLParser.GraphPatternSubContext ctx) { }
-
+	@Override public void exitLogicalRange(RSPQLParser.LogicalRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQueryUnit(@NotNull RSPQLParser.QueryUnitContext ctx) { }
+	@Override public void enterLogicalStep(RSPQLParser.LogicalStepContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQueryUnit(@NotNull RSPQLParser.QueryUnitContext ctx) { }
-
+	@Override public void exitLogicalStep(RSPQLParser.LogicalStepContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOptionalGraphPattern(@NotNull RSPQLParser.OptionalGraphPatternContext ctx) { }
+	@Override public void enterWhereClause(RSPQLParser.WhereClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOptionalGraphPattern(@NotNull RSPQLParser.OptionalGraphPatternContext ctx) { }
-
+	@Override public void exitWhereClause(RSPQLParser.WhereClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSolutionModifier(@NotNull RSPQLParser.SolutionModifierContext ctx) { }
+	@Override public void enterDuration(RSPQLParser.DurationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSolutionModifier(@NotNull RSPQLParser.SolutionModifierContext ctx) { }
-
+	@Override public void exitDuration(RSPQLParser.DurationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOffsetClause(@NotNull RSPQLParser.OffsetClauseContext ctx) { }
+	@Override public void enterSolutionModifier(RSPQLParser.SolutionModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOffsetClause(@NotNull RSPQLParser.OffsetClauseContext ctx) { }
-
+	@Override public void exitSolutionModifier(RSPQLParser.SolutionModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQuery(@NotNull RSPQLParser.QueryContext ctx) { }
+	@Override public void enterGroupClause(RSPQLParser.GroupClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQuery(@NotNull RSPQLParser.QueryContext ctx) { }
-
+	@Override public void exitGroupClause(RSPQLParser.GroupClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNamedWindowClause(@NotNull RSPQLParser.NamedWindowClauseContext ctx) { }
+	@Override public void enterGroupCondition(RSPQLParser.GroupConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNamedWindowClause(@NotNull RSPQLParser.NamedWindowClauseContext ctx) { }
-
+	@Override public void exitGroupCondition(RSPQLParser.GroupConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVerb(@NotNull RSPQLParser.VerbContext ctx) { }
+	@Override public void enterHavingClause(RSPQLParser.HavingClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVerb(@NotNull RSPQLParser.VerbContext ctx) { }
-
+	@Override public void exitHavingClause(RSPQLParser.HavingClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTriplesSameSubject(@NotNull RSPQLParser.TriplesSameSubjectContext ctx) { }
+	@Override public void enterHavingCondition(RSPQLParser.HavingConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTriplesSameSubject(@NotNull RSPQLParser.TriplesSameSubjectContext ctx) { }
-
+	@Override public void exitHavingCondition(RSPQLParser.HavingConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLogicalStep(@NotNull RSPQLParser.LogicalStepContext ctx) { }
+	@Override public void enterOrderClause(RSPQLParser.OrderClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLogicalStep(@NotNull RSPQLParser.LogicalStepContext ctx) { }
-
+	@Override public void exitOrderClause(RSPQLParser.OrderClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWindowGraphPattern(@NotNull RSPQLParser.WindowGraphPatternContext ctx) { }
+	@Override public void enterOrderCondition(RSPQLParser.OrderConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWindowGraphPattern(@NotNull RSPQLParser.WindowGraphPatternContext ctx) { }
-
+	@Override public void exitOrderCondition(RSPQLParser.OrderConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHavingCondition(@NotNull RSPQLParser.HavingConditionContext ctx) { }
+	@Override public void enterLimitOffsetClauses(RSPQLParser.LimitOffsetClausesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHavingCondition(@NotNull RSPQLParser.HavingConditionContext ctx) { }
-
+	@Override public void exitLimitOffsetClauses(RSPQLParser.LimitOffsetClausesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLogicalRange(@NotNull RSPQLParser.LogicalRangeContext ctx) { }
+	@Override public void enterLimitClause(RSPQLParser.LimitClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLogicalRange(@NotNull RSPQLParser.LogicalRangeContext ctx) { }
-
+	@Override public void exitLimitClause(RSPQLParser.LimitClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGroupClause(@NotNull RSPQLParser.GroupClauseContext ctx) { }
+	@Override public void enterOffsetClause(RSPQLParser.OffsetClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGroupClause(@NotNull RSPQLParser.GroupClauseContext ctx) { }
-
+	@Override public void exitOffsetClause(RSPQLParser.OffsetClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpressionList(@NotNull RSPQLParser.ExpressionListContext ctx) { }
+	@Override public void enterGroupGraphPattern(RSPQLParser.GroupGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpressionList(@NotNull RSPQLParser.ExpressionListContext ctx) { }
-
+	@Override public void exitGroupGraphPattern(RSPQLParser.GroupGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoundExpression(@NotNull RSPQLParser.BoundExpressionContext ctx) { }
+	@Override public void enterGraphPatternSub(RSPQLParser.GraphPatternSubContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoundExpression(@NotNull RSPQLParser.BoundExpressionContext ctx) { }
-
+	@Override public void exitGraphPatternSub(RSPQLParser.GraphPatternSubContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOrderClause(@NotNull RSPQLParser.OrderClauseContext ctx) { }
+	@Override public void enterTriplesSameSubject(RSPQLParser.TriplesSameSubjectContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOrderClause(@NotNull RSPQLParser.OrderClauseContext ctx) { }
-
+	@Override public void exitTriplesSameSubject(RSPQLParser.TriplesSameSubjectContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPropertyListNotEmpty(@NotNull RSPQLParser.PropertyListNotEmptyContext ctx) { }
+	@Override public void enterPropertyListNotEmpty(RSPQLParser.PropertyListNotEmptyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPropertyListNotEmpty(@NotNull RSPQLParser.PropertyListNotEmptyContext ctx) { }
-
+	@Override public void exitPropertyListNotEmpty(RSPQLParser.PropertyListNotEmptyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRdfliteral(@NotNull RSPQLParser.RdfliteralContext ctx) { }
+	@Override public void enterProperty(RSPQLParser.PropertyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRdfliteral(@NotNull RSPQLParser.RdfliteralContext ctx) { }
-
+	@Override public void exitProperty(RSPQLParser.PropertyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelectQuery(@NotNull RSPQLParser.SelectQueryContext ctx) { }
+	@Override public void enterVerb(RSPQLParser.VerbContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSelectQuery(@NotNull RSPQLParser.SelectQueryContext ctx) { }
-
+	@Override public void exitVerb(RSPQLParser.VerbContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObject(@NotNull RSPQLParser.ObjectContext ctx) { }
+	@Override public void enterObjectList(RSPQLParser.ObjectListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitObject(@NotNull RSPQLParser.ObjectContext ctx) { }
-
+	@Override public void exitObjectList(RSPQLParser.ObjectListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterResultVar(@NotNull RSPQLParser.ResultVarContext ctx) { }
+	@Override public void enterObject(RSPQLParser.ObjectContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitResultVar(@NotNull RSPQLParser.ResultVarContext ctx) { }
-
+	@Override public void exitObject(RSPQLParser.ObjectContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterString(@NotNull RSPQLParser.StringContext ctx) { }
+	@Override public void enterVarOrTerm(RSPQLParser.VarOrTermContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitString(@NotNull RSPQLParser.StringContext ctx) { }
-
+	@Override public void exitVarOrTerm(RSPQLParser.VarOrTermContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstructQuery(@NotNull RSPQLParser.ConstructQueryContext ctx) { }
+	@Override public void enterBlankNodePropertyList(RSPQLParser.BlankNodePropertyListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstructQuery(@NotNull RSPQLParser.ConstructQueryContext ctx) { }
-
+	@Override public void exitBlankNodePropertyList(RSPQLParser.BlankNodePropertyListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGroupOrUnionGraphPattern(@NotNull RSPQLParser.GroupOrUnionGraphPatternContext ctx) { }
+	@Override public void enterGraphPatternNotTriples(RSPQLParser.GraphPatternNotTriplesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGroupOrUnionGraphPattern(@NotNull RSPQLParser.GroupOrUnionGraphPatternContext ctx) { }
-
+	@Override public void exitGraphPatternNotTriples(RSPQLParser.GraphPatternNotTriplesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelationalExpression(@NotNull RSPQLParser.RelationalExpressionContext ctx) { }
+	@Override public void enterGroupOrUnionGraphPattern(RSPQLParser.GroupOrUnionGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRelationalExpression(@NotNull RSPQLParser.RelationalExpressionContext ctx) { }
-
+	@Override public void exitGroupOrUnionGraphPattern(RSPQLParser.GroupOrUnionGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBaseDecl(@NotNull RSPQLParser.BaseDeclContext ctx) { }
+	@Override public void enterOptionalGraphPattern(RSPQLParser.OptionalGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBaseDecl(@NotNull RSPQLParser.BaseDeclContext ctx) { }
-
+	@Override public void exitOptionalGraphPattern(RSPQLParser.OptionalGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrefixedName(@NotNull RSPQLParser.PrefixedNameContext ctx) { }
+	@Override public void enterMinusGraphPattern(RSPQLParser.MinusGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrefixedName(@NotNull RSPQLParser.PrefixedNameContext ctx) { }
-
+	@Override public void exitMinusGraphPattern(RSPQLParser.MinusGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrefixDecl(@NotNull RSPQLParser.PrefixDeclContext ctx) { }
+	@Override public void enterGraphGraphPattern(RSPQLParser.GraphGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrefixDecl(@NotNull RSPQLParser.PrefixDeclContext ctx) { }
-
+	@Override public void exitGraphGraphPattern(RSPQLParser.GraphGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDatasetClause(@NotNull RSPQLParser.DatasetClauseContext ctx) { }
+	@Override public void enterWindowGraphPattern(RSPQLParser.WindowGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDatasetClause(@NotNull RSPQLParser.DatasetClauseContext ctx) { }
-
+	@Override public void exitWindowGraphPattern(RSPQLParser.WindowGraphPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAskQuery(@NotNull RSPQLParser.AskQueryContext ctx) { }
+	@Override public void enterFilter(RSPQLParser.FilterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAskQuery(@NotNull RSPQLParser.AskQueryContext ctx) { }
-
+	@Override public void exitFilter(RSPQLParser.FilterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGraphGraphPattern(@NotNull RSPQLParser.GraphGraphPatternContext ctx) { }
+	@Override public void enterBindPattern(RSPQLParser.BindPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGraphGraphPattern(@NotNull RSPQLParser.GraphGraphPatternContext ctx) { }
-
+	@Override public void exitBindPattern(RSPQLParser.BindPatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAggregate(@NotNull RSPQLParser.AggregateContext ctx) { }
+	@Override public void enterVarOrIri(RSPQLParser.VarOrIriContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAggregate(@NotNull RSPQLParser.AggregateContext ctx) { }
-
+	@Override public void exitVarOrIri(RSPQLParser.VarOrIriContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDuration(@NotNull RSPQLParser.DurationContext ctx) { }
+	@Override public void enterGraphTerm(RSPQLParser.GraphTermContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDuration(@NotNull RSPQLParser.DurationContext ctx) { }
-
+	@Override public void exitGraphTerm(RSPQLParser.GraphTermContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGraphTerm(@NotNull RSPQLParser.GraphTermContext ctx) { }
+	@Override public void enterExpression(RSPQLParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGraphTerm(@NotNull RSPQLParser.GraphTermContext ctx) { }
-
+	@Override public void exitExpression(RSPQLParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumericLiteralNegative(@NotNull RSPQLParser.NumericLiteralNegativeContext ctx) { }
+	@Override public void enterConditionalAndExpression(RSPQLParser.ConditionalAndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumericLiteralNegative(@NotNull RSPQLParser.NumericLiteralNegativeContext ctx) { }
-
+	@Override public void exitConditionalAndExpression(RSPQLParser.ConditionalAndExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelectClause(@NotNull RSPQLParser.SelectClauseContext ctx) { }
+	@Override public void enterValueLogical(RSPQLParser.ValueLogicalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSelectClause(@NotNull RSPQLParser.SelectClauseContext ctx) { }
-
+	@Override public void exitValueLogical(RSPQLParser.ValueLogicalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPhysicalRange(@NotNull RSPQLParser.PhysicalRangeContext ctx) { }
+	@Override public void enterRelationalExpression(RSPQLParser.RelationalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPhysicalRange(@NotNull RSPQLParser.PhysicalRangeContext ctx) { }
-
+	@Override public void exitRelationalExpression(RSPQLParser.RelationalExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTernaryOrBinaryBuiltin(@NotNull RSPQLParser.TernaryOrBinaryBuiltinContext ctx) { }
+	@Override public void enterExpressionList(RSPQLParser.ExpressionListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTernaryOrBinaryBuiltin(@NotNull RSPQLParser.TernaryOrBinaryBuiltinContext ctx) { }
-
+	@Override public void exitExpressionList(RSPQLParser.ExpressionListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarOrTerm(@NotNull RSPQLParser.VarOrTermContext ctx) { }
+	@Override public void enterNumericExpression(RSPQLParser.NumericExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarOrTerm(@NotNull RSPQLParser.VarOrTermContext ctx) { }
-
+	@Override public void exitNumericExpression(RSPQLParser.NumericExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPhysicalWindow(@NotNull RSPQLParser.PhysicalWindowContext ctx) { }
+	@Override public void enterMultiplicativeExpression(RSPQLParser.MultiplicativeExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPhysicalWindow(@NotNull RSPQLParser.PhysicalWindowContext ctx) { }
-
+	@Override public void exitMultiplicativeExpression(RSPQLParser.MultiplicativeExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDescribeQuery(@NotNull RSPQLParser.DescribeQueryContext ctx) { }
+	@Override public void enterUnaryExpression(RSPQLParser.UnaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDescribeQuery(@NotNull RSPQLParser.DescribeQueryContext ctx) { }
-
+	@Override public void exitUnaryExpression(RSPQLParser.UnaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryBuiltin(@NotNull RSPQLParser.UnaryBuiltinContext ctx) { }
+	@Override public void enterPrimaryExpression(RSPQLParser.PrimaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryBuiltin(@NotNull RSPQLParser.UnaryBuiltinContext ctx) { }
-
+	@Override public void exitPrimaryExpression(RSPQLParser.PrimaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPhysicalStep(@NotNull RSPQLParser.PhysicalStepContext ctx) { }
+	@Override public void enterBrackettedExpression(RSPQLParser.BrackettedExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPhysicalStep(@NotNull RSPQLParser.PhysicalStepContext ctx) { }
-
+	@Override public void exitBrackettedExpression(RSPQLParser.BrackettedExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlankNode(@NotNull RSPQLParser.BlankNodeContext ctx) { }
+	@Override public void enterBuiltInCall(RSPQLParser.BuiltInCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBlankNode(@NotNull RSPQLParser.BlankNodeContext ctx) { }
-
+	@Override public void exitBuiltInCall(RSPQLParser.BuiltInCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrologue(@NotNull RSPQLParser.PrologueContext ctx) { }
+	@Override public void enterRdfliteral(RSPQLParser.RdfliteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrologue(@NotNull RSPQLParser.PrologueContext ctx) { }
-
+	@Override public void exitRdfliteral(RSPQLParser.RdfliteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrimaryExpression(@NotNull RSPQLParser.PrimaryExpressionContext ctx) { }
+	@Override public void enterNumericLiteral(RSPQLParser.NumericLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrimaryExpression(@NotNull RSPQLParser.PrimaryExpressionContext ctx) { }
-
+	@Override public void exitNumericLiteral(RSPQLParser.NumericLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBinaryBuiltin(@NotNull RSPQLParser.BinaryBuiltinContext ctx) { }
+	@Override public void enterNumericLiteralUnsigned(RSPQLParser.NumericLiteralUnsignedContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBinaryBuiltin(@NotNull RSPQLParser.BinaryBuiltinContext ctx) { }
-
+	@Override public void exitNumericLiteralUnsigned(RSPQLParser.NumericLiteralUnsignedContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelectModifier(@NotNull RSPQLParser.SelectModifierContext ctx) { }
+	@Override public void enterNumericLiteralPositive(RSPQLParser.NumericLiteralPositiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSelectModifier(@NotNull RSPQLParser.SelectModifierContext ctx) { }
-
+	@Override public void exitNumericLiteralPositive(RSPQLParser.NumericLiteralPositiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIri(@NotNull RSPQLParser.IriContext ctx) { }
+	@Override public void enterNumericLiteralNegative(RSPQLParser.NumericLiteralNegativeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIri(@NotNull RSPQLParser.IriContext ctx) { }
-
+	@Override public void exitNumericLiteralNegative(RSPQLParser.NumericLiteralNegativeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHavingClause(@NotNull RSPQLParser.HavingClauseContext ctx) { }
+	@Override public void enterArgList(RSPQLParser.ArgListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHavingClause(@NotNull RSPQLParser.HavingClauseContext ctx) { }
-
+	@Override public void exitArgList(RSPQLParser.ArgListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpression(@NotNull RSPQLParser.ExpressionContext ctx) { }
+	@Override public void enterConstraint(RSPQLParser.ConstraintContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpression(@NotNull RSPQLParser.ExpressionContext ctx) { }
-
+	@Override public void exitConstraint(RSPQLParser.ConstraintContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMinusGraphPattern(@NotNull RSPQLParser.MinusGraphPatternContext ctx) { }
+	@Override public void enterAggregate(RSPQLParser.AggregateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMinusGraphPattern(@NotNull RSPQLParser.MinusGraphPatternContext ctx) { }
-
+	@Override public void exitAggregate(RSPQLParser.AggregateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumericLiteralPositive(@NotNull RSPQLParser.NumericLiteralPositiveContext ctx) { }
+	@Override public void enterUnaryBuiltin(RSPQLParser.UnaryBuiltinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumericLiteralPositive(@NotNull RSPQLParser.NumericLiteralPositiveContext ctx) { }
-
+	@Override public void exitUnaryBuiltin(RSPQLParser.UnaryBuiltinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLimitClause(@NotNull RSPQLParser.LimitClauseContext ctx) { }
+	@Override public void enterBinaryBuiltin(RSPQLParser.BinaryBuiltinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLimitClause(@NotNull RSPQLParser.LimitClauseContext ctx) { }
-
+	@Override public void exitBinaryBuiltin(RSPQLParser.BinaryBuiltinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalAndExpression(@NotNull RSPQLParser.ConditionalAndExpressionContext ctx) { }
+	@Override public void enterTernaryBuiltin(RSPQLParser.TernaryBuiltinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalAndExpression(@NotNull RSPQLParser.ConditionalAndExpressionContext ctx) { }
-
+	@Override public void exitTernaryBuiltin(RSPQLParser.TernaryBuiltinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMultiplicativeExpression(@NotNull RSPQLParser.MultiplicativeExpressionContext ctx) { }
+	@Override public void enterTernaryOrBinaryBuiltin(RSPQLParser.TernaryOrBinaryBuiltinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMultiplicativeExpression(@NotNull RSPQLParser.MultiplicativeExpressionContext ctx) { }
-
+	@Override public void exitTernaryOrBinaryBuiltin(RSPQLParser.TernaryOrBinaryBuiltinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterServiceGraphPattern(@NotNull RSPQLParser.ServiceGraphPatternContext ctx) { }
+	@Override public void enterStrReplaceExpression(RSPQLParser.StrReplaceExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitServiceGraphPattern(@NotNull RSPQLParser.ServiceGraphPatternContext ctx) { }
-
+	@Override public void exitStrReplaceExpression(RSPQLParser.StrReplaceExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterObjectList(@NotNull RSPQLParser.ObjectListContext ctx) { }
+	@Override public void enterBoundExpression(RSPQLParser.BoundExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitObjectList(@NotNull RSPQLParser.ObjectListContext ctx) { }
-
+	@Override public void exitBoundExpression(RSPQLParser.BoundExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFilter(@NotNull RSPQLParser.FilterContext ctx) { }
+	@Override public void enterExistsFunc(RSPQLParser.ExistsFuncContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFilter(@NotNull RSPQLParser.FilterContext ctx) { }
-
+	@Override public void exitExistsFunc(RSPQLParser.ExistsFuncContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStrReplaceExpression(@NotNull RSPQLParser.StrReplaceExpressionContext ctx) { }
+	@Override public void enterString(RSPQLParser.StringContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStrReplaceExpression(@NotNull RSPQLParser.StrReplaceExpressionContext ctx) { }
-
+	@Override public void exitString(RSPQLParser.StringContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstraint(@NotNull RSPQLParser.ConstraintContext ctx) { }
+	@Override public void enterIri(RSPQLParser.IriContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstraint(@NotNull RSPQLParser.ConstraintContext ctx) { }
-
+	@Override public void exitIri(RSPQLParser.IriContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumericLiteralUnsigned(@NotNull RSPQLParser.NumericLiteralUnsignedContext ctx) { }
+	@Override public void enterPrefixedName(RSPQLParser.PrefixedNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumericLiteralUnsigned(@NotNull RSPQLParser.NumericLiteralUnsignedContext ctx) { }
-
+	@Override public void exitPrefixedName(RSPQLParser.PrefixedNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExistsFunc(@NotNull RSPQLParser.ExistsFuncContext ctx) { }
+	@Override public void enterBlankNode(RSPQLParser.BlankNodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExistsFunc(@NotNull RSPQLParser.ExistsFuncContext ctx) { }
-
+	@Override public void exitBlankNode(RSPQLParser.BlankNodeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVar(RSPQLParser.VarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVar(RSPQLParser.VarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRegisterClause(@NotNull RSPQLParser.RegisterClauseContext ctx) { }
+	@Override public void enterVarname(RSPQLParser.VarnameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRegisterClause(@NotNull RSPQLParser.RegisterClauseContext ctx) { }
+	@Override public void exitVarname(RSPQLParser.VarnameContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEveryRule(@NotNull ParserRuleContext ctx) { }
+	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEveryRule(@NotNull ParserRuleContext ctx) { }
+	@Override public void exitEveryRule(ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitTerminal(@NotNull TerminalNode node) { }
+	@Override public void visitTerminal(TerminalNode node) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitErrorNode(@NotNull ErrorNode node) { }
+	@Override public void visitErrorNode(ErrorNode node) { }
 }

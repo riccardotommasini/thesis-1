@@ -1,0 +1,72 @@
+{
+  "type": "record",
+  "name": "SJSONTripleMap",
+  "namespace": "phisco.streams.polimi.it.avro",
+  "fields": [
+    {
+      "name": "data",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "record",
+            "name": "SJSONTriple",
+            "fields": [
+              {
+                "name": "s",
+                "type": "string"
+              },
+              {
+                "name": "p",
+                "type": "string"
+              },
+              {
+                "name": "o",
+                "type": {
+                  "type": "record",
+                  "name": "TripleObject",
+                  "fields": [
+                    {
+                      "name": "value",
+                      "type": [
+                        "null",
+                        "string",
+                        "int",
+                        "long",
+                        "float"
+                      ]
+                    },
+                    {
+                      "name": "datatype",
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    {
+                      "name": "type",
+                      "type": {
+                        "name": "Kind",
+                        "type": "enum",
+                        "symbols": [
+                          "literal",
+                           "uri",
+                           "bnode"
+                        ]
+                      }
+                    }
+                   ]
+                }
+              },
+              {
+                "name": "ts",
+                "type": "long"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

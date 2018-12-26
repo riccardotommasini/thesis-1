@@ -87,7 +87,18 @@
             <artifactId>antlr4-runtime</artifactId>
             <version>4.7.2</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.apache.calcite/calcite-core -->
+        <dependency>
+            <groupId>org.apache.calcite</groupId>
+            <artifactId>calcite-core</artifactId>
+            <version>1.18.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -134,7 +145,7 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.3</version>
+                <version>4.7.2</version>
                 <configuration>
                     <arguments>
                         <argument>-package</argument>
