@@ -35,10 +35,11 @@ physicalWindow :  physicalRange physicalStep? ;
 physicalRange : 'ELEMENTS' INTEGER ;
 physicalStep : 'STEP' INTEGER ;
 logicalWindow : logicalRange logicalStep? ;
-logicalRange : 'RANGE' duration ;
-logicalStep : 'STEP' duration ;
-whereClause : 'WHERE'  groupGraphPattern ; 
-duration : DURATION ;
+logicalRange : 'RANGE' DURATION ;
+logicalStep : 'STEP' DURATION ;
+whereClause : 'WHERE'  groupGraphPattern ;
+DURATION : 'P' ( INTEGER 'Y' )? ( INTEGER 'M' )? ( INTEGER 'D' )? 'T' ( INTEGER 'H' )? ( mins=INTEGER 'M' )? ( INTEGER ( '.' INTEGER )? 'S' )? ;
+
 // solution modifiers 
 solutionModifier :  groupClause?  havingClause?  orderClause?  limitOffsetClauses? ; 
 groupClause : 'GROUP' 'BY'  groupCondition+ ; 
@@ -55,13 +56,15 @@ offsetClause : 'OFFSET' INTEGER ;
 groupGraphPattern : '{'  ( graphPatternSub )+ '}' ;
 graphPatternSub : ( triplesSameSubject '.'? | graphPatternNotTriples );
 
-triplesSameSubject :  varOrTerm  propertyListNotEmpty |  blankNodePropertyList  propertyListNotEmpty? ;
+triplesSameSubject :  triplesSameSubjectNoBlankNode | triplesSameSubjectBlankNode ;
+triplesSameSubjectNoBlankNode: varOrTerm  propertyListNotEmpty;
+triplesSameSubjectBlankNode: blankNodePropertyList  propertyListNotEmpty?;
 propertyListNotEmpty :  property ( ';' (  property )? )* ;
 property :  verb  objectList ;
 verb :  varOrIri | TYPE ;
 objectList :  object ( ','  object )* ; 
 object :  varOrTerm | blankNodePropertyList ; 
-varOrTerm :  var|  graphTerm ;
+varOrTerm :  var |  graphTerm ;
 blankNodePropertyList : '['  propertyListNotEmpty ']' ; 
 
 graphPatternNotTriples :  groupOrUnionGraphPattern 
@@ -73,13 +76,13 @@ graphPatternNotTriples :  groupOrUnionGraphPattern
 												|  bindPattern;
 groupOrUnionGraphPattern :  groupGraphPattern ( 'UNION'  groupGraphPattern )+ ; 
 optionalGraphPattern : 'OPTIONAL'  groupGraphPattern ; 
-minusGraphPattern : 'MINUS'  groupGraphPattern ; 
+minusGraphPattern : 'MINUS'  groupGraphPattern ;
 graphGraphPattern : 'GRAPH'  varOrIri  groupGraphPattern ;
-windowGraphPattern : 'WINDOW'  varOrIri  groupGraphPattern ;
+windowGraphPattern : 'WINDOW'  varOrIri  '{' (triplesSameSubject '.'?)+ '}';
 filter : 'FILTER'  constraint ;
 bindPattern : 'BIND' '('  expression 'AS'  var')' ;
 
-varOrIri :  var| iri ;
+varOrIri :  var | iri ;
 graphTerm : iri |  rdfliteral |  numericLiteral |  blankNode | NIL |  BOOL ;
 expression : conditionalAndExpression ( '||'  conditionalAndExpression )* ; 
 conditionalAndExpression :  valueLogical ( '&&'  valueLogical )* ; 
@@ -153,7 +156,6 @@ STAR : '*' ;
 UNDEF : 'UNDEF' ;
 TYPE : 'A' | 'a' ;
 COMMENT : '#' ( ~( '\r' | '\n' ) )* -> skip;
-DURATION : 'P' ( INTEGER 'Y' )? ( INTEGER 'M' )? ( INTEGER 'D' )? 'T' ( INTEGER 'H' )? ( INTEGER 'M' )? ( INTEGER ( '.' INTEGER )? 'S' )? ;
 IRIREF  : '<' ~( '<' | '>' | '"' | '{' | '}' | '|' | '^' | '`' )* '>' ;
 PNAME_NS : PN_PREFIX? ':' ;
 PNAME_LN : PNAME_NS PN_LOCAL ;

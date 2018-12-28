@@ -248,16 +248,6 @@ public interface RSPQLListener extends ParseTreeListener {
 	 */
 	void exitWhereClause(RSPQLParser.WhereClauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RSPQLParser#duration}.
-	 * @param ctx the parse tree
-	 */
-	void enterDuration(RSPQLParser.DurationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RSPQLParser#duration}.
-	 * @param ctx the parse tree
-	 */
-	void exitDuration(RSPQLParser.DurationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#solutionModifier}.
 	 * @param ctx the parse tree
 	 */
@@ -387,6 +377,26 @@ public interface RSPQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTriplesSameSubject(RSPQLParser.TriplesSameSubjectContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RSPQLParser#triplesSameSubjectNoBlankNode}.
+	 * @param ctx the parse tree
+	 */
+	void enterTriplesSameSubjectNoBlankNode(RSPQLParser.TriplesSameSubjectNoBlankNodeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RSPQLParser#triplesSameSubjectNoBlankNode}.
+	 * @param ctx the parse tree
+	 */
+	void exitTriplesSameSubjectNoBlankNode(RSPQLParser.TriplesSameSubjectNoBlankNodeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RSPQLParser#triplesSameSubjectBlankNode}.
+	 * @param ctx the parse tree
+	 */
+	void enterTriplesSameSubjectBlankNode(RSPQLParser.TriplesSameSubjectBlankNodeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RSPQLParser#triplesSameSubjectBlankNode}.
+	 * @param ctx the parse tree
+	 */
+	void exitTriplesSameSubjectBlankNode(RSPQLParser.TriplesSameSubjectBlankNodeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RSPQLParser#propertyListNotEmpty}.
 	 * @param ctx the parse tree

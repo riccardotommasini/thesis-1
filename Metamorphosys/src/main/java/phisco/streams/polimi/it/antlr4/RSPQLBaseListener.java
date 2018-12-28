@@ -304,18 +304,6 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDuration(RSPQLParser.DurationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDuration(RSPQLParser.DurationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterSolutionModifier(RSPQLParser.SolutionModifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -467,6 +455,30 @@ public class RSPQLBaseListener implements RSPQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTriplesSameSubject(RSPQLParser.TriplesSameSubjectContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTriplesSameSubjectNoBlankNode(RSPQLParser.TriplesSameSubjectNoBlankNodeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTriplesSameSubjectNoBlankNode(RSPQLParser.TriplesSameSubjectNoBlankNodeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTriplesSameSubjectBlankNode(RSPQLParser.TriplesSameSubjectBlankNodeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTriplesSameSubjectBlankNode(RSPQLParser.TriplesSameSubjectBlankNodeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

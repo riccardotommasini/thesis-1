@@ -155,12 +155,6 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWhereClause(RSPQLParser.WhereClauseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RSPQLParser#duration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDuration(RSPQLParser.DurationContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#solutionModifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -238,6 +232,18 @@ public interface RSPQLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTriplesSameSubject(RSPQLParser.TriplesSameSubjectContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RSPQLParser#triplesSameSubjectNoBlankNode}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTriplesSameSubjectNoBlankNode(RSPQLParser.TriplesSameSubjectNoBlankNodeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RSPQLParser#triplesSameSubjectBlankNode}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTriplesSameSubjectBlankNode(RSPQLParser.TriplesSameSubjectBlankNodeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RSPQLParser#propertyListNotEmpty}.
 	 * @param ctx the parse tree
