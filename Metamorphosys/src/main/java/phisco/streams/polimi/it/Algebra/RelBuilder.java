@@ -78,7 +78,6 @@ public class RelBuilder {
                 .vars(forest.get(left).vars().merge(forest.get(right).vars()))
                 .scanKeys(this.forest.get(left).scanKeys())
                 .addScanKeys(this.forest.get(right).scanKeys());
-
         updateState(node);
         return this;
     }
@@ -110,7 +109,7 @@ public class RelBuilder {
                 .map(e -> new Pair(e.getKey(), e.getValue().entrySet().stream().map(e2 -> {
                     forest.get(e2.getKey()).scanKeys().containsAll(e2.getValue());
                     return forest.get(e2.getKey()).scanKeys().containsAll(e2.getValue()) ? 1 : 0;
-                }).reduce((i, j) -> i+j).orElse(0))).collect(Collectors.toList());
+                }).reduce((i, j) -> i+j).orElse(0))).sorted((i,j) -> (Integer) j.b - (Integer) i.b).collect(Collectors.toList());
     }
 
     private void updateState(RelNode node){
