@@ -17,5 +17,11 @@ public class Vars extends HashMap<String, Map<String, List<Key>>> {
         });
         return this;
     }
+    public Vars(){
+        super();
+    }
+    public Vars(Vars vars){
+        super(vars);
+    }
 
 }

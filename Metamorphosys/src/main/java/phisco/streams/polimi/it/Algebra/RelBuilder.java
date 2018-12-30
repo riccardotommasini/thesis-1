@@ -102,15 +102,6 @@ public class RelBuilder {
         return this;
     }
 
-    public List score(Vars vars){
-        return vars.entrySet()
-                .stream()
-                .filter(e -> e.getValue().size()>1)
-                .map(e -> new Pair(e.getKey(), e.getValue().entrySet().stream().map(e2 -> {
-                    forest.get(e2.getKey()).scanKeys().containsAll(e2.getValue());
-                    return forest.get(e2.getKey()).scanKeys().containsAll(e2.getValue()) ? 1 : 0;
-                }).reduce((i, j) -> i+j).orElse(0))).sorted((i,j) -> (Integer) j.b - (Integer) i.b).collect(Collectors.toList());
-    }
 
     private void updateState(RelNode node){
         this.forest.put(node.name(), node);

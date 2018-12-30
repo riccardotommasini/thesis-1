@@ -1,17 +1,16 @@
 package phisco.streams.polimi.it.Parser;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
-import lombok.var;
+import org.antlr.v4.runtime.misc.Pair;
 import phisco.streams.polimi.it.Algebra.*;
 import phisco.streams.polimi.it.antlr4.RSPQLBaseVisitor;
 import phisco.streams.polimi.it.antlr4.RSPQLParser;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 import static phisco.streams.polimi.it.Algebra.Key.*;
@@ -24,11 +23,15 @@ public class Gregor extends RSPQLBaseVisitor {
     private int i;
     private String last_source;
     @Getter
-    private Vars vars;
+    private Vars vars, terms;
+    @Getter
+    private Map<String, List<String>> termsPerFilter;
 
     public Gregor(){
         builder = new RelBuilder();
         vars = new Vars();
+        terms = new Vars();
+        termsPerFilter = new HashMap<>();
         i=0;
     }
 
@@ -61,6 +64,13 @@ public class Gregor extends RSPQLBaseVisitor {
         return super.visitWindowGraphPattern(ctx);
     }
 
+    @Override
+    public Object visitWhereClause(RSPQLParser.WhereClauseContext ctx) {
+        List<String> scores =this.score();
+        scores.forEach(el -> {{
+        }});
+        return super.visitWhereClause(ctx);
+    }
 
     @Override
     public Object visitGroupGraphPattern(RSPQLParser.GroupGraphPatternContext ctx) {
@@ -79,16 +89,31 @@ public class Gregor extends RSPQLBaseVisitor {
                 Vars vars = new Vars();
                 String name = "F" + i++;
                 Filters filters = new Filters();
-                if (ctx.varOrTerm().graphTerm() != null)
-                    filters.put(name, Collections.singletonMap(S, s -> s.equals(visitGraphTerm(ctx.varOrTerm().graphTerm()))));
-                else
+                if (ctx.varOrTerm().graphTerm() != null) {
+                    String term = visitGraphTerm(ctx.varOrTerm().graphTerm());
+                    filters.put(name, Collections.singletonMap(S, s -> s.equals(term)));
+                    terms.merge(term, Collections.singletonMap(name, Arrays.asList(S)),
+                            (oldV, newV) -> new HashMap(oldV){{putAll(newV);}});
+                    termsPerFilter.merge(name, Arrays.asList(term), (oldV, newV) -> new ArrayList<String>(oldV){{addAll(newV);}});
+                } else
                     vars.put(ctx.varOrTerm().var().varname().getText(), Collections.singletonMap(name, Arrays.asList(S)));
-                if (p.verb().TYPE() != null || p.verb().varOrIri().iri() != null)
-                    filters.put(name, Collections.singletonMap(P, v -> v.equals(p.verb().getText())));
+                if (p.verb().TYPE() != null || p.verb().varOrIri().iri() != null) {
+                    String term = p.verb().getText();
+                    filters.put(name, Collections.singletonMap(P, v -> v.equals(term)));
+                    terms.merge(term, Collections.singletonMap(name, Arrays.asList(P)),
+                            (oldV, newV) -> new HashMap(oldV){{putAll(newV);}});
+                    termsPerFilter.merge(name, Arrays.asList(term), (oldV, newV) -> new ArrayList<String>(oldV){{addAll(newV);}});
+                }
                 else
                     vars.put(p.verb().varOrIri().var().varname().getText(), Collections.singletonMap(name, Arrays.asList(P)));
                 if (o.varOrTerm().graphTerm() != null)  // not handling blankNodePropertyList atm
-                    filters.put(name, Collections.singletonMap(O, v -> v.equals(o.varOrTerm().graphTerm().getText())));
+                {
+                    String term = o.varOrTerm().graphTerm().getText();
+                    filters.put(name, Collections.singletonMap(O, v -> v.equals(term)));
+                    terms.merge(term, Collections.singletonMap(name, Arrays.asList(O)),
+                            (oldV, newV) -> new HashMap(oldV){{putAll(newV);}});
+                    termsPerFilter.merge(name, Arrays.asList(term), (oldV, newV) -> new ArrayList<String>(oldV){{addAll(newV);}});
+                }
                 else
                     vars.put(o.varOrTerm().var().varname().getText(), Collections.singletonMap(name, Arrays.asList(O)));
                 builder.addNode(name,
@@ -130,5 +155,32 @@ public class Gregor extends RSPQLBaseVisitor {
     @Override
     public String visitIri(RSPQLParser.IriContext ctx) {
         return ctx.getText();
+    }
+
+    public List<String> score(){
+        Vars currentVars = new Vars(vars);
+        Vars prevVars;
+        do {
+            prevVars = new Vars(vars);
+            for (Map<String,List<Key>> srcs: prevVars.values()){
+                for (Map.Entry<String,List<Key>> src : srcs.entrySet()){
+                    for (String term : termsPerFilter.get(src.getKey())){
+                        currentVars.put(term, terms.get(term));
+                    }
+                }
+            }
+        } while (vars.size() > prevVars.size());
+
+        List<String> join_vars = currentVars.entrySet()
+                .stream()
+                .filter(e -> e.getValue().size()>1)
+                .map(e -> new Pair<>(e.getKey(), e.getValue().entrySet().stream().map(e2 -> {
+                    this.builder.forest().get(e2.getKey()).scanKeys().containsAll(e2.getValue());
+                    return this.builder.forest().get(e2.getKey()).scanKeys().containsAll(e2.getValue()) ? 1 : 0;
+                }).reduce((i, j) -> i+j).orElse(0)))
+                .sorted((i,j) -> j.b - i.b)
+                .map(p -> p.a)
+                .collect(Collectors.toList());
+        return join_vars;
     }
 }
