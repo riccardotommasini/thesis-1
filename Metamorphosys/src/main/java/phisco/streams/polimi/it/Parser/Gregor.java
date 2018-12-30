@@ -3,6 +3,7 @@ package phisco.streams.polimi.it.Parser;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.var;
 import phisco.streams.polimi.it.Algebra.*;
@@ -12,18 +13,22 @@ import phisco.streams.polimi.it.antlr4.RSPQLParser;
 import java.time.Duration;
 import java.util.*;
 
+
 import static phisco.streams.polimi.it.Algebra.Key.*;
 
-
+@ToString
 @Accessors(fluent = true)
 public class Gregor extends RSPQLBaseVisitor {
     @Getter @Setter
     private RelBuilder builder;
     private int i;
     private String last_source;
+    @Getter
+    private Vars vars;
 
     public Gregor(){
         builder = new RelBuilder();
+        vars = new Vars();
         i=0;
     }
 
@@ -40,6 +45,7 @@ public class Gregor extends RSPQLBaseVisitor {
     public Window visitLogicalWindow(RSPQLParser.LogicalWindowContext ctx) {
         return new LogicalWindow().duration(Duration.parse(ctx.logicalRange().DURATION().getText()));
     }
+
 
     @Override
     public Object visitSelectQuery(RSPQLParser.SelectQueryContext ctx) {
@@ -68,66 +74,36 @@ public class Gregor extends RSPQLBaseVisitor {
 
     @Override
     public Object visitTriplesSameSubjectNoBlankNode(RSPQLParser.TriplesSameSubjectNoBlankNodeContext ctx) {
-        Boolean first = true;
         for (var p : ctx.propertyListNotEmpty().property()) {
             for (var o : p.objectList().object()) {
-                Set<String> vars = new HashSet<>();
-                builder.addNode("F" + i++,
-                        new FilterNode().filter(new HashMap<Key, String>() {{
-                            if (ctx.varOrTerm().graphTerm() != null)
-                                put(S, visitGraphTerm(ctx.varOrTerm().graphTerm()));
-                            else
-                                vars.add(ctx.varOrTerm().var().varname().getText());
-                            if (p.verb().TYPE() != null || p.verb().varOrIri().iri() != null)
-                                put(P, p.verb().getText());
-                            else
-                                vars.add(p.verb().varOrIri().var().varname().getText());
-                            if (o.varOrTerm().graphTerm() != null)  // not handling blankNodePropertyList atm
-                                put(O, o.varOrTerm().graphTerm().getText());
-                            else
-                                vars.add(o.varOrTerm().var().varname().getText());
-                        }}).addChildren((RelNode) this.builder.forest().get(this.last_source))
-                                .vars(vars)
-                                .key(this.builder.forest().get(this.builder.root()).key()));
-                if (!first)
-                    builder.join(this.builder.root(), this.builder.previous_root(), "J" + i++, Arrays.asList(S), Arrays.asList(S));
+                Vars vars = new Vars();
+                String name = "F" + i++;
+                Filters filters = new Filters();
+                if (ctx.varOrTerm().graphTerm() != null)
+                    filters.put(name, Collections.singletonMap(S, s -> s.equals(visitGraphTerm(ctx.varOrTerm().graphTerm()))));
                 else
-                    first = false;
+                    vars.put(ctx.varOrTerm().var().varname().getText(), Collections.singletonMap(name, Arrays.asList(S)));
+                if (p.verb().TYPE() != null || p.verb().varOrIri().iri() != null)
+                    filters.put(name, Collections.singletonMap(P, v -> v.equals(p.verb().getText())));
+                else
+                    vars.put(p.verb().varOrIri().var().varname().getText(), Collections.singletonMap(name, Arrays.asList(P)));
+                if (o.varOrTerm().graphTerm() != null)  // not handling blankNodePropertyList atm
+                    filters.put(name, Collections.singletonMap(O, v -> v.equals(o.varOrTerm().graphTerm().getText())));
+                else
+                    vars.put(o.varOrTerm().var().varname().getText(), Collections.singletonMap(name, Arrays.asList(O)));
+                builder.addNode(name,
+                        new FilterNode()
+                                .filters(filters)
+                                .addChildren((RelNode) this.builder.forest().get(this.last_source))
+                                .vars(vars));
+                this.vars.merge(vars);
             }
         }
         return null;
     }
 
     @Override
-    public Object visitTriplesSameSubjectBlankNode(RSPQLParser.TriplesSameSubjectBlankNodeContext ctx) {
-        Boolean first = true;
-        for (var p : ctx.propertyListNotEmpty().property()) {
-            for (var o : p.objectList().object()) {
-                Set<String> vars = new HashSet<>();
-                builder.addNode("F" + i++,
-                        new FilterNode().filter(new HashMap<Key, String>() {{
-                            if (p.verb().TYPE() != null || p.verb().varOrIri().iri() != null)
-                                put(P, p.verb().getText());
-                            else
-                                vars.add(p.verb().varOrIri().var().varname().getText());
-                            if (o.varOrTerm().graphTerm() != null)  // not handling blankNodePropertyList atm
-                                put(O, o.varOrTerm().graphTerm().getText());
-                            else
-                                vars.add(o.varOrTerm().var().varname().getText());
-                        }}).addChildren((RelNode) this.builder.forest().get(this.last_source)).vars(vars)
-                        .key(this.builder.forest().get(this.builder.root()).key()));
-                if (!first)
-                    builder.join(this.builder.root(), this.builder.previous_root(), "J" + i++, Arrays.asList(S), Arrays.asList(S));
-                else
-                    first = false;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Object visitObject(RSPQLParser.ObjectContext ctx) {
-
+    public Object visitSelectClause(RSPQLParser.SelectClauseContext ctx) {
         return null;
     }
 

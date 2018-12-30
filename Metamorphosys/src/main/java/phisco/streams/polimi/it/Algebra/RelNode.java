@@ -14,19 +14,19 @@ public abstract class RelNode {
     @Getter @Setter
     private List<RelNode> children;
     @Getter @Setter
-    private Key key;
+    private ScanKeys scanKeys;
     @Getter @Setter
-    private Set<String> vars;
+    private Vars keys;
+    @Getter @Setter
+    private Vars vars;
+    @Getter @Setter
+    private String name;
 
 
     public RelNode() {
         this.children = new ArrayList<>();
-        this.vars = new HashSet<>();
-    }
-
-    public RelNode(Key key) {
-        super();
-        this.key = key;
+        this.vars = new Vars();
+        this.scanKeys = new ScanKeys();
     }
 
     public RelNode addChildren( RelNode... children){
@@ -34,4 +34,16 @@ public abstract class RelNode {
         return this;
     }
 
-}
+    public RelNode addScanKeys(Key... sk){
+        this.scanKeys.addAll(Arrays.asList(sk));
+        this.children.forEach(c -> c.addScanKeys(sk));
+        return this;
+    }
+    public RelNode addScanKeys(ScanKeys sk) {
+        this.scanKeys.addAll(sk);
+        this.children.forEach(c -> c.addScanKeys(sk));
+        return this;
+    }
+
+
+    }

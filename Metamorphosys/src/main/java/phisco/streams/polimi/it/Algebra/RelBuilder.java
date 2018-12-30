@@ -2,13 +2,16 @@ package phisco.streams.polimi.it.Algebra;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static phisco.streams.polimi.it.Algebra.JoinType.NATURAL;
 
-
+@ToString
 @Accessors(fluent = true)
 public class RelBuilder {
 
@@ -29,90 +32,64 @@ public class RelBuilder {
     }
 
     public RelBuilder scan(String name, Key key){
-        this.forest.put(name, new ScanNode(name, key));
-        this.previous_root = this.root;
-        this.root = name;
+        RelNode node = new ScanNode().name(name).addScanKeys(key);
+        updateState(node);
         return this;
     }
 
-    public RelBuilder filter(String child, String parent, Map filter, Set<String> vars){
-        this.forest.put(parent,
-                new FilterNode()
-                        .filter(filter)
-                        .addChildren(this.forest.get(child))
-                        .key(this.forest.get(child).key())
-                        .vars(vars));
-        this.previous_root = this.root;
-        this.root = parent;
-        return this;
-    }
-
-    public RelBuilder window(String child, String parent){
-        RelNode window = new WindowNode()
-                .addChildren(forest.get(child))
-                .key(forest.get(child).key());
-        if (forest.get(child).vars() != null)
-            window.vars(forest.get(child).vars());
-        this.forest.put(parent, window);
-
-        this.previous_root = this.root;
-        this.root = parent;
+    public RelBuilder filter(String child, String parent, Filters filter, Vars vars){
+        RelNode node = new FilterNode()
+                .filters(filter)
+                .addChildren(this.forest.get(child))
+                .name(parent)
+                .vars(vars)
+                .scanKeys(this.forest.get(child).scanKeys());
+        updateState(node);
         return this;
     }
 
     public RelBuilder window(String child, String parent, Window window){
         RelNode w = new WindowNode()
                 .window(window)
+                .name(parent)
                 .addChildren(this.forest.get(child))
-                .key(this.forest.get(child).key());
+                .scanKeys(this.forest.get(child).scanKeys());
         if (forest.get(child).vars() != null)
             w.vars(forest.get(child).vars());
-        this.forest.put(parent, w);
-        this.previous_root = this.root;
-        this.root = parent;
+        updateState(w);
         return this;
     }
 
-    public RelBuilder window(String parent, LogicalWindow window){
-        ((WindowNode) this.forest.get(parent)).window(window);
-        this.previous_root = this.root;
-        this.root = parent;
+    public RelBuilder project(String child, String parent, Vars vars){
+        RelNode node = new ProjectNode()
+                .addChildren(this.forest.get(child))
+                .name(parent)
+                .vars(vars);
+        updateState(node);
         return this;
     }
 
-    public RelBuilder project(String child, String parent, Set<String> vars){
-        this.forest.put(parent,
-                new ProjectNode()
-                        .addChildren(this.forest.get(child))
-                        .key(this.forest.get(child).key())
-                        .vars(vars));
-        this.previous_root = this.root;
-        this.root = parent;
-        return this;
-    }
+    public RelBuilder join(String left, String right, String parent, Vars keys){
+        RelNode node = new JoinNode()
+                .keys(keys)
+                .joinType(NATURAL)
+                .name(parent)
+                .addChildren(this.forest.get(left),this.forest.get(right))
+                .vars(forest.get(left).vars().merge(forest.get(right).vars()))
+                .scanKeys(this.forest.get(left).scanKeys())
+                .addScanKeys(this.forest.get(right).scanKeys());
 
-    public RelBuilder join(String left, String right, String parent, List<Key> leftKey, List<Key> rightKey){
-        this.forest.put(parent,
-                new JoinNode()
-                        .joinType(NATURAL)
-                        .leftKey(leftKey)
-                        .rightKey(rightKey)
-                        .addChildren(this.forest.get(left),this.forest.get(right))
-                        .vars(new HashSet<String>(){{
-                            if (forest.get(left).vars() != null) addAll(forest.get(left).vars());
-                            if (forest.get(right).vars() != null) addAll(forest.get(right).vars());
-                        }}));
-        this.previous_root = this.root;
-        this.root = parent;
+        updateState(node);
         return this;
     }
 
     public RelBuilder addNode(String name, RelNode node){
-        this.forest.put(name, node);
-        this.previous_root = this.root;
-        this.root = name;
+        node.name(name);
+        node.children().forEach(c -> node.addScanKeys(c.scanKeys()));
+        updateState(node);
         return this;
     }
+
     public RelBuilder optimize(){
         return this;
     }
@@ -126,6 +103,21 @@ public class RelBuilder {
         return this;
     }
 
+    public List score(Vars vars){
+        return vars.entrySet()
+                .stream()
+                .filter(e -> e.getValue().size()>1)
+                .map(e -> new Pair(e.getKey(), e.getValue().entrySet().stream().map(e2 -> {
+                    forest.get(e2.getKey()).scanKeys().containsAll(e2.getValue());
+                    return forest.get(e2.getKey()).scanKeys().containsAll(e2.getValue()) ? 1 : 0;
+                }).reduce((i, j) -> i+j).orElse(0))).collect(Collectors.toList());
+    }
 
-
+    private void updateState(RelNode node){
+        this.forest.put(node.name(), node);
+        this.previous_root = this.root;
+        this.root = node.name();
+        //if (node.children() != null)
+        //    this.roots.removeAll(node.children().stream().map(c -> c.name()).collect(Collectors.toList()));
+    }
 }
