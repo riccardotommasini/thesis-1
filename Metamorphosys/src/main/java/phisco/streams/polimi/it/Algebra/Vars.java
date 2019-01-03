@@ -17,6 +17,11 @@ public class Vars extends HashMap<String, Map<String, List<Key>>> {
         });
         return this;
     }
+
+    public Vars newMerged(Vars other){
+        return new Vars(this).merge(other);
+    }
+
     public Vars(){
         super();
     }
