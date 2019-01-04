@@ -31,7 +31,7 @@ public class RelBuilder {
     public RelBuilder()
     {
         forest =  new HashMap<>();
-        roots = new ArrayList<>();
+        roots = new LinkedList<>();
     }
 
     public RelBuilder scan(String name, Key key){
@@ -63,27 +63,29 @@ public class RelBuilder {
         return this;
     }
 
-    public RelBuilder project(String child, String parent, Vars vars){
+    public RelBuilder project(String child, String parent, Set<String> vars){
         RelNode node = new ProjectNode()
+                .projectVars(vars)
                 .addChildren(this.forest.get(child))
-                .name(parent)
-                .vars(vars);
+                .name(parent);
         updateState(node);
+        node.filterVars(vars);
         return this;
     }
 
-    public RelBuilder join(String left, String right, String parent, Vars keys){
+    public RelBuilder join(String left, String right, String parent, Vars keys, JoinType type){
         RelNode node = new JoinNode()
                 .keys(keys)
-                .joinType(NATURAL)
+                .joinType(type)
                 .name(parent)
                 .addChildren(this.forest.get(left),this.forest.get(right))
-                .vars(forest.get(left).vars().merge(forest.get(right).vars()))
+                .vars(forest.get(left).vars().newMerged(forest.get(right).vars()))
                 .scanKeys(this.forest.get(left).scanKeys())
                 .addScanKeys(this.forest.get(right).scanKeys());
         updateState(node);
         return this;
     }
+
 
     public RelBuilder addNode(String name, RelNode node){
         node.name(name);

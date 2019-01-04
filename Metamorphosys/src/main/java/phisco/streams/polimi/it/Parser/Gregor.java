@@ -67,6 +67,10 @@ public class Gregor extends RSPQLBaseVisitor {
         ctx.datasetClause().forEach(c ->  visitDatasetClause(c));
         visitSelectClause(ctx.selectClause());
         visitWhereClause(ctx.whereClause());
+        var clusters = clusterize();
+        doJoinsPerCluster(clusters);
+        doJoinBetweenClusters();
+        this.builder.project(this.builder.root(),"P"+i++,this.useful_vars);
         return null;
     }
 
@@ -141,7 +145,10 @@ public class Gregor extends RSPQLBaseVisitor {
                                 .filters(filters)
                                 .addChildren((RelNode) this.builder.forest().get(this.last_source))
                                 .vars(vars));
+                System.out.println("VARS pre:" + vars);
                 this.vars.merge(vars);
+                System.out.println("VARS post:" + vars);
+
             }
         }
         return null;
@@ -235,7 +242,7 @@ public class Gregor extends RSPQLBaseVisitor {
         return new ArrayList(clusters.keySet()){{removeAll(usefulClusters(clusters));}};
     }
 
-    public void doJoins(Map<String,Pair<Set<String>,List<String>>> clusters){
+    public void doJoinsPerCluster(Map<String,Pair<Set<String>,List<String>>> clusters){
         Vars varsOrTerms = vars.newMerged(terms);
         clusters.forEach((key,val) -> {
             Set usedFilters = new HashSet();
@@ -256,11 +263,31 @@ public class Gregor extends RSPQLBaseVisitor {
                         usedFilters.add(right);
                         Vars leftVars = this.builder.forest().get(left).vars();
                         Vars mergedVars = this.builder.forest().get(right).vars().newMerged(leftVars);
-                        this.builder.join(left, right, join, mergedVars);
+                        this.builder.join(left, right, join, mergedVars, JoinType.NATURAL);
                         left = join;
                     }
                 }
             }
         });
     }
+
+    public void doJoinBetweenClusters(){
+        List<String> rootsToJoin = this.builder.roots().stream()
+                .filter(r -> this.builder.forest().get(r) instanceof JoinNode || this.builder.forest().get(r) instanceof FilterNode)
+                .collect(Collectors.toList());
+        String left = rootsToJoin.get(0);
+        for (int j=1; j<rootsToJoin.size(); j++){
+            String join = "J"+i++;
+            this.builder.join(left, rootsToJoin.get(j), join, new Vars(), JoinType.BLOCKING);
+            left = join;
+        }
+        this.builder.roots(new ArrayList<String>(){{add(builder.root());}});
+    }
+
+    public void doSelectVarPropagation(){
+        System.out.println(this.builder.root());
+        this.builder.forest().get(this.builder.root()).filterVars(this.useful_vars);
+    }
+
+
 }

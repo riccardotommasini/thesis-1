@@ -14,7 +14,7 @@ import java.util.Map;
 public class GregorTest {
     public static void main( String[] args ){
         CharStream input = new ANTLRInputStream(
-                "SELECT DISTINCT ?s ?o ?o5 " +
+                "SELECT DISTINCT ?s ?o " +
                         "FROM NAMED WINDOW :window ON :stream [ RANGE PT1H ] " +
                         "FROM NAMED WINDOW :window2 ON :stream2 [ RANGE PT1H ] " +
                         "WHERE { " +
@@ -32,7 +32,6 @@ public class GregorTest {
         //System.out.println(parser.queryUnit().toStringTree(parser));
         Gregor gregor = new Gregor();
         gregor.visit(parser.queryUnit());
-        System.out.println(gregor.builder().forest().get(gregor.builder().root()));
         System.out.println("vars: " + gregor.vars());
         System.out.println("terms: " + gregor.terms());
         System.out.println("filterSubObj: " + gregor.filterSubObj());
@@ -42,8 +41,8 @@ public class GregorTest {
         System.out.println("clusters: " + clusters);
         System.out.println("usefulClusters: " + gregor.usefulClusters(clusters));
         System.out.println("notUsefulClusters:" + gregor.blockingClusters(clusters));
-        gregor.doJoins(clusters);
         System.out.println("roots: " + gregor.builder().roots());
-        gregor.builder().roots().forEach(r -> System.out.println(r + " : " + gregor.builder().forest().get(r)));
+        gregor.builder().roots().forEach(r -> System.out.println(r + " : " + gregor.builder().forest().get(r).pprint(0)));
+        gregor.builder().forest().get(gregor.builder().root()).pprint(0);
     }
 }
