@@ -35,7 +35,7 @@ public class RelBuilder {
     }
 
     public RelBuilder scan(String name, Key sk){
-        RelNode node = new ScanNode().scanKey(sk).name(name);
+        RelNode node = new ScanNode().scanKey(sk).name(name).scanKeys(new ScanKeys(){{put(name,sk);}});
         updateState(node);
         return this;
     }
@@ -46,7 +46,7 @@ public class RelBuilder {
                 .addChildren(this.forest.get(child))
                 .name(parent)
                 .vars(vars)
-                .scanKeys(this.forest.get(child).scanKeys());
+                .scanKeys(new ScanKeys(){{put(parent, forest.get(child).scanKeys().get(child));}});
         updateState(node);
         return this;
     }
@@ -56,7 +56,7 @@ public class RelBuilder {
                 .window(window)
                 .name(parent)
                 .addChildren(this.forest.get(child))
-                .scanKeys(this.forest.get(child).scanKeys());
+                .scanKeys(new ScanKeys(){{put(parent, forest.get(child).scanKeys().get(child));}});
         if (forest.get(child).vars() != null)
             w.vars(forest.get(child).vars());
         updateState(w);
@@ -80,7 +80,7 @@ public class RelBuilder {
                 .name(parent)
                 .addChildren(this.forest.get(left),this.forest.get(right))
                 .vars(forest.get(left).vars().newMerged(forest.get(right).vars()))
-                .scanKeys(this.forest.get(left).scanKeys().newMerged(forest.get(right).scanKeys()));
+                .scanKeys(new ScanKeys(this.forest.get(left).scanKeys()){{putAll(forest.get(right).scanKeys());}});
         updateState(node);
         return this;
     }

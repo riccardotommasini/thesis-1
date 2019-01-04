@@ -12,8 +12,8 @@ public abstract class RelNode {
 
     @Getter @Setter
     private List<RelNode> children;
-    @Getter
-    private Vars scanKeys;
+    @Getter @Setter
+    private ScanKeys scanKeys;
     @Getter @Setter
     private Vars keys;
     @Getter @Setter
@@ -25,7 +25,7 @@ public abstract class RelNode {
     public RelNode() {
         this.children = new ArrayList<>();
         this.vars = new Vars();
-        this.scanKeys = new Vars();
+        this.scanKeys = new ScanKeys();
     }
 
     public RelNode addChildren( RelNode... children){
@@ -42,7 +42,7 @@ public abstract class RelNode {
     @Override
     public String toString() {
         return  "name='" + name + '\'' +
-                (scanKeys.size() > 0 ? ", scanKeys=" + scanKeys : "" ) +
+                ", scanKeys=" + scanKeys +
                 (keys != null ? ", keys=" + keys : "") +
                 (vars.size() > 0 ? ", vars=" + vars : "");
     }
@@ -55,11 +55,5 @@ public abstract class RelNode {
         return "\n" + spaces + this.toString().replaceAll("super=","") + String.join("", this.children.stream()
                 .map(c-> c.pprint(nesting+1))
                 .collect(Collectors.toList()));
-    }
-
-    public RelNode scanKeys(Vars sk){
-        this.scanKeys = sk;
-        this.children.forEach(c -> c.scanKeys(new Vars(c.scanKeys())));
-        return this;
     }
 }

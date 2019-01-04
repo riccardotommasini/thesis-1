@@ -2,15 +2,15 @@ package phisco.streams.polimi.it.Algebra;
 
 import java.util.*;
 
-public class Vars extends HashMap<String, Map<String, List<Key>>> {
+public class Vars extends HashMap<String, Map<String, HashSet<Key>>> {
     public Vars merge(Vars other){
         other.keySet().forEach(k -> {
             this.merge(k, other.get(k),
                     (oldV, newV) ->
-                            new HashMap<String, List<Key>>(oldV)
+                            new HashMap<String, HashSet<Key>>(oldV)
                             {{
                                 newV.forEach((k,v) ->
-                                        merge(k, v, (o, n) -> new ArrayList<Key>(o){{addAll(n);
+                                        merge(k, v, (o, n) -> new HashSet<Key>(o){{addAll(n);
                                 }}));
                             }}
                             );

@@ -29,7 +29,6 @@ public class GregorTest {
         Gregor gregor = new Gregor();
         gregor.visit(parser.queryUnit());
         System.out.println("vars: " + gregor.vars());
-        System.out.println("terms: " + gregor.terms());
         System.out.println("filterSubObj: " + gregor.filterSubObj());
         //System.out.println("scored: " + gregor.score());
         System.out.println("joinGraph: " + gregor.joinGraph());

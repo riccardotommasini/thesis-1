@@ -20,6 +20,7 @@ public class ProjectNode extends RelNode{
     }
 
     public RelNode projectVars(Set<String> projectVars) {
+        this.projectVars = projectVars;
         this.children().forEach(c -> c.filterVars(projectVars));
         return this;
     }
