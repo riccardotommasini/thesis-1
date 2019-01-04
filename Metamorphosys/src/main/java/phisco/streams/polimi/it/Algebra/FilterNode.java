@@ -13,7 +13,7 @@ import java.util.function.Function;
 @ToString(callSuper = true)
 @Accessors(fluent = true)
 public class FilterNode extends RelNode{
-    @Getter @Setter
+    @Getter @Setter @ToString.Exclude
     private Filters filters;
 
 

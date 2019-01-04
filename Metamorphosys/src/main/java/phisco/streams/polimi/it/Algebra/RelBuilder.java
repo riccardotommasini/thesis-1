@@ -22,6 +22,8 @@ public class RelBuilder {
     @Getter @Setter
     private String previous_root;
     @Getter @Setter
+    private List<String> roots;
+    @Getter @Setter
     private List<OptimizationRule> rules;
     @Getter @Setter
     private Executor executor;
@@ -29,6 +31,7 @@ public class RelBuilder {
     public RelBuilder()
     {
         forest =  new HashMap<>();
+        roots = new ArrayList<>();
     }
 
     public RelBuilder scan(String name, Key key){
@@ -107,7 +110,8 @@ public class RelBuilder {
         this.forest.put(node.name(), node);
         this.previous_root = this.root;
         this.root = node.name();
-        //if (node.children() != null)
-        //    this.roots.removeAll(node.children().stream().map(c -> c.name()).collect(Collectors.toList()));
+        this.roots.add(node.name());
+        if (node.children() != null)
+            this.roots.removeAll(node.children().stream().map(c -> c.name()).collect(Collectors.toList()));
     }
 }
