@@ -12,10 +12,15 @@ import java.util.Set;
 @Accessors(fluent = true)
 @ToString
 public class ProjectNode extends RelNode{
-    @Getter @Setter
+    @Getter
     public Set<String> projectVars;
     public ProjectNode(){
         super();
         projectVars = new HashSet<>();
+    }
+
+    public RelNode projectVars(Set<String> projectVars) {
+        this.children().forEach(c -> c.filterVars(projectVars));
+        return this;
     }
 }

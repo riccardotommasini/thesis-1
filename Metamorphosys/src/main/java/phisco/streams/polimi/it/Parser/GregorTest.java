@@ -18,7 +18,7 @@ public class GregorTest {
                             "?s :p1 :o1; " +
                             "   :p2 ?o . " +
                             "?o :p3 :o3 ." +
-                            "?o2 :p3 :o4 ;" +
+                            ":o3 :p3 :o4 ;" +
                             "    :p4 :o5." +
                         "} " +
                         "};");
@@ -32,11 +32,7 @@ public class GregorTest {
         System.out.println("terms: " + gregor.terms());
         System.out.println("filterSubObj: " + gregor.filterSubObj());
         //System.out.println("scored: " + gregor.score());
-        var clusters = gregor.clusterize();
         System.out.println("joinGraph: " + gregor.joinGraph());
-        System.out.println("clusters: " + clusters);
-        System.out.println("usefulClusters: " + gregor.usefulClusters(clusters));
-        System.out.println("notUsefulClusters:" + gregor.blockingClusters(clusters));
         System.out.println("roots: " + gregor.builder().roots());
         gregor.builder().roots().forEach(r -> System.out.println(r + " : " + gregor.builder().forest().get(r).pprint(0)));
         gregor.builder().forest().get(gregor.builder().root()).pprint(0);

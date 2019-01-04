@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.time.Duration;
 
-@ToString(callSuper = true)
+@ToString()
 @Accessors(fluent = true)
 public class LogicalWindow extends Window {
     @Getter @Setter

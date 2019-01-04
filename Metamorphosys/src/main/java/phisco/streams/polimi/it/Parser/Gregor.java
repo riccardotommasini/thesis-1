@@ -6,9 +6,6 @@ import lombok.experimental.Accessors;
 import org.antlr.v4.runtime.misc.Pair;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.alg.connectivity.KosarajuStrongConnectivityInspector;
-import org.jgrapht.alg.interfaces.StrongConnectivityAlgorithm;
-import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.graph.DefaultUndirectedGraph;
 import phisco.streams.polimi.it.Algebra.*;
 import phisco.streams.polimi.it.antlr4.RSPQLBaseVisitor;
@@ -58,7 +55,13 @@ public class Gregor extends RSPQLBaseVisitor {
 
     @Override
     public Window visitLogicalWindow(RSPQLParser.LogicalWindowContext ctx) {
-        return new LogicalWindow().duration(Duration.parse(ctx.logicalRange().DURATION().getText()));
+        LogicalWindow w = new LogicalWindow().duration(Duration.parse(ctx.logicalRange().DURATION().getText()));
+        if (ctx.logicalStep()!=null){
+            w.step(Duration.parse(ctx.logicalStep().DURATION().getText()));
+        } else {
+            w.step(w.duration());
+        }
+        return w;
     }
 
 
@@ -67,9 +70,9 @@ public class Gregor extends RSPQLBaseVisitor {
         ctx.datasetClause().forEach(c ->  visitDatasetClause(c));
         visitSelectClause(ctx.selectClause());
         visitWhereClause(ctx.whereClause());
-        var clusters = clusterize();
-        doJoinsPerCluster(clusters);
+        doJoinsPerCluster(clusterize());
         doJoinBetweenClusters();
+        System.out.println(this.builder.forest().get(this.builder.root()).pprint(0));
         this.builder.project(this.builder.root(),"P"+i++,this.useful_vars);
         return null;
     }
@@ -110,6 +113,7 @@ public class Gregor extends RSPQLBaseVisitor {
                     filters.put(name, Collections.singletonMap(S, s -> s.equals(term)));
                     terms.merge(term, Collections.singletonMap(name, Arrays.asList(S)),
                             (oldV, newV) -> new HashMap(oldV){{putAll(newV);}});
+                    vars.put(term, Collections.singletonMap(name, Arrays.asList(S)));
                     filterSubObj.merge(name, Arrays.asList(term),
                             (oldV, newV) -> new ArrayList<String>(oldV){{
                                 addAll(newV);
@@ -133,6 +137,7 @@ public class Gregor extends RSPQLBaseVisitor {
                     filters.put(name, Collections.singletonMap(O, v -> v.equals(term)));
                     terms.merge(term, Collections.singletonMap(name, Arrays.asList(O)),
                             (oldV, newV) -> new HashMap(oldV){{putAll(newV);}});
+                    vars.put(term, Collections.singletonMap(name, Arrays.asList(O)));
                     filterSubObj.merge(name, Arrays.asList(term), (oldV, newV) -> new ArrayList<String>(oldV){{addAll(newV);}});
                 }
                 else {
@@ -235,6 +240,7 @@ public class Gregor extends RSPQLBaseVisitor {
                 .map(el -> el.getKey())
                 .collect(Collectors.toList());
     }
+
     public List<Pair<Set<String>,List<String>>> blockingClusters(Map<String,Pair<Set<String>,List<String>>> clusters) {
         return new ArrayList(clusters.keySet()){{removeAll(usefulClusters(clusters));}};
     }
@@ -259,8 +265,8 @@ public class Gregor extends RSPQLBaseVisitor {
                         String right = filters.get(j);
                         usedFilters.add(right);
                         Vars leftVars = this.builder.forest().get(left).vars();
-                        Vars mergedVars = this.builder.forest().get(right).vars().newMerged(leftVars);
-                        this.builder.join(left, right, join, mergedVars, JoinType.NATURAL);
+                        Set<String> mergedVars = this.builder.forest().get(right).vars().newMerged(leftVars).keySet();
+                        this.builder.join(left, right, join, new HashSet<String>(){{add(v);}}, JoinType.NATURAL);
                         left = join;
                     }
                 }
@@ -275,16 +281,10 @@ public class Gregor extends RSPQLBaseVisitor {
         String left = rootsToJoin.get(0);
         for (int j=1; j<rootsToJoin.size(); j++){
             String join = "J"+i++;
-            this.builder.join(left, rootsToJoin.get(j), join, new Vars(), JoinType.BLOCKING);
+            this.builder.join(left, rootsToJoin.get(j), join, new HashSet<>(), JoinType.BLOCKING);
             left = join;
         }
         this.builder.roots(new ArrayList<String>(){{add(builder.root());}});
     }
-
-    public void doSelectVarPropagation(){
-        System.out.println(this.builder.root());
-        this.builder.forest().get(this.builder.root()).filterVars(this.useful_vars);
-    }
-
 
 }

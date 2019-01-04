@@ -13,4 +13,6 @@ import java.util.List;
 @Accessors(fluent = true)
 @ToString(callSuper = true)
 public class ScanNode extends RelNode {
+    @Getter @Setter
+    private Key scanKey;
 }

@@ -34,8 +34,8 @@ public class RelBuilder {
         roots = new LinkedList<>();
     }
 
-    public RelBuilder scan(String name, Key key){
-        RelNode node = new ScanNode().name(name).addScanKeys(key);
+    public RelBuilder scan(String name, Key sk){
+        RelNode node = new ScanNode().scanKey(sk).name(name);
         updateState(node);
         return this;
     }
@@ -73,15 +73,14 @@ public class RelBuilder {
         return this;
     }
 
-    public RelBuilder join(String left, String right, String parent, Vars keys, JoinType type){
+    public RelBuilder join(String left, String right, String parent, Set<String> keys, JoinType type){
         RelNode node = new JoinNode()
-                .keys(keys)
+                .joinKeys(keys)
                 .joinType(type)
                 .name(parent)
                 .addChildren(this.forest.get(left),this.forest.get(right))
                 .vars(forest.get(left).vars().newMerged(forest.get(right).vars()))
-                .scanKeys(this.forest.get(left).scanKeys())
-                .addScanKeys(this.forest.get(right).scanKeys());
+                .scanKeys(this.forest.get(left).scanKeys().newMerged(forest.get(right).scanKeys()));
         updateState(node);
         return this;
     }
@@ -89,7 +88,7 @@ public class RelBuilder {
 
     public RelBuilder addNode(String name, RelNode node){
         node.name(name);
-        node.children().forEach(c -> node.addScanKeys(c.scanKeys()));
+        //node.children().forEach(c -> node.scanKeys(c.scanKeys()));
         updateState(node);
         return this;
     }

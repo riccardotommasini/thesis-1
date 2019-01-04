@@ -3,7 +3,6 @@ package phisco.streams.polimi.it.Algebra;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.apache.http.util.TextUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,8 +12,8 @@ public abstract class RelNode {
 
     @Getter @Setter
     private List<RelNode> children;
-    @Getter @Setter
-    private ScanKeys scanKeys;
+    @Getter
+    private Vars scanKeys;
     @Getter @Setter
     private Vars keys;
     @Getter @Setter
@@ -26,7 +25,7 @@ public abstract class RelNode {
     public RelNode() {
         this.children = new ArrayList<>();
         this.vars = new Vars();
-        this.scanKeys = new ScanKeys();
+        this.scanKeys = new Vars();
     }
 
     public RelNode addChildren( RelNode... children){
@@ -34,16 +33,6 @@ public abstract class RelNode {
         return this;
     }
 
-    public RelNode addScanKeys(Key... sk){
-        this.scanKeys.addAll(Arrays.asList(sk));
-        this.children.forEach(c -> c.addScanKeys(sk));
-        return this;
-    }
-    public RelNode addScanKeys(ScanKeys sk) {
-        this.scanKeys.addAll(sk);
-        this.children.forEach(c -> c.addScanKeys(sk));
-        return this;
-    }
     public void filterVars(Set<String> vars){
         this.vars.keySet().retainAll(vars);
         if (children != null)
@@ -63,8 +52,14 @@ public abstract class RelNode {
         for (int i=0; i < nesting; i++)
             spaces+="| ";
         spaces+= "+ ";
-        return "\n" + spaces + this.toString() + String.join("", this.children.stream()
+        return "\n" + spaces + this.toString().replaceAll("super=","") + String.join("", this.children.stream()
                 .map(c-> c.pprint(nesting+1))
                 .collect(Collectors.toList()));
+    }
+
+    public RelNode scanKeys(Vars sk){
+        this.scanKeys = sk;
+        this.children.forEach(c -> c.scanKeys(new Vars(c.scanKeys())));
+        return this;
     }
 }
