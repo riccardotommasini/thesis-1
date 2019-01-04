@@ -145,10 +145,7 @@ public class Gregor extends RSPQLBaseVisitor {
                                 .filters(filters)
                                 .addChildren((RelNode) this.builder.forest().get(this.last_source))
                                 .vars(vars));
-                System.out.println("VARS pre:" + vars);
                 this.vars.merge(vars);
-                System.out.println("VARS post:" + vars);
-
             }
         }
         return null;

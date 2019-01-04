@@ -4,12 +4,8 @@ import lombok.var;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.misc.Pair;
 import phisco.streams.polimi.it.antlr4.RSPQLLexer;
 import phisco.streams.polimi.it.antlr4.RSPQLParser;
-
-import java.util.HashSet;
-import java.util.Map;
 
 public class GregorTest {
     public static void main( String[] args ){
