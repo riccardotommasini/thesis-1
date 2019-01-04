@@ -36,7 +36,7 @@ public class GregorTest {
         //System.out.println(parser.queryUnit().toStringTree(parser));
         Gregor gregor = new Gregor();
         gregor.visit(parser.queryUnit());
-        //System.out.println(gregor.builder().forest().get(gregor.builder().root()));
+        System.out.println(gregor.builder().forest().get(gregor.builder().root()));
         System.out.println("vars: " + gregor.vars());
         System.out.println("terms: " + gregor.terms());
         System.out.println("filterSubObj: " + gregor.filterSubObj());
@@ -45,7 +45,8 @@ public class GregorTest {
         System.out.println("joinGraph: " + clusters);
         System.out.println("usefulClusters: " + gregor.usefulClusters(clusters));
         System.out.println("notUsefulClusters:" + gregor.blockingClusters(clusters));
-
+        gregor.doJoins(clusters);
+        System.out.println(gregor);
 
     }
 }

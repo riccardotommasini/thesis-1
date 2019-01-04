@@ -134,13 +134,13 @@ public class Gregor extends RSPQLBaseVisitor {
                 else {
                     String term = o.varOrTerm().var().getText();
                     vars.put(term, Collections.singletonMap(name, Arrays.asList(O)));
-                    builder.addNode(name,
-                            new FilterNode()
-                                    .filters(filters)
-                                    .addChildren((RelNode) this.builder.forest().get(this.last_source))
-                                    .vars(vars));
                     filterSubObj.merge(name, Arrays.asList(term), (oldV, newV) -> new ArrayList<String>(oldV){{addAll(newV);}});
                 }
+                builder.addNode(name,
+                        new FilterNode()
+                                .filters(filters)
+                                .addChildren((RelNode) this.builder.forest().get(this.last_source))
+                                .vars(vars));
                 this.vars.merge(vars);
             }
         }
@@ -195,6 +195,7 @@ public class Gregor extends RSPQLBaseVisitor {
                         }
                     }
                 });
+
         List<Set<String>> connectedFilters = new ConnectivityInspector<>(joinGraph).connectedSets();
 
         Map<String,Pair<Set<String>,List<String>>> joinClustersVars = connectedFilters.stream().map(cluster -> {
@@ -234,4 +235,25 @@ public class Gregor extends RSPQLBaseVisitor {
         return new ArrayList(clusters.keySet()){{removeAll(usefulClusters(clusters));}};
     }
 
+    public void doJoins(Map<String,Pair<Set<String>,List<String>>> clusters){
+        Vars varsOrTerms = vars.newMerged(terms);
+        clusters.forEach((key,val) -> {
+            if (val.a.size() > 1){
+                var vb = val.b;
+                String left;
+                for (String v: vb){
+                    List<Map.Entry<String, List<Key>>> filters = new ArrayList(varsOrTerms.get(v).entrySet());
+                    left = filters.get(0).getKey();
+                    for (int j=1; j<filters.size(); j++){
+                        String join = "J"+i++;
+                        String right = filters.get(j).getKey();
+                        Vars leftVars = this.builder.forest().get(left).vars();
+                        Vars mergedVars = this.builder.forest().get(right).vars().newMerged(leftVars);
+                        this.builder.join(left, right, join, mergedVars);
+                        left = join;
+                    }
+                }
+            }
+        });
+    }
 }
