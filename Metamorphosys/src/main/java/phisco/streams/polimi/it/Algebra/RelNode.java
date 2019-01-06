@@ -3,6 +3,7 @@ package phisco.streams.polimi.it.Algebra;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import phisco.streams.polimi.it.executor.Executor;
 
 import java.util.*;
 import java.util.stream.Collectors;

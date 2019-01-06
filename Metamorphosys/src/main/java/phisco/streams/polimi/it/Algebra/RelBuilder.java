@@ -4,12 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.antlr.v4.runtime.misc.Pair;
+import phisco.streams.polimi.it.executor.Executor;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static phisco.streams.polimi.it.Algebra.JoinType.NATURAL;
 
 @ToString
 @Accessors(fluent = true)
@@ -102,7 +100,7 @@ public class RelBuilder {
     }
 
     public RelBuilder run(){
-        executor.execute(forest.get(this.root));
+        executor.walk(forest.get(this.root));
         return this;
     }
 
@@ -113,6 +111,9 @@ public class RelBuilder {
         this.root = node.name();
         this.roots.add(node.name());
         if (node.children() != null)
-            this.roots.removeAll(node.children().stream().map(c -> c.name()).collect(Collectors.toList()));
+            this.roots.removeAll(
+                    node.children().stream()
+                            .map(c -> c.name())
+                            .collect(Collectors.toList()));
     }
 }

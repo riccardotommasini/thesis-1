@@ -109,7 +109,7 @@ public class Gregor extends RSPQLBaseVisitor {
                 Filters filters = new Filters();
                 if (ctx.varOrTerm().graphTerm() != null) {
                     String term = visitGraphTerm(ctx.varOrTerm().graphTerm());
-                    filters.put(name, Collections.singletonMap(S, s -> s.equals(term)));
+                    filters.put(S, s -> s.equals(term));
                     this.vars.merge(term, Collections.singletonMap(name, new HashSet<Key>(){{add(S);}}),
                             (oldV, newV) -> new HashMap(oldV){{putAll(newV);}});
                     vars.put(term, Collections.singletonMap(name, new HashSet<Key>(){{add(S);}}));
@@ -126,14 +126,14 @@ public class Gregor extends RSPQLBaseVisitor {
                                 }});
                 }
                 if (p.verb().TYPE() != null || p.verb().varOrIri().iri() != null) {
-                    filters.put(name, Collections.singletonMap(P, v -> v.equals(p.verb().getText())));
+                    filters.put(P, v -> v.equals(p.verb().getText()));
                 }
                 else
                     vars.put(p.verb().varOrIri().var().getText(), Collections.singletonMap(name, new HashSet<Key>(){{add(P);}}));
                 if (o.varOrTerm().graphTerm() != null)  // not handling blankNodePropertyList atm
                 {
                     String term = o.varOrTerm().graphTerm().getText();
-                    filters.put(name, Collections.singletonMap(O, v -> v.equals(term)));
+                    filters.put(O, v -> v.equals(term));
                     this.vars.merge(term, Collections.singletonMap(name, new HashSet<Key>(){{add(O);}}),
                             (oldV, newV) -> new HashMap(oldV){{putAll(newV);}});
                     vars.put(term, Collections.singletonMap(name, new HashSet<Key>(){{add(O);}}));
@@ -193,7 +193,7 @@ public class Gregor extends RSPQLBaseVisitor {
         return ctx.getText();
     }
 
-    public Map<String,Pair<Set<String>,List<String>>> clusterize(){
+    private Map<String,Pair<Set<String>,List<String>>> clusterize(){
         filterSubObj.keySet().forEach(f -> joinGraph.addVertex(f));
         vars.entrySet()
                 .forEach(e -> {
@@ -227,7 +227,7 @@ public class Gregor extends RSPQLBaseVisitor {
         return joinClustersVars;
     }
 
-    public int scoreVar(String var){
+    private int scoreVar(String var){
         return this.vars.get(var).entrySet().stream()
                 .flatMap(e -> e.getValue().stream()
                         .map(v ->
@@ -236,7 +236,7 @@ public class Gregor extends RSPQLBaseVisitor {
     }
 
 
-    public void doJoinsPerCluster(Map<String,Pair<Set<String>,List<String>>> clusters){
+    private void doJoinsPerCluster(Map<String,Pair<Set<String>,List<String>>> clusters){
         clusters.forEach((key,val) -> {
             Set usedFilters = new HashSet();
             if (val.a.size() > 1){
@@ -262,7 +262,7 @@ public class Gregor extends RSPQLBaseVisitor {
         });
     }
 
-    public void doJoinBetweenClusters(){
+    private void doJoinBetweenClusters(){
         List<String> rootsToJoin = this.builder.roots().stream()
                 .filter(r -> this.builder.forest().get(r) instanceof JoinNode || this.builder.forest().get(r) instanceof FilterNode)
                 .collect(Collectors.toList());
@@ -274,5 +274,9 @@ public class Gregor extends RSPQLBaseVisitor {
         }
         this.builder.roots(new ArrayList<String>(){{add(builder.root());}});
     }
+
+     public void run(){
+        this.builder.run();
+     }
 
 }
