@@ -116,4 +116,8 @@ public class RelBuilder {
                             .map(c -> c.name())
                             .collect(Collectors.toList()));
     }
+
+    public void update() {
+        this.forest(this.forest.get(root).update());
+    }
 }

@@ -12,10 +12,7 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.TimeWindowedDeserializer;
 import org.apache.kafka.streams.kstream.TimeWindowedSerializer;
 import org.apache.kafka.streams.kstream.Windowed;
-import phisco.streams.polimi.it.Algebra.FilterNode;
-import phisco.streams.polimi.it.Algebra.RelNode;
-import phisco.streams.polimi.it.Algebra.ScanNode;
-import phisco.streams.polimi.it.Algebra.WindowNode;
+import phisco.streams.polimi.it.Algebra.*;
 import phisco.streams.polimi.it.avro.SJSONtKey;
 
 import java.time.Duration;
@@ -30,7 +27,11 @@ public class KafkaExecutor extends Executor {
     private StreamsBuilder builder;
     @Getter
     private Serde<Windowed<SJSONtKey>> windowedSerde;
+    @Getter
+    private SpecificAvroSerde keySpecificAvroSerde;
     private Properties props;
+    @Getter
+    private SpecificAvroSerde valueSpecificAvroSerde;
 
     public KafkaExecutor() {
         nodes = new HashMap<>();
@@ -49,8 +50,8 @@ public class KafkaExecutor extends Executor {
         final Map<String, String> serdeConfig = Collections.singletonMap("schema.registry.url",
                 "http://localhost:8081");
 
-        SpecificAvroSerde keySpecificAvroSerde = new SpecificAvroSerde();
-        SpecificAvroSerde valueSpecificAvroSerde = new SpecificAvroSerde();
+        keySpecificAvroSerde = new SpecificAvroSerde();
+        valueSpecificAvroSerde = new SpecificAvroSerde();
         keySpecificAvroSerde.configure(serdeConfig,true);
         valueSpecificAvroSerde.configure(serdeConfig,false);
 
@@ -64,27 +65,29 @@ public class KafkaExecutor extends Executor {
     }
 
     @Override
-    public KafkaNode walk(RelNode root) {
+    public List<KafkaNode> walk(RelNode root) {
         List<KafkaNode> children = new ArrayList<>();
         if (root.children() != null)
             children.addAll(root.children().stream()
-                    .map(c -> walk(c))
+                    .flatMap(c -> walk(c).stream())
                     .collect(Collectors.toList()));
         return translate(root, children);
 
     }
 
-    private KafkaNode translate(RelNode node, List<KafkaNode> children){
-        KafkaNode kafkaNode = new KafkaNode();
+    private List<KafkaNode> translate(RelNode node, List<KafkaNode> children){
+        KafkaNode kafkaNode = null;
         if (node instanceof ScanNode){
             kafkaNode = new KafkaScanNode(this, (ScanNode) node);
         } else if (node instanceof WindowNode){
             kafkaNode = new KafkaWindowNode(this, (WindowNode) node);
         } else if (node instanceof FilterNode){
             kafkaNode = new KafkaFilterNode(this, (FilterNode) node);
+        } else if (node instanceof JoinNode){
+            kafkaNode = new KafkaJoinNode(this, (JoinNode) node);
         }
         if ( kafkaNode != null)
             nodes.put(node.name(), kafkaNode);
-        return kafkaNode != null ? kafkaNode : children.get(0);
+        return Arrays.asList(kafkaNode != null ? kafkaNode : children.get(0));
     }
 }

@@ -15,7 +15,7 @@ import java.util.Map;
 @ToString
 public class KafkaFilterNode extends KafkaNode {
     public KafkaFilterNode(KafkaExecutor executor, FilterNode node) {
-        KafkaNode child = executor.nodes().get(node.name());
+        KafkaNode child = executor.nodes().get(node.children().get(0).name());
         if (child.stream() != null)
             this.stream(child.stream().filter(getStreamingPredicate(node.filters())));
         else

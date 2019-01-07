@@ -6,6 +6,8 @@ import lombok.experimental.Accessors;
 
 import lombok.ToString;
 
+import java.util.Map;
+
 @ToString(callSuper = true)
 @Accessors(fluent = true)
 public class FilterNode extends RelNode{

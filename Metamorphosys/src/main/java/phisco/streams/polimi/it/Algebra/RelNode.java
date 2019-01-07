@@ -78,4 +78,12 @@ public abstract class RelNode {
                 .vars(this.vars())
                 .keys(this.keys());
     }
+
+    public Map<String, RelNode> update(){
+        Map<String, RelNode> map = this.children.stream()
+                .flatMap(c -> c.update().entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (m1,m2) -> m1));
+        map.put(this.name, this);
+        return map;
+    }
 }
