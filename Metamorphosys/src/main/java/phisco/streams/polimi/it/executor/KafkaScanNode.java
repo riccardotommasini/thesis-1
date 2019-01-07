@@ -7,8 +7,6 @@ import phisco.streams.polimi.it.Algebra.ScanNode;
 
 @ToString(callSuper = true)
 @Accessors(fluent = true)
-@AllArgsConstructor
-@NoArgsConstructor
 public class KafkaScanNode extends KafkaNode {
 
     public KafkaScanNode(KafkaExecutor executor, ScanNode node){

@@ -33,7 +33,6 @@ public class Gregor extends RSPQLBaseVisitor {
     private Map<String, List<String>> filterSubObj;
     @Getter
     private Graph<String, JoinEdge> joinGraph;
-
     public Gregor(){
         builder = new RelBuilder();
         vars = new Vars();
@@ -279,4 +278,7 @@ public class Gregor extends RSPQLBaseVisitor {
         this.builder.run();
      }
 
+     public void optimize( List<OptimizationRule> rules){
+        this.builder.forest().get(this.builder.root()).walk(rules, this.builder);
+     }
 }

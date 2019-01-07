@@ -3,9 +3,11 @@ package phisco.streams.polimi.it.Algebra;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang.RandomStringUtils;
 import phisco.streams.polimi.it.executor.Executor;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Accessors(fluent = true)
@@ -56,5 +58,24 @@ public abstract class RelNode {
         return "\n" + spaces + this.toString().replaceAll("super=","") + String.join("", this.children.stream()
                 .map(c-> c.pprint(nesting+1))
                 .collect(Collectors.toList()));
+    }
+
+    public List<RelNode> walk(List<OptimizationRule> rules, RelBuilder builder){
+        List<RelNode> children = this.children.stream().flatMap(c -> c.walk(rules, builder).stream()).collect(Collectors.toList());
+        for (OptimizationRule r : rules){
+            if (r.isApplicable(this)){
+                return r.apply(this);
+            }
+        }
+        this.children(children);
+        return Arrays.asList(this);
+    }
+
+    public void clone(RelNode clone){
+        clone.children(this.children())
+                .scanKeys(this.scanKeys())
+                .name(this.name()+"_"+ RandomStringUtils.randomAlphabetic(10))
+                .vars(this.vars())
+                .keys(this.keys());
     }
 }

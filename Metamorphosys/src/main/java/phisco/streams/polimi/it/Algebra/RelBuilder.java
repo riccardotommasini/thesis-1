@@ -33,7 +33,7 @@ public class RelBuilder {
     }
 
     public RelBuilder scan(String name, Key sk){
-        RelNode node = new ScanNode().scanKey(sk).name(name).scanKeys(new ScanKeys(){{put(name,sk);}});
+        RelNode node = new ScanNode().scanKey(sk).name(name).scanKeys(new ScanKeys(){{put(name,Arrays.asList(sk));}});
         updateState(node);
         return this;
     }

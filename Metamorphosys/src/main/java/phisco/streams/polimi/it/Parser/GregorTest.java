@@ -3,10 +3,13 @@ package phisco.streams.polimi.it.Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import phisco.streams.polimi.it.Algebra.PushFiltersBeforeWindows;
 import phisco.streams.polimi.it.executor.Executor;
 import phisco.streams.polimi.it.executor.KafkaExecutor;
 import phisco.streams.polimi.it.antlr4.RSPQLLexer;
 import phisco.streams.polimi.it.antlr4.RSPQLParser;
+
+import java.util.Arrays;
 
 public class GregorTest {
     public static void main( String[] args ){
@@ -34,7 +37,10 @@ public class GregorTest {
         System.out.println("joinGraph: " + gregor.joinGraph());
         System.out.println("roots: " + gregor.builder().roots());
         gregor.builder().roots().forEach(r -> System.out.println(r + " : " + gregor.builder().forest().get(r).pprint(0)));
-        gregor.builder().forest().get(gregor.builder().root()).pprint(0);
+        System.out.println(gregor.builder().forest().get(gregor.builder().root()).pprint(0));
+        gregor.optimize(Arrays.asList(new PushFiltersBeforeWindows()));
+        System.out.println("optimized: "+ gregor.builder().forest().get(gregor.builder().root()).pprint(0));
+
         Executor executor = new KafkaExecutor();
         System.out.println(executor.walk(gregor.builder().forest().get(gregor.builder().root())));
     }
