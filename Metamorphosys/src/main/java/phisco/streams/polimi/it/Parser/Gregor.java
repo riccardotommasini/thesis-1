@@ -107,7 +107,7 @@ public class Gregor extends RSPQLBaseVisitor {
                 String name = "F" + i++;
                 Filters filters = new Filters();
                 if (ctx.varOrTerm().graphTerm() != null) {
-                    String term = visitGraphTerm(ctx.varOrTerm().graphTerm());
+                    String term = visitGraphTerm(ctx.varOrTerm().graphTerm()).replaceAll("(^<|>$)","");
                     filters.put(S, s -> s.equals(term));
                     this.vars.merge(term, Collections.singletonMap(name, new HashSet<Key>(){{add(S);}}),
                             (oldV, newV) -> new HashMap(oldV){{putAll(newV);}});
@@ -117,7 +117,7 @@ public class Gregor extends RSPQLBaseVisitor {
                                 addAll(newV);
                     }});
                 } else {
-                    String term = ctx.varOrTerm().var().getText();
+                    String term = ctx.varOrTerm().var().getText().replaceAll("(^<|>$)","");
                     vars.put(term, Collections.singletonMap(name, new HashSet<Key>(){{add(S);}}));
                     filterSubObj.merge(name, Arrays.asList(term),
                             (oldV, newV) -> new ArrayList<String>(oldV) {{
@@ -125,13 +125,13 @@ public class Gregor extends RSPQLBaseVisitor {
                                 }});
                 }
                 if (p.verb().TYPE() != null || p.verb().varOrIri().iri() != null) {
-                    filters.put(P, v -> v.equals(p.verb().getText()));
+                    filters.put(P, v -> v.equals(p.verb().getText().replaceAll("(^<|>$)","")));
                 }
                 else
-                    vars.put(p.verb().varOrIri().var().getText(), Collections.singletonMap(name, new HashSet<Key>(){{add(P);}}));
+                    vars.put(p.verb().varOrIri().var().getText().replaceAll("(^<|>$)",""), Collections.singletonMap(name, new HashSet<Key>(){{add(P);}}));
                 if (o.varOrTerm().graphTerm() != null)  // not handling blankNodePropertyList atm
                 {
-                    String term = o.varOrTerm().graphTerm().getText();
+                    String term = o.varOrTerm().graphTerm().getText().replaceAll("(^<|>$)","");
                     filters.put(O, v -> v.equals(term));
                     this.vars.merge(term, Collections.singletonMap(name, new HashSet<Key>(){{add(O);}}),
                             (oldV, newV) -> new HashMap(oldV){{putAll(newV);}});
@@ -139,7 +139,7 @@ public class Gregor extends RSPQLBaseVisitor {
                     filterSubObj.merge(name, Arrays.asList(term), (oldV, newV) -> new ArrayList<String>(oldV){{addAll(newV);}});
                 }
                 else {
-                    String term = o.varOrTerm().var().getText();
+                    String term = o.varOrTerm().var().getText().replaceAll("(^<|>$)","");
                     vars.put(term, Collections.singletonMap(name, new HashSet<Key>(){{add(O);}}));
                     filterSubObj.merge(name, Arrays.asList(term), (oldV, newV) -> new ArrayList<String>(oldV){{addAll(newV);}});
                 }

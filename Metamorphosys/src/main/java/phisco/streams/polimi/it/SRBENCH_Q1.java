@@ -57,8 +57,8 @@ public class SRBENCH_Q1
 
         //properties
         Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-SRBENCH-Q1");
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-SRBENCH-Q1");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-SRBENCH-Q11");
+        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-SRBENCH-Q11");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
@@ -85,7 +85,7 @@ public class SRBENCH_Q1
         StreamsBuilder builder = new StreamsBuilder();
 
         //FROM partitioned by subject (known)
-        KStream<SJSONtKey, SJSONTriple> s0 = builder.stream("sorted_triples");
+        KStream<SJSONtKey, SJSONTriple> s0 = builder.stream("observations");
         SJSONTripleStream st0 = new SJSONTripleStream(s0);
 
         //BGP1

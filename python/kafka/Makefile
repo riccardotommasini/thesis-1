@@ -1,3 +1,4 @@
+.PHONY: consumer producer
 consumer:
 	docker build -t phisco/avro_consumer consumer
 producer:

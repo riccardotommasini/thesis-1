@@ -19,11 +19,13 @@ import java.util.Map;
 public class KafkaWindowNode extends KafkaNode {
     public KafkaWindowNode(KafkaExecutor executor, WindowNode node) {
         super(node);
-        this.table(executor.nodes().get(node.children().get(0).name()).stream().groupByKey()
+        this.table(executor.nodes().get(node.children().get(0).name()).stream()
+                .groupByKey()
                 .windowedBy(window(node.window()))
                 .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
                         this.aggregator(node.name())
                 ));
+        System.out.println("window: " + node + this);
     }
 
     public static Aggregator<SJSONtKey, SJSONTriple, SJSONTripleMap> aggregator(String name){

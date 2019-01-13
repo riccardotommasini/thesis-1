@@ -103,7 +103,7 @@ public class SRBENCH_Q4
         StreamsBuilder builder = new StreamsBuilder();
 
         //FROM partitioned by subject (known)
-        KStream<SJSONtKey, SJSONTriple> s0 = builder.stream("sorted_triples");
+        KStream<SJSONtKey, SJSONTriple> s0 = builder.stream("observations");
         SJSONTripleStream st0 = new SJSONTripleStream(s0);
 
         // 1 + 7

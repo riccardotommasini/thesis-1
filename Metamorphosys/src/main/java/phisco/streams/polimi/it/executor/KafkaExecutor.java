@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.TimeWindowedDeserializer;
@@ -36,8 +37,8 @@ public class KafkaExecutor extends Executor {
     public KafkaExecutor() {
         nodes = new HashMap<>();
         props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-SRBENCH-Q1");
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-SRBENCH-Q1");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-gregor100");
+        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-gregor100");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
@@ -77,7 +78,9 @@ public class KafkaExecutor extends Executor {
 
     private List<KafkaNode> translate(RelNode node, List<KafkaNode> children){
         KafkaNode kafkaNode = null;
-        if (node instanceof ScanNode){
+        if (nodes.containsKey(node.name()))
+            kafkaNode = nodes.get(node.name());
+        else if (node instanceof ScanNode){
             kafkaNode = new KafkaScanNode(this, (ScanNode) node);
         } else if (node instanceof WindowNode){
             kafkaNode = new KafkaWindowNode(this, (WindowNode) node);
@@ -85,9 +88,18 @@ public class KafkaExecutor extends Executor {
             kafkaNode = new KafkaFilterNode(this, (FilterNode) node);
         } else if (node instanceof JoinNode){
             kafkaNode = new KafkaJoinNode(this, (JoinNode) node);
+        } else if (node instanceof ProjectNode){
+            kafkaNode = new KafkaProjectionNode(this, (ProjectNode)node);
         }
         if ( kafkaNode != null)
             nodes.put(node.name(), kafkaNode);
         return Arrays.asList(kafkaNode != null ? kafkaNode : children.get(0));
+    }
+
+    @Override
+    public void execute(){
+        KafkaStreams streams = new KafkaStreams(builder.build(), props);
+        streams.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
 }
