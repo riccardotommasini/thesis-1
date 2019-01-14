@@ -1,5 +1,6 @@
 package phisco.streams.polimi.it.executor;
 
+import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import lombok.val;
 import org.antlr.v4.runtime.misc.Pair;
@@ -39,10 +40,10 @@ public class KafkaJoinNode extends KafkaNode {
 
            Map<String, Boolean> rekeyPerChildren = node.children().stream()
                    .flatMap(c -> c.vars().get(node.joinKeys().toArray()[0]).entrySet().stream()
-                           .filter(e -> node.scanKeys().containsKey(e.getKey()))
+                           .filter(e -> node.scanKeys().containsKey(e.getKey()) && rekeyNeeded.containsKey(e.getKey()))
                            .map(e -> new Pair<>(c.name(),rekeyNeeded.get(e.getKey()))))
                    .collect(Collectors.toMap(e -> e.a, e -> e.b, (n,o) -> n && o));
-           if (rekeyPerChildren.get(node.children().get(0).name()))
+           if (rekeyPerChildren.containsKey(node.children().get(0).name()) && rekeyPerChildren.get(node.children().get(0).name()))
                 left = left.toStream()
                         .flatMap((k,v) -> {
                             List < KeyValue < Windowed < SJSONtKey >, SJSONTripleMap >> result = new ArrayList();
@@ -69,14 +70,14 @@ public class KafkaJoinNode extends KafkaNode {
                        .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
                                SJSONTripleStream.aggregatorPostRekey
                        );
-           if (rekeyPerChildren.get(node.children().get(1).name()))
+           if (rekeyPerChildren.containsKey(node.children().get(1).name()) && rekeyPerChildren.get(node.children().get(1).name()))
                right = right.toStream()
                        .flatMap((k,v) -> {
                            List < KeyValue < Windowed < SJSONtKey >, SJSONTripleMap >> result = new ArrayList();
                            List<SJSONTriple> results = v.getData().get(node.children().get(1).name());
                            SJSONTripleMap t1_object = new SJSONTripleMap(new HashMap<String, List<SJSONTriple>>(v.getData()){{remove(node.children().get(1).name());}});
                            Function<SJSONTriple,String> keyExtractor = el -> el.toString();
-                           switch ((Key)node.vars().get(node.joinKeys().toArray()[0]).<Key>get(node.children().get(0).name()).<Key>toArray()[0]){
+                           switch ((Key) node.vars().get(node.joinKeys().toArray()[0]).get(node.children().get(0).name()).toArray()[0]){
                                case S:
                                    keyExtractor = el -> el.getS();
                                    break;
@@ -96,7 +97,16 @@ public class KafkaJoinNode extends KafkaNode {
                        .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
                                SJSONTripleStream.aggregatorPostRekey
                        );
-           this.table(left.join(right, SJSONTripleStream.SJSONtripleMapsJoiner(new ArrayList<>(node.children().get(0).vars().values().stream().flatMap(el -> el.keySet().stream()).collect(Collectors.toSet())), new ArrayList<>(node.children().get(1).vars().values().stream().flatMap(el -> el.keySet().stream()).collect(Collectors.toSet())))));
+           this.table(left.
+                   join(right,
+                           SJSONTripleStream.SJSONtripleMapsJoiner(
+                                   new ArrayList<>(
+                                           Sets.intersection(node.children().get(0).vars().values().stream()
+                                                   .flatMap(el -> el.keySet().stream()).collect(Collectors.toSet()),
+                                                   node.vars().get(node.joinKeys().toArray()[0]).keySet())),
+                                   new ArrayList<>(Sets.intersection(node.children().get(1).vars().values().stream()
+                                                   .flatMap(el -> el.keySet().stream()).collect(Collectors.toSet()),
+                                           node.vars().get(node.joinKeys().toArray()[0]).keySet())))));
        } else {
            this.table(left);
        }

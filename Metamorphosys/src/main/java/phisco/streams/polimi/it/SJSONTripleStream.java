@@ -66,6 +66,7 @@ public class SJSONTripleStream{
                     }
                 );}}
             );
+
             keep_keys_right.forEach(key ->{
                 if (v2.getData().containsKey(key)){
                     v1.getData().merge(key, v2.getData().get(key), (value1, value2) ->
@@ -76,7 +77,6 @@ public class SJSONTripleStream{
                     }
                     );}}
             );
-
             return v2;
         };
     }

@@ -34,11 +34,11 @@ public class KafkaExecutor extends Executor {
     @Getter
     private SpecificAvroSerde valueSpecificAvroSerde;
 
-    public KafkaExecutor() {
+    public KafkaExecutor(String name) {
         nodes = new HashMap<>();
         props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "metamorphosys-gregor100");
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "metamorphosys-gregor100");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, name);
+        props.put(StreamsConfig.CLIENT_ID_CONFIG, name);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);

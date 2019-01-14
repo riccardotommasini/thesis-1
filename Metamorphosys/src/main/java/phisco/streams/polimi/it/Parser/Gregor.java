@@ -281,6 +281,7 @@ public class Gregor extends RSPQLBaseVisitor {
      public void optimize( List<OptimizationRule> rules){
         this.builder.forest().get(this.builder.root()).walk(rules, this.builder);
         update();
+         this.builder.forest().get(this.builder.root()).optimizeVars();
      }
      public void update(){
          this.builder.update();

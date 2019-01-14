@@ -64,6 +64,7 @@ public class RelBuilder {
     public RelBuilder project(String child, String parent, Set<String> vars){
         RelNode node = new ProjectNode()
                 .projectVars(vars)
+                .vars(new Vars(this.forest.get(child).vars()))
                 .addChildren(this.forest.get(child))
                 .name(parent);
         updateState(node);

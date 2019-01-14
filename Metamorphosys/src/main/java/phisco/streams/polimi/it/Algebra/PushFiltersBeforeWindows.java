@@ -21,10 +21,10 @@ public class PushFiltersBeforeWindows extends OptimizationRule {
         for (Map.Entry<String,Map<String,HashSet<Key>>> e : new ArrayList<>(newVars.entrySet())) {
             if (e.getValue().containsKey(node.name())) {
                 newVars.put(e.getKey(), new HashMap<String, HashSet<Key>>(e.getValue()){{
-                    put(newWindow.name(), remove(node.name()));
+                    put(newWindow.name(), new HashSet<>(remove(node.name())));
                 }});
             } else {
-                newVars.put(e.getKey(),e.getValue());
+                newVars.put(e.getKey(),new HashMap<>(e.getValue()));
             }
         }
         newWindow.children(Arrays.asList(node)).vars(newVars)

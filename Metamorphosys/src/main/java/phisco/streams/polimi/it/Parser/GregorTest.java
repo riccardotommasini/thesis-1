@@ -39,7 +39,7 @@ public class GregorTest {
         gregor.optimize(Arrays.asList(new PushFiltersBeforeWindows()));
         System.out.println("optimized: "+ gregor.builder().forest().get(gregor.builder().root()).pprint(0));
 
-        Executor executor = new KafkaExecutor();
+        Executor executor = new KafkaExecutor("executor-223");
         System.out.println(executor.walk(gregor.builder().forest().get(gregor.builder().root())));
         executor.execute();
     }

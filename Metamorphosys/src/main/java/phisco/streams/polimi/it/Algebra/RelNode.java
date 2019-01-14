@@ -86,4 +86,8 @@ public abstract class RelNode {
         map.put(this.name, this);
         return map;
     }
+
+    public void optimizeVars(){
+        this.children.forEach(c -> c.optimizeVars());
+    }
 }
