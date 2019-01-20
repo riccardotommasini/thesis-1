@@ -63,7 +63,7 @@ public class KafkaJoinNode extends KafkaNode {
 
                             }
                             val keyExtractorFinal = keyExtractor;
-                            results.forEach((el) -> result.add(new KeyValue<>(new Windowed(new SJSONtKey(keyExtractorFinal.apply(el)), k.window()), t1_object)));
+                            results.forEach(el -> result.add(new KeyValue<>(new Windowed(new SJSONtKey(keyExtractorFinal.apply(el)), k.window()), new SJSONTripleMap(new HashMap<String, List<SJSONTriple>>(t1_object.getData()){{put(node.children().get(0).name(), new ArrayList<SJSONTriple>(){{add(el);}});}}))));
                             return result;
                         })
                        .groupByKey(Grouped.with(executor.windowedSerde(), executor.valueSpecificAvroSerde()))
@@ -72,12 +72,11 @@ public class KafkaJoinNode extends KafkaNode {
                        );
            if (rekeyPerChildren.containsKey(node.children().get(1).name()) && rekeyPerChildren.get(node.children().get(1).name()))
                right = right.toStream()
-                       .flatMap((k,v) -> {
-                           List < KeyValue < Windowed < SJSONtKey >, SJSONTripleMap >> result = new ArrayList();
+                       .flatMap((k,v) -> { List < KeyValue < Windowed < SJSONtKey >, SJSONTripleMap >> result = new ArrayList();
                            List<SJSONTriple> results = v.getData().get(node.children().get(1).name());
                            SJSONTripleMap t1_object = new SJSONTripleMap(new HashMap<String, List<SJSONTriple>>(v.getData()){{remove(node.children().get(1).name());}});
-                           Function<SJSONTriple,String> keyExtractor = el -> el.toString();
-                           switch ((Key) node.vars().get(node.joinKeys().toArray()[0]).get(node.children().get(0).name()).toArray()[0]){
+                           Function<SJSONTriple,String> keyExtractor = el -> "";
+                           switch ((Key) node.vars().get(node.joinKeys().toArray()[0]).get(node.children().get(1).name()).toArray()[0]){
                                case S:
                                    keyExtractor = el -> el.getS();
                                    break;
@@ -90,7 +89,7 @@ public class KafkaJoinNode extends KafkaNode {
 
                            }
                            val keyExtractorFinal = keyExtractor;
-                           results.forEach((el) -> result.add(new KeyValue<>(new Windowed(new SJSONtKey(keyExtractorFinal.apply(el)), k.window()), t1_object)));
+                           results.forEach(el -> result.add(new KeyValue<>(new Windowed(new SJSONtKey(keyExtractorFinal.apply(el)), k.window()), new SJSONTripleMap(new HashMap<String, List<SJSONTriple>>(t1_object.getData()){{put(node.children().get(1).name(), new ArrayList<SJSONTriple>(){{add(el);}});}}))));
                            return result;
                        })
                        .groupByKey(Grouped.with(executor.windowedSerde(), executor.valueSpecificAvroSerde()))

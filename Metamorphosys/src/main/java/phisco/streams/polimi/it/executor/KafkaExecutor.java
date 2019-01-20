@@ -10,6 +10,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.TimeWindowedDeserializer;
 import org.apache.kafka.streams.kstream.TimeWindowedSerializer;
 import org.apache.kafka.streams.kstream.Windowed;
@@ -98,7 +99,9 @@ public class KafkaExecutor extends Executor {
 
     @Override
     public void execute(){
-        KafkaStreams streams = new KafkaStreams(builder.build(), props);
+        Topology topology = builder.build();
+        System.out.println(topology.describe());
+        KafkaStreams streams = new KafkaStreams(topology, props);
         streams.start();
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }

@@ -32,7 +32,7 @@ public class JoinNode extends RelNode{
             for (int j = 0; j < vs.size(); j++) {
                 if (Sets.intersection(vs.get(i).getValue().keySet(),vs.get(j).getValue().keySet()).size() >= 1){
                     vs.get(i).getValue().keySet().retainAll(vs.get(j).getValue().keySet());
-                    vs.get(j).getValue().keySet().retainAll(vs.get(i).getValue().keySet());
+                    vs.get(j).getValue().keySet().removeAll(vs.get(i).getValue().keySet());
                 }
             }
         }

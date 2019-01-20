@@ -23,9 +23,9 @@ public class KafkaWindowNode extends KafkaNode {
                 .groupByKey()
                 .windowedBy(window(node.window()))
                 .aggregate(() -> new SJSONTripleMap(new HashMap<>()),
-                        this.aggregator(node.name())
+                        this.aggregator(node.vars().size() > 0 ? node.name() : "")
                 ));
-        System.out.println("window: " + node + this);
+        //System.out.println("window: " + node + this);
     }
 
     public static Aggregator<SJSONtKey, SJSONTriple, SJSONTripleMap> aggregator(String name){
