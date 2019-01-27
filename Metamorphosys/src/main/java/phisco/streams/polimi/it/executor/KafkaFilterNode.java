@@ -34,7 +34,7 @@ public class KafkaFilterNode extends KafkaNode {
                     p = (k, v) -> pf.test(k, v) && e.getValue().test(v.getP());
                     break;
                 case O:
-                    p = (k, v) -> pf.test(k, v) && e.getValue().test(v.getO().toString());
+                    p = (k, v) -> pf.test(k, v) && e.getValue().test(v.getO().getValue().toString());
             }
         }
         return p;
