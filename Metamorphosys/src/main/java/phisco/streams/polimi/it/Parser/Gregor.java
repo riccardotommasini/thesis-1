@@ -68,8 +68,9 @@ public class Gregor extends RSPQLBaseVisitor {
         ctx.datasetClause().forEach(c ->  visitDatasetClause(c));
         visitSelectClause(ctx.selectClause());
         visitWhereClause(ctx.whereClause());
-        doJoinsPerCluster(clusterize());
-        doJoinBetweenClusters();
+        //doJoinsPerCluster(clusterize());
+        //doJoinBetweenClusters();
+        doJoins();
         System.out.println(this.builder.forest().get(this.builder.root()).pprint(0));
         this.builder.project(this.builder.root(),"P"+i++,this.useful_vars);
         return null;
@@ -192,7 +193,7 @@ public class Gregor extends RSPQLBaseVisitor {
         return ctx.getText();
     }
 
-    private Map<String,Pair<Set<String>,List<String>>> clusterize(){
+    private void populateJoinGraph(){
         filterSubObj.keySet().forEach(f -> joinGraph.addVertex(f));
         vars.entrySet()
                 .forEach(e -> {
@@ -203,6 +204,76 @@ public class Gregor extends RSPQLBaseVisitor {
                         }
                     }
                 });
+    }
+
+    private void doJoins(){
+        populateJoinGraph();
+        System.out.println(joinGraph);
+        while (true){
+            var sorted_edges = sortedEdges(joinGraph);
+            System.out.println(sorted_edges);
+            if (joinGraph.vertexSet().size()>1){
+                var source = joinGraph.getEdgeSource(sorted_edges.get(0));
+                var target = joinGraph.getEdgeTarget(sorted_edges.get(0));
+                var parent = "J" + i++;
+                this.builder.join(source,target,parent, new HashSet<String>(){{add(sorted_edges.get(0).var());}}, JoinType.NATURAL);
+                joinGraph.addVertex(parent);
+                Arrays.asList(source,target).forEach( v -> {
+                    var outgoing = new ArrayList<>(joinGraph.outgoingEdgesOf(v));
+                    var incoming = new ArrayList<>(joinGraph.incomingEdgesOf(v));
+                    for (var out : outgoing) {
+                        if (parent != joinGraph.getEdgeTarget(out)) {
+                            joinGraph.addEdge(parent, joinGraph.getEdgeTarget(out), new JoinEdge(out.var()));
+                            System.out.println("out add " + parent + " -> " + joinGraph.getEdgeTarget(out) + " ( " + sorted_edges.get(0).var() + " )");
+                        }
+                    }
+                    for (var in : incoming) {
+                        if (parent != joinGraph.getEdgeSource(in)) {
+                            joinGraph.addEdge(joinGraph.getEdgeSource(in), parent, new JoinEdge(in.var()));
+                            System.out.println("in add " + parent + " <- " + joinGraph.getEdgeSource(in) + " ( " + sorted_edges.get(0).var() + " )");
+                        }
+                    }
+                }
+                );
+                joinGraph.removeVertex(source);
+                joinGraph.removeVertex(target);
+                System.out.println(source + " + " + target + " -> " + parent + " = " + joinGraph);
+                System.out.println(joinGraph);
+            } else {
+                break;
+            }
+        }
+    }
+
+    private List<JoinEdge> sortedEdges(Graph<String, JoinEdge> joinGraph){
+        return joinGraph.edgeSet().parallelStream().sorted(Comparator.comparingInt(e -> - scoreJoinEdge(e.var(), joinGraph.getEdgeSource(e), joinGraph.getEdgeTarget(e)))).collect(Collectors.toList());
+    }
+
+    private int scoreJoinEdge(String var, String edgeSource, String edgeTarget) {
+        int score = 0;
+        val source = this.builder.forest().get(edgeSource);
+        val target = this.builder.forest().get(edgeTarget);
+        score += scoreEdgeGivenVar(var,source);
+        score += scoreEdgeGivenVar(var,target);
+        System.out.println(edgeSource + " -> " + edgeTarget + " : " + score);
+        return score;
+    }
+
+    private int scoreEdgeGivenVar(String var, RelNode node){
+        if ( ! (node instanceof JoinNode)) {
+            System.out.println(var + " -> " + node);
+            return (int) (long) node.vars().get(var).entrySet()
+                    .stream()
+                    .filter(e -> node.scanKeys().containsKey(e.getKey()))
+                    .filter(e -> !e.getValue().containsAll(node.scanKeys().get(e.getKey())))
+                    .count();
+        }
+        return 0;
+    }
+
+
+    private Map<String,Pair<Set<String>,List<String>>> clusterize(){
+        populateJoinGraph();
 
         List<Set<String>> connectedFilters = new ConnectivityInspector<>(joinGraph).connectedSets();
 
