@@ -72,7 +72,9 @@ public class Gregor extends RSPQLBaseVisitor {
         //doJoinBetweenClusters();
         doJoins();
         System.out.println(this.builder.forest().get(this.builder.root()).pprint(0));
-        this.builder.project(this.builder.root(),"P"+i++,this.useful_vars);
+        String name = "P"+i++;
+        this.builder.project(this.builder.root(), name, this.useful_vars);
+        this.builder.forest().get(name).update();
         return null;
     }
 
@@ -209,10 +211,11 @@ public class Gregor extends RSPQLBaseVisitor {
     private void doJoins(){
         populateJoinGraph();
         System.out.println(joinGraph);
+        int numberOfClusters = new ConnectivityInspector<>(joinGraph).connectedSets().size();
         while (true){
             var sorted_edges = sortedEdges(joinGraph);
             System.out.println(sorted_edges);
-            if (joinGraph.vertexSet().size()>1){
+            if (joinGraph.vertexSet().size()> numberOfClusters){
                 var source = joinGraph.getEdgeSource(sorted_edges.get(0));
                 var target = joinGraph.getEdgeTarget(sorted_edges.get(0));
                 var parent = "J" + i++;
@@ -222,7 +225,7 @@ public class Gregor extends RSPQLBaseVisitor {
                     var outgoing = new ArrayList<>(joinGraph.outgoingEdgesOf(v));
                     var incoming = new ArrayList<>(joinGraph.incomingEdgesOf(v));
                     for (var out : outgoing) {
-                        if (parent != joinGraph.getEdgeTarget(out)) {
+                        if (! parent.equals(joinGraph.getEdgeTarget(out))) {
                             joinGraph.addEdge(parent, joinGraph.getEdgeTarget(out), new JoinEdge(out.var()));
                             System.out.println("out add " + parent + " -> " + joinGraph.getEdgeTarget(out) + " ( " + sorted_edges.get(0).var() + " )");
                         }
@@ -289,10 +292,12 @@ public class Gregor extends RSPQLBaseVisitor {
                     }
                 }
             return set;})
-                .map(p -> new Pair<>(p.a,
-                        new ArrayList<>(p.b).stream()
+                .map(p -> new Pair<>(p.a, new ArrayList<>(p.b)
+                        .stream()
                                 .sorted(Comparator.comparingInt(this::scoreVar).reversed())
-                                .collect(Collectors.toList())))
+                                .collect(Collectors.toList())
+                        )
+                )
                 .collect(Collectors.toMap(el -> "C"+i++, Function.identity()));
         return joinClustersVars;
     }
@@ -352,8 +357,9 @@ public class Gregor extends RSPQLBaseVisitor {
      public void optimize( List<OptimizationRule> rules){
         this.builder.forest().get(this.builder.root()).walk(rules, this.builder);
         update();
-         this.builder.forest().get(this.builder.root()).optimizeVars();
+        //this.builder.forest().get(this.builder.root()).optimizeVars();
      }
+
      public void update(){
          this.builder.update();
      }

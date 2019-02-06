@@ -22,7 +22,7 @@ public class GregorTest {
                         "                ?observation <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#procedure> ?sensor ;\n" +
                         "                    <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://knoesis.wright.edu/ssw/ont/weather.owl#RainfallObservation> ;\n" +
                         "                    <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#result> ?result .\n" +
-                        "                ?result <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue> ?value ; \n" +
+                        "                ?result <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#floatValue> ?value .\n" +
                                 "                <http://knoesis.wright.edu/ssw/ont/sensor-observation.owl#uom> ?uom . \n"+
                         "            }\n" +
                         "         };");
