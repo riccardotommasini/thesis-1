@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static phisco.streams.polimi.it.Algebra.Key.*;
 
+@SuppressWarnings("Duplicates")
 @ToString
 @Accessors(fluent = true)
 public class Gregor extends RSPQLBaseVisitor {
@@ -68,11 +69,9 @@ public class Gregor extends RSPQLBaseVisitor {
         ctx.datasetClause().forEach(c ->  visitDatasetClause(c));
         visitSelectClause(ctx.selectClause());
         visitWhereClause(ctx.whereClause());
-        //doJoinsPerCluster(clusterize());
-        //doJoinBetweenClusters();
         doJoins();
         System.out.println(this.builder.forest().get(this.builder.root()).pprint(0));
-        String name = "P"+i++;
+        String name = "P" + i++;
         this.builder.project(this.builder.root(), name, this.useful_vars);
         this.builder.forest().get(name).update();
         return null;
@@ -86,9 +85,6 @@ public class Gregor extends RSPQLBaseVisitor {
 
     @Override
     public Object visitWhereClause(RSPQLParser.WhereClauseContext ctx) {
-        //List<List<String>> scores =this.score();
-        //scores.forEach(el -> {{
-        //}});
         return super.visitWhereClause(ctx);
     }
 
@@ -131,7 +127,8 @@ public class Gregor extends RSPQLBaseVisitor {
                     filters.put(P, v -> v.equals(p.verb().getText().replaceAll("(^<|>$)","")));
                 }
                 else
-                    vars.put(p.verb().varOrIri().var().getText().replaceAll("(^<|>$)",""), Collections.singletonMap(name, new HashSet<Key>(){{add(P);}}));
+                    vars.put(p.verb().varOrIri().var().getText().replaceAll("(^<|>$)",""),
+                            Collections.singletonMap(name, new HashSet<Key>(){{add(P);}}));
                 if (o.varOrTerm().graphTerm() != null)  // not handling blankNodePropertyList atm
                 {
                     String term = o.varOrTerm().graphTerm().getText().replaceAll("(^<|>$)","");
@@ -150,7 +147,8 @@ public class Gregor extends RSPQLBaseVisitor {
                         new FilterNode()
                                 .filters(filters)
                                 .addChildren((RelNode) this.builder.forest().get(this.last_source))
-                                .scanKeys(new ScanKeys(){{put(name, builder.forest().get(last_source).scanKeys().get(last_source));}})
+                                .scanKeys(new ScanKeys(){{put(name,
+                                        builder.forest().get(last_source).scanKeys().get(last_source));}})
                                 .vars(vars));
                 this.vars.merge(vars);
             }
@@ -212,44 +210,53 @@ public class Gregor extends RSPQLBaseVisitor {
         populateJoinGraph();
         System.out.println(joinGraph);
         int numberOfClusters = new ConnectivityInspector<>(joinGraph).connectedSets().size();
-        while (true){
+        while (joinGraph.vertexSet().size() > numberOfClusters){
             var sorted_edges = sortedEdges(joinGraph);
             System.out.println(sorted_edges);
-            if (joinGraph.vertexSet().size()> numberOfClusters){
-                var source = joinGraph.getEdgeSource(sorted_edges.get(0));
-                var target = joinGraph.getEdgeTarget(sorted_edges.get(0));
-                var parent = "J" + i++;
-                this.builder.join(source,target,parent, new HashSet<String>(){{add(sorted_edges.get(0).var());}}, JoinType.NATURAL);
-                joinGraph.addVertex(parent);
-                Arrays.asList(source,target).forEach( v -> {
-                    var outgoing = new ArrayList<>(joinGraph.outgoingEdgesOf(v));
-                    var incoming = new ArrayList<>(joinGraph.incomingEdgesOf(v));
-                    for (var out : outgoing) {
-                        if (! parent.equals(joinGraph.getEdgeTarget(out))) {
+            String source = joinGraph.getEdgeSource(sorted_edges.get(0));
+            String target = joinGraph.getEdgeTarget(sorted_edges.get(0));
+            Set<JoinEdge> joinEdges = joinGraph.getAllEdges(source,target);
+            Set<String> joinVars = joinEdges.stream().map(e -> e.var()).collect(Collectors.toSet());
+            String parent = "J" + i++;
+            this.builder.join(source,target,parent, joinVars, JoinType.NATURAL);
+            this.joinGraph.removeAllEdges(joinEdges);
+            joinGraph.addVertex(parent);
+            Arrays.asList(source,target).forEach( v -> {
+                        var outgoing = new ArrayList<>(joinGraph.outgoingEdgesOf(v));
+                        var incoming = new ArrayList<>(joinGraph.incomingEdgesOf(v));
+                        for (var out : outgoing) {
                             joinGraph.addEdge(parent, joinGraph.getEdgeTarget(out), new JoinEdge(out.var()));
-                            System.out.println("out add " + parent + " -> " + joinGraph.getEdgeTarget(out) + " ( " + sorted_edges.get(0).var() + " )");
+                            System.out.println("out add " + parent +
+                                    " -> " + joinGraph.getEdgeTarget(out) + " ( " + sorted_edges.get(0).var() + " )");
                         }
-                    }
-                    for (var in : incoming) {
-                        if (parent != joinGraph.getEdgeSource(in)) {
+                        for (var in : incoming) {
                             joinGraph.addEdge(joinGraph.getEdgeSource(in), parent, new JoinEdge(in.var()));
-                            System.out.println("in add " + parent + " <- " + joinGraph.getEdgeSource(in) + " ( " + sorted_edges.get(0).var() + " )");
+                            System.out.println("in add " + parent + " <- " +
+                                    joinGraph.getEdgeSource(in) + " ( " + sorted_edges.get(0).var() + " )");
                         }
                     }
-                }
-                );
-                joinGraph.removeVertex(source);
-                joinGraph.removeVertex(target);
-                System.out.println(source + " + " + target + " -> " + parent + " = " + joinGraph);
-                System.out.println(joinGraph);
-            } else {
-                break;
+            );
+            joinGraph.removeVertex(source);
+            joinGraph.removeVertex(target);
+            System.out.println(source + " + " + target + " -> " + parent + " = " + joinGraph);
+            System.out.println(joinGraph);
+        }
+        if (joinGraph.vertexSet().size() > 1){
+            List<String> vertices = new ArrayList(joinGraph.vertexSet());
+            String prev = vertices.get(0);
+            for (int j=1; j < vertices.size(); j++){
+                String parent = "J" + i++;
+                this.builder.join(prev, vertices.get(j), parent, new HashSet<>(), JoinType.BLOCKING);
             }
         }
     }
 
     private List<JoinEdge> sortedEdges(Graph<String, JoinEdge> joinGraph){
-        return joinGraph.edgeSet().parallelStream().sorted(Comparator.comparingInt(e -> - scoreJoinEdge(e.var(), joinGraph.getEdgeSource(e), joinGraph.getEdgeTarget(e)))).collect(Collectors.toList());
+        return joinGraph.edgeSet()
+                .parallelStream()
+                .sorted(Comparator.comparingInt(e -> - scoreJoinEdge(e.var(), joinGraph.getEdgeSource(e),
+                        joinGraph.getEdgeTarget(e))))
+                .collect(Collectors.toList());
     }
 
     private int scoreJoinEdge(String var, String edgeSource, String edgeTarget) {
@@ -267,97 +274,16 @@ public class Gregor extends RSPQLBaseVisitor {
             System.out.println(var + " -> " + node);
             return (int) (long) node.vars().get(var).entrySet()
                     .stream()
-                    .filter(e -> node.scanKeys().containsKey(e.getKey()))
-                    .filter(e -> !e.getValue().containsAll(node.scanKeys().get(e.getKey())))
+                    .filter(e -> node.scanKeys().containsKey(e.getKey()) &&
+                            !e.getValue().containsAll(node.scanKeys().get(e.getKey())))
                     .count();
         }
         return 0;
     }
 
-
-    private Map<String,Pair<Set<String>,List<String>>> clusterize(){
-        populateJoinGraph();
-
-        List<Set<String>> connectedFilters = new ConnectivityInspector<>(joinGraph).connectedSets();
-
-        Map<String,Pair<Set<String>,List<String>>> joinClustersVars = connectedFilters.stream().map(cluster -> {
-            Pair<Set<String>,Set<String>> set = new Pair(cluster,new HashSet<>());
-            List<String> clusterlist = new ArrayList<>(cluster);
-            if (cluster.size() > 1)
-               for (int i = 0; i < clusterlist.size(); i++){
-                    for (int j = i; j < clusterlist.size(); j++){
-                        JoinEdge edge = joinGraph.getEdge(clusterlist.get(i),clusterlist.get(j));
-                        if (edge != null)
-                            set.b.add(edge.var());
-                    }
-                }
-            return set;})
-                .map(p -> new Pair<>(p.a, new ArrayList<>(p.b)
-                        .stream()
-                                .sorted(Comparator.comparingInt(this::scoreVar).reversed())
-                                .collect(Collectors.toList())
-                        )
-                )
-                .collect(Collectors.toMap(el -> "C"+i++, Function.identity()));
-        return joinClustersVars;
-    }
-
-    private int scoreVar(String var){
-        return this.vars.get(var).entrySet().stream()
-                .flatMap(e -> e.getValue().stream()
-                        .map(v ->
-                                e.getValue().contains(this.builder.forest().get(e.getKey()).scanKeys().get(e.getKey())) ?
-                                1 : 0)).mapToInt(i -> i).sum();
-    }
-
-
-    private void doJoinsPerCluster(Map<String,Pair<Set<String>,List<String>>> clusters){
-        clusters.forEach((key,val) -> {
-            Set usedFilters = new HashSet();
-            if (val.a.size() > 1){
-                var vb = val.b;
-                String left = "";
-                for (String v: vb){
-                    List<String> filters = new ArrayList(vars.get(v).keySet()){{removeAll(usedFilters);}};
-                    int j = 0;
-                    if (left.equals("")) {
-                        left = filters.get(0);
-                        usedFilters.add(left);
-                        j++;
-                    }
-                    for ( ; j<filters.size(); j++){
-                        String join = "J"+i++;
-                        String right = filters.get(j);
-                        usedFilters.add(right);
-                        this.builder.join(left, right, join, new HashSet<String>(){{add(v);}}, JoinType.NATURAL);
-                        left = join;
-                    }
-                }
-            }
-        });
-    }
-
-    private void doJoinBetweenClusters(){
-        List<String> rootsToJoin = this.builder.roots().stream()
-                .filter(r -> this.builder.forest().get(r) instanceof JoinNode || this.builder.forest().get(r) instanceof FilterNode)
-                .collect(Collectors.toList());
-        String left = rootsToJoin.get(0);
-        for (int j=1; j<rootsToJoin.size(); j++){
-            String join = "J"+i++;
-            this.builder.join(left, rootsToJoin.get(j), join, new HashSet<>(), JoinType.BLOCKING);
-            left = join;
-        }
-        this.builder.roots(new ArrayList<String>(){{add(builder.root());}});
-    }
-
-     public void run(){
-        this.builder.run();
-     }
-
      public void optimize( List<OptimizationRule> rules){
         this.builder.forest().get(this.builder.root()).walk(rules, this.builder);
         update();
-        //this.builder.forest().get(this.builder.root()).optimizeVars();
      }
 
      public void update(){

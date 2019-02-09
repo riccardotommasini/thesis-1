@@ -5,12 +5,17 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.var;
 import org.antlr.v4.runtime.misc.Pair;
-import org.apache.kafka.streams.kstream.Printed;
+import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.processor.ProcessorContext;
+import org.apache.kafka.streams.processor.PunctuationType;
+import org.apache.kafka.streams.processor.Punctuator;
+import org.apache.kafka.streams.state.KeyValueStore;
 import phisco.streams.polimi.it.Algebra.Key;
 import phisco.streams.polimi.it.Algebra.ProjectNode;
 import phisco.streams.polimi.it.avro.SJSONTriple;
 import phisco.streams.polimi.it.avro.SJSONTripleMap;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -41,8 +46,12 @@ public class KafkaProjectionNode extends KafkaNode {
         executor.nodes().get(node.children().get(0).name())
                 .table()
                 //.filter((k,v) -> ((Map) v).keySet().size() == node.projectVars().size())
-                .mapValues((v) -> checks.stream()
+                .mapValues((v) -> checks.parallelStream()
                         .map(c -> new Pair(c.a.b,
-                                c.b.apply(((SJSONTripleMap)v).getData().get(c.a.a)))).collect(Collectors.<Pair<String, List<String>>, String, List<String> >toMap(c -> c.a, c -> c.b, (oldList, newList) -> new ArrayList(oldList){{addAll(newList);}}))).toStream().print(Printed.toSysOut());
+                                c.b.apply(((SJSONTripleMap)v).getData().get(c.a.a))))
+                        .collect(Collectors.<Pair<String,List<String>>,String,List<String>>toMap(c -> c.a, c -> c.b,
+                                (oldList, newList) -> new ArrayList(oldList){{addAll(newList);}})))
+                .toStream()
+                .print(Printed.toSysOut());
     }
 }

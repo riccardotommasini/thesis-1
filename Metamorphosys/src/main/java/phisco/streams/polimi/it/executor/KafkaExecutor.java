@@ -102,6 +102,7 @@ public class KafkaExecutor extends Executor {
         Topology topology = builder.build();
         System.out.println(topology.describe());
         KafkaStreams streams = new KafkaStreams(topology, props);
+        streams.cleanUp();
         streams.start();
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
