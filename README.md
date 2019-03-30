@@ -2,7 +2,7 @@
 
 ## HOW TO RUN
 
-`avro_producer` needs everything else to be up and running, so spam the next command until you see "thesis_avro_producer_1 is up-to-date"
+`avro_producer` needs everything else to be up and running, so execute the next command until "thesis_avro_producer_1 is up-to-date":
 
 ```
 docker-compose up -d avro_producer
