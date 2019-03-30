@@ -54,7 +54,7 @@ public class SJSONTripleStream{
                                 return map;
                             }};
 
-    public static ValueJoiner<SJSONTripleMap, SJSONTripleMap, SJSONTripleMap> SJSONtripleMapsJoiner(List<String> keep_keys_left, List<String> keep_keys_right){
+    public static ValueJoiner<SJSONTripleMap, SJSONTripleMap, SJSONTripleMap> SJSONtri  pleMapsJoiner(List<String> keep_keys_left, List<String> keep_keys_right){
         return (v1, v2) ->{
             keep_keys_left.forEach(key -> {
                 if (v1.getData().containsKey(key)){

@@ -1,4 +1,6 @@
-package phisco.streams.polimi.it.Algebra;
+package phisco.streams.polimi.it.Parser;
+
+import phisco.streams.polimi.it.Algebra.RelNode;
 
 import java.util.List;
 import java.util.function.Function;

@@ -3,7 +3,6 @@ package phisco.streams.polimi.it.Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import phisco.streams.polimi.it.Algebra.PushFiltersBeforeWindows;
 import phisco.streams.polimi.it.executor.Executor;
 import phisco.streams.polimi.it.executor.KafkaExecutor;
 import phisco.streams.polimi.it.antlr4.RSPQLLexer;
@@ -29,7 +28,6 @@ public class GregorTest {
         RSPQLLexer lexer = new RSPQLLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RSPQLParser parser = new RSPQLParser(tokens);
-        //System.out.println(parser.queryUnit().toStringTree(parser));
         Gregor gregor = new Gregor();
         gregor.visit(parser.queryUnit());
         System.out.println("vars: " + gregor.vars());

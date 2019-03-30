@@ -1,6 +1,6 @@
-package phisco.streams.polimi.it.Algebra;
+package phisco.streams.polimi.it.Parser;
 
-import org.apache.commons.lang.RandomStringUtils;
+import phisco.streams.polimi.it.Algebra.*;
 
 import java.util.*;
 

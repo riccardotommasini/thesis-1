@@ -4,10 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang.RandomStringUtils;
-import phisco.streams.polimi.it.executor.Executor;
+import phisco.streams.polimi.it.Parser.OptimizationRule;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Accessors(fluent = true)

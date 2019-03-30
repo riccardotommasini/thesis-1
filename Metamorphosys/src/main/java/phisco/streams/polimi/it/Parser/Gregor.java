@@ -3,7 +3,6 @@ package phisco.streams.polimi.it.Parser;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.antlr.v4.runtime.misc.Pair;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.DefaultUndirectedGraph;
@@ -13,7 +12,6 @@ import phisco.streams.polimi.it.antlr4.RSPQLParser;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
